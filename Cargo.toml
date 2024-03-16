@@ -4,19 +4,23 @@ version = "0.1.0"
 edition = "2021"
 
 [features]
+hydration = [
+    "yew/hydration"
+]
+
 static = [
     "yew/ssr"
 ]
 
 [[bin]]
-name = "dev"
+name = "csr"
 
 [[bin]]
-name = "prod"
+name = "ssr"
 required-features = [
     "static"
 ]
 
 [dependencies]
-yew = "0.21.0"
+yew = { version = "0.21.0", features = ["csr"] }
 yew-router = "0.18.0"
