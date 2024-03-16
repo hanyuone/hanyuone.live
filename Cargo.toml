@@ -1,0 +1,22 @@
+[package]
+name = "website"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+static = [
+    "yew/ssr"
+]
+
+[[bin]]
+name = "dev"
+
+[[bin]]
+name = "prod"
+required-features = [
+    "static"
+]
+
+[dependencies]
+yew = "0.21.0"
+yew-router = "0.18.0"
