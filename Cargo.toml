@@ -24,3 +24,9 @@ required-features = [
 [dependencies]
 yew = { version = "0.21.0", features = ["csr"] }
 yew-router = "0.18.0"
+
+[dependencies.yew_icons]
+version = "0.8"
+features = [
+    "BootstrapGithub"
+]

@@ -4,14 +4,16 @@ use yew_router::{
     BrowserRouter, Routable, Router, Switch,
 };
 
-use crate::pages::Route;
+use crate::{components::layout::Layout, pages::Route};
 
 #[function_component(AppContent)]
 fn app_content() -> Html {
     html! {
-        <main>
-            <Switch<Route> render={Route::switch} />
-        </main>
+        <Layout>
+            <main>
+                <Switch<Route> render={Route::switch} />
+            </main>
+        </Layout>
     }
 }
 
