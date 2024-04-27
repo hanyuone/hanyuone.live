@@ -25,6 +25,7 @@ jobs:
         name: Install pnpm
         with:
           version: 8
+          run_install: true
       # Checkout repo
       - uses: actions/checkout@v2
       # ==================== BUILD ====================
