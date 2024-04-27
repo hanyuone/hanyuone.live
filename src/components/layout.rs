@@ -1,6 +1,7 @@
 use yew::{function_component, html, Children, Html, Properties};
 
-use crate::components::header::Header;
+mod footer;
+mod header;
 
 #[derive(Properties, PartialEq)]
 pub struct LayoutProps {
@@ -11,9 +12,12 @@ pub struct LayoutProps {
 #[function_component(Layout)]
 pub fn layout(props: &LayoutProps) -> Html {
     html! {
-        <>
-            <Header />
-            {props.children.clone()}
-        </>
+        <div class="flex flex-col h-screen justify-between">
+            <header::Header />
+            <main class="mb-auto">
+                {props.children.clone()}
+            </main>
+            <footer::Footer />
+        </div>
     }
 }

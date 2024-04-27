@@ -10,9 +10,7 @@ use crate::{components::layout::Layout, pages::Route};
 fn app_content() -> Html {
     html! {
         <Layout>
-            <main>
-                <Switch<Route> render={Route::switch} />
-            </main>
+            <Switch<Route> render={Route::switch} />
         </Layout>
     }
 }
