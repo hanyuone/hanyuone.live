@@ -1,5 +1,8 @@
-use yew::{function_component, html, Html};
-use yew_router::{BrowserRouter, Switch};
+use yew::{function_component, html, Html, Properties};
+use yew_router::{
+    history::{AnyHistory, MemoryHistory},
+    BrowserRouter, Routable, Router, Switch,
+};
 
 use crate::pages::Route;
 
@@ -18,5 +21,29 @@ pub fn app() -> Html {
         <BrowserRouter>
             <AppContent />
         </BrowserRouter>
+    }
+}
+
+#[derive(PartialEq, Properties)]
+pub struct StaticAppProps {
+    route: Route,
+}
+
+impl StaticAppProps {
+    fn create_history(&self) -> AnyHistory {
+        let path = self.route.to_path();
+        let history = MemoryHistory::with_entries(vec![path]);
+        history.into()
+    }
+}
+
+#[function_component(StaticApp)]
+pub fn static_app(props: &StaticAppProps) -> Html {
+    let history = props.create_history();
+
+    html! {
+        <Router history={history}>
+            <AppContent />
+        </Router>
     }
 }
