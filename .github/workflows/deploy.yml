@@ -1,0 +1,30 @@
+name: Deploy static website to GH Pages
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      # ==================== SETUP ====================
+      # Install Rust
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: wasm32-unknown-unknown
+      # Install Trunk and WASM for building webapp
+      - uses: jetli/trunk-action@v0.1.0
+      - uses: jetli/wasm-bindgen-action@v0.1.0
+      # Checkout repo
+      - uses: actions/checkout@v2
+      # ==================== BUILD ====================
+      - name: Build static pages
+        run: trunk build --release
+      # =================== DEPLOY ====================
+      - uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
