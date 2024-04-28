@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "dev": "trunk serve",
+    "build": "trunk build --release --features hydration && cargo run --bin ssr --features static release"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

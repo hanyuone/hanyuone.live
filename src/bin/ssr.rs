@@ -1,5 +1,6 @@
 use std::{
-    env, io, path::{Path, PathBuf}
+    env, io,
+    path::{Path, PathBuf},
 };
 
 use website::{
@@ -10,13 +11,8 @@ use website::{
 use yew::LocalServerRenderer;
 use yew_router::Routable;
 
-/// CURRENT PLAN OF RENDERING ALL ROUTES (modified from blakerain.com):
-/// 1. Get default template from `dist` folder
-/// 2. Render head and body
-/// 3. Inject head and body into template at specified locations:
-///   - Between `head-ssg-before` and `head-ssg-after` for head
-///   - At end of `body` tag for body
-
+/// Basic struct for converting a HTML file into a "template" - a place where
+/// we can inject tags in `<head>` and `<body>`.
 struct Template {
     content: String,
     head_index: usize,
@@ -24,19 +20,18 @@ struct Template {
 }
 
 impl Template {
+    /// Converts the path of an HTML file (usually our `index.html`) into a
+    /// `Template`. Errors when there is no `head-ssg-after` (for injecting
+    /// `<head>` tags into) or `</body>` (for injecting `<body>` tags into).
     async fn load(path: impl AsRef<Path>) -> io::Result<Self> {
         let content = tokio::fs::read_to_string(path).await?;
-        println!("{}", content);
 
         let Some(head_index) = content.find("<script id=head-ssg-after") else {
             return Err(io::Error::new(io::ErrorKind::Other, "Malformed index.html"));
         };
 
         let Some(body_index) = content.find("</body>") else {
-            return Err(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                "Malformed index.html",
-            ));
+            return Err(io::Error::new(io::ErrorKind::Other, "Malformed index.html"));
         };
 
         Ok(Self {
@@ -46,6 +41,7 @@ impl Template {
         })
     }
 
+    /// Injects HTML into the head and body.
     async fn render(&self, head: String, body: String) -> String {
         if head.is_empty() {
             eprintln!("warning: empty <head>");
@@ -65,6 +61,8 @@ impl Template {
     }
 }
 
+/// A "holder" for the `index.html` template and the directory where generated
+/// HTML files should go.
 struct Env {
     template: Template,
     target_dir: PathBuf,
@@ -81,6 +79,7 @@ impl Env {
         })
     }
 
+    /// Render a route using `LocalServerRenderer`.
     async fn render_route(&self, route: Route) -> String {
         let head = HeadContext::default();
 
@@ -101,6 +100,7 @@ impl Env {
         self.template.render(head, body).await
     }
 
+    /// Write a string to a certain path within `self.target_dir`.
     async fn write_str<P: AsRef<Path>>(&self, path: P, s: &str) -> std::io::Result<()> {
         let path = self.target_dir.clone().join(path);
 
@@ -117,6 +117,9 @@ struct RouteTarget {
     target: PathBuf,
 }
 
+/// Maps all existing routes, adding extra information about the HTML file
+/// location the rendered HTML for that route should be stored (in the `RouteTarget`
+/// struct).
 fn collect_routes() -> Vec<RouteTarget> {
     enum_iterator::all::<Route>()
         .map(|route| {
@@ -133,6 +136,8 @@ fn collect_routes() -> Vec<RouteTarget> {
         .collect()
 }
 
+/// Statically render all routes into plain HTML files, with routes defined
+/// in the `Route` enum.
 async fn render_routes(env: &Env) -> io::Result<()> {
     for RouteTarget { route, target } in collect_routes() {
         let result = env.render_route(route).await;
