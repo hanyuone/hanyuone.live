@@ -31,8 +31,8 @@ pub fn app() -> Html {
 
 #[derive(PartialEq, Properties)]
 pub struct StaticAppProps {
-    route: Route,
-    head: HeadContext,
+    pub route: Route,
+    pub head: HeadContext,
 }
 
 impl StaticAppProps {

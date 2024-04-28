@@ -1,10 +1,11 @@
+use enum_iterator::Sequence;
 use yew::{html, Html};
 use yew_router::Routable;
 
 mod about;
 mod home;
 
-#[derive(Clone, PartialEq, Routable)]
+#[derive(Debug, Clone, PartialEq, Routable, Sequence)]
 pub enum Route {
     #[at("/")]
     Home,

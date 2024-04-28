@@ -95,3 +95,13 @@ impl Clone for HeadContext {
         }
     }
 }
+
+#[derive(Properties, PartialEq)]
+pub struct HeadRenderProps {
+    pub context: HeadContext,
+}
+
+#[function_component(HeadRender)]
+pub fn head_render(props: &HeadRenderProps) -> Html {
+    props.context.content.borrow().clone()
+}

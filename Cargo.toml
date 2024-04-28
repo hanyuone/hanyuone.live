@@ -22,6 +22,7 @@ required-features = [
 ]
 
 [dependencies]
+enum-iterator = "2.0.1"
 gloo = "0.11.0"
 web-sys = "0.3.69"
 yew = { version = "0.21.0", features = ["csr"] }
@@ -33,3 +34,11 @@ version = "0.8"
 features = [
     "BootstrapGithub"
 ]
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen-futures = { version = "0.4" }
+wasm-logger = { version = "0.2" }
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+env_logger = { version = "0.10" }
+tokio = { version = "1.37.0", features = ["full"] }
