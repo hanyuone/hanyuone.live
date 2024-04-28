@@ -1,10 +1,13 @@
-use yew::{function_component, html, Html, Properties};
+use yew::{function_component, html, html::PhantomComponent, ContextProvider, Html, Properties};
 use yew_router::{
     history::{AnyHistory, MemoryHistory},
     BrowserRouter, Routable, Router, Switch,
 };
 
-use crate::{components::layout::Layout, pages::Route};
+use crate::{
+    components::{head::HeadContext, layout::Layout},
+    pages::Route,
+};
 
 #[function_component(AppContent)]
 fn app_content() -> Html {
@@ -18,15 +21,18 @@ fn app_content() -> Html {
 #[function_component(App)]
 pub fn app() -> Html {
     html! {
-        <BrowserRouter>
-            <AppContent />
-        </BrowserRouter>
+        <PhantomComponent<ContextProvider<HeadContext>>>
+            <BrowserRouter>
+                <AppContent />
+            </BrowserRouter>
+        </PhantomComponent<ContextProvider<HeadContext>>>
     }
 }
 
 #[derive(PartialEq, Properties)]
 pub struct StaticAppProps {
     route: Route,
+    head: HeadContext,
 }
 
 impl StaticAppProps {
@@ -42,8 +48,10 @@ pub fn static_app(props: &StaticAppProps) -> Html {
     let history = props.create_history();
 
     html! {
-        <Router history={history}>
-            <AppContent />
-        </Router>
+        <ContextProvider<HeadContext> context={props.head.clone()}>
+            <Router history={history}>
+                <AppContent />
+            </Router>
+        </ContextProvider<HeadContext>>
     }
 }
