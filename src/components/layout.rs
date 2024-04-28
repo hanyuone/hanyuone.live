@@ -12,7 +12,7 @@ pub struct LayoutProps {
 #[function_component(Layout)]
 pub fn layout(props: &LayoutProps) -> Html {
     html! {
-        <div class="flex flex-col h-screen justify-between">
+        <div class="bg-primary text-white flex flex-col h-screen justify-between">
             <header::Header />
             <main class="mb-auto">
                 {props.children.clone()}
