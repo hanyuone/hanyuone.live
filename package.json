@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "trunk serve",
-    "build": "trunk build --release --features hydration && cargo run --bin ssr --features static release"
+    "build": "trunk build --release --features hydration && cargo run --bin ssr --features static release",
+    "build:md": "mkdir $TRUNK_STAGING_DIR/content && cp -r content $TRUNK_STAGING_DIR",
+    "build:tailwind": "pnpm exec tailwindcss -i styles/tailwind.css -o $TRUNK_STAGING_DIR/tailwind.css"
   },
   "keywords": [],
   "author": "",

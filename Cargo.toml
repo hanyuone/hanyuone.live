@@ -24,7 +24,9 @@ required-features = [
 [dependencies]
 enum-iterator = "2.0.1"
 gloo = "0.11.0"
+gloo-net = "0.5.0"
 pulldown-cmark = "0.10.3"
+wasm-bindgen-futures = "0.4"
 web-sys = "0.3.69"
 yew = { version = "0.21.0", features = ["csr"] }
 yew-hooks = "0.3.1"
