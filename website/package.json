@@ -1,0 +1,15 @@
+{
+    "name": "hanyuone.live",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "tailwind": "pnpm exec tailwindcss -i styles/tailwind.css -o $TRUNK_STAGING_DIR/tailwind.css"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "tailwindcss": "^3.4.3"
+    }
+}

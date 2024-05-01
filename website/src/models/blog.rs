@@ -2,10 +2,6 @@ use std::{fmt::Display, str::FromStr};
 
 use enum_iterator::Sequence;
 
-// PLAN: Have two ways of fetching/rendering documents:
-// - For CSR (local), fetch Markdown files using HTTP
-// - For SSR (deployed), fetch Markdown files locally
-
 // Steps:
 // 1. Read Markdown files as raw strings (HTTP or local), and have website display
 // blogs with pre-rendered MD

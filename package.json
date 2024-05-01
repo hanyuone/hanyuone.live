@@ -4,15 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "trunk serve",
-    "build": "trunk build --release --features hydration && cargo run --bin ssr --features static release",
-    "build:md": "mkdir $TRUNK_STAGING_DIR/content && cp -r content $TRUNK_STAGING_DIR",
-    "build:tailwind": "pnpm exec tailwindcss -i styles/tailwind.css -o $TRUNK_STAGING_DIR/tailwind.css"
+    "dev": "cd website && trunk serve",
+    "build:md": "cargo run -p markdown",
+    "build:wasm": "cd website && trunk build --release --features hydration",
+    "build:ssg": "cargo run -p website --bin ssr --features static release",
+    "build": "pnpm build:md && pnpm build:wasm && pnpm build:ssg"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "tailwindcss": "^3.4.3"
-  }
+  "license": "ISC"
 }

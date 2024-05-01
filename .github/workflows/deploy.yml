@@ -51,10 +51,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       # ==================== BUILD ====================
-      - name: Build static pages
-        run: trunk build --release --features hydration
-      - name: Run SSR
-        run: cargo run --bin ssr --features static release
+      - name: Build website
+        run: pnpm build
       # =================== DEPLOY ====================
       - name: Setup Pages
         uses: actions/configure-pages@v5

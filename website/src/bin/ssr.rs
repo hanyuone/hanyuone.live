@@ -70,7 +70,7 @@ struct Env {
 
 impl Env {
     async fn new() -> io::Result<Self> {
-        let target_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("dist");
+        let target_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../dist");
         let template = Template::load(target_dir.join("index.html")).await?;
 
         Ok(Self {

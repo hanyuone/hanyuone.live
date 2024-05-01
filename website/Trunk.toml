@@ -1,11 +1,11 @@
 [build]
 target = "index.html"
-dist = "dist"
+dist = "../dist"
 
 [[hooks]]
 stage = "build"
 command = "sh"
 command_arguments = [
     "-c",
-    "pnpm build:md && pnpm build:tailwind"
+    "pnpm tailwind"
 ]
