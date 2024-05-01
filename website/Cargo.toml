@@ -36,7 +36,9 @@ markdown = { path = "../markdown" }
 [dependencies.yew_icons]
 version = "0.8"
 features = [
-    "BootstrapGithub"
+    "BootstrapGithub",
+    "BootstrapLinkedin",
+    "LucideMail",
 ]
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]

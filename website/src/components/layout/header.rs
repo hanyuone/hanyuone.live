@@ -15,13 +15,14 @@ pub fn header() -> Html {
                         {"hanyuone.live"}
                     </Link<Route>>
                 </div>
+                // Other pages
                 <div class="flex px-4">
-                    <Link<Route> classes="px-4 py-4 text-white transition-colors hover:bg-secondary" to={Route::About}>
+                    <Link<Route> classes="px-4 py-4 text-white hover:bg-secondary transition-colors" to={Route::About}>
                         {"About"}
                     </Link<Route>>
                     <a
                         href="/public/resume.pdf"
-                        class="px-4 py-4 text-white transition-colors hover:bg-secondary">
+                        class="px-4 py-4 text-white hover:bg-secondary transition-colors">
                         {"Resume"}
                     </a>
                 </div>
@@ -29,8 +30,18 @@ pub fn header() -> Html {
                 <div class="flex px-4 py-4 ml-auto items-center">
                     <a
                         href="https://github.com/hanyuone"
-                        class="text-neutral-200 hover:text-neutral-50">
+                        class="px-2 text-neutral-200 hover:text-neutral-50 transition-colors">
                         <Icon icon_id={IconId::BootstrapGithub} height="1.1em" />
+                    </a>
+                    <a
+                        href="https://linkedin.com/hanyuan-li"
+                        class="px-2 text-neutral-200 hover:text-neutral-50 transition-colors">
+                        <Icon icon_id={IconId::BootstrapLinkedin} height="1.1em" />
+                    </a>
+                    <a
+                        href="mailto:work@hanyuone.live"
+                        class="px-2 text-neutral-200 hover:text-neutral-50 transition-colors">
+                        <Icon icon_id={IconId::LucideMail} height="1.1em" />
                     </a>
                 </div>
             </div>
