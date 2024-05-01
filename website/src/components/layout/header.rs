@@ -34,7 +34,7 @@ pub fn header() -> Html {
                         <Icon icon_id={IconId::BootstrapGithub} height="1.1em" />
                     </a>
                     <a
-                        href="https://linkedin.com/hanyuan-li"
+                        href="https://linkedin.com/in/hanyuan-li"
                         class="px-2 text-neutral-200 hover:text-neutral-50 transition-colors">
                         <Icon icon_id={IconId::BootstrapLinkedin} height="1.1em" />
                     </a>
