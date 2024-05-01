@@ -31,6 +31,8 @@ yew = { version = "0.21.0", features = ["csr"] }
 yew-hooks = "0.3.1"
 yew-router = "0.18.0"
 
+markdown = { path = "../markdown" }
+
 [dependencies.yew_icons]
 version = "0.8"
 features = [

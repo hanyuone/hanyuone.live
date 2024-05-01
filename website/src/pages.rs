@@ -1,8 +1,7 @@
 use enum_iterator::Sequence;
+use markdown::models::BlogId;
 use yew::{html, Html};
 use yew_router::Routable;
-
-use crate::models::blog::BlogId;
 
 mod about;
 mod blog_post;

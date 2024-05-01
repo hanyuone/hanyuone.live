@@ -1,3 +1,5 @@
+pub mod models;
+
 use std::{
     fs, io,
     path::{Path, PathBuf},

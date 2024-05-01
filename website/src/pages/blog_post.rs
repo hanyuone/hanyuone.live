@@ -1,10 +1,11 @@
 use std::path::PathBuf;
 
 use gloo_net::http::Request;
+use markdown::models::BlogId;
 use yew::{function_component, html, use_state, Html, Properties};
 use yew_hooks::use_effect_once;
 
-use crate::{components::head::Head, models::blog::BlogId};
+use crate::components::head::Head;
 
 #[derive(PartialEq, Properties)]
 pub struct BlogProps {
