@@ -8,7 +8,7 @@
     "build:md": "cargo run -p markdown",
     "build:wasm": "cd website && trunk build --release --features hydration",
     "build:ssg": "cargo run -p website --bin ssr --features static release",
-    "build": "pnpm build:md && pnpm build:wasm && pnpm build:ssg"
+    "build": "pnpm build:wasm && pnpm build:ssg && pnpm build:md"
   },
   "keywords": [],
   "author": "",
