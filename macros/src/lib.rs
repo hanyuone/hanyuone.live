@@ -1,10 +1,13 @@
+mod generator;
+
 use std::{fs, io, path::PathBuf};
 
+use generator::Generator;
 use proc_macro::TokenStream;
-use quote::{quote, TokenStreamExt};
+use quote::quote;
 use syn::{
     parse::{Parse, ParseStream},
-    parse_macro_input, parse_str, Ident, LitStr,
+    parse_macro_input, LitStr,
 };
 
 struct BlogModelsInput {
@@ -17,13 +20,6 @@ impl Parse for BlogModelsInput {
             directory: input.parse()?,
         })
     }
-}
-
-#[derive(Default)]
-struct Generator {
-    enumerators: proc_macro2::TokenStream,
-    display: proc_macro2::TokenStream,
-    from_str: proc_macro2::TokenStream,
 }
 
 // Loads all blogs as a list of strings.
@@ -50,35 +46,6 @@ fn load_blogs(dir: &str) -> Result<Vec<String>, io::Error> {
     Ok(blog_names)
 }
 
-fn slug_constr(slug: &str) -> String {
-    slug.split('-').map(titlecase).collect::<Vec<_>>().join("")
-}
-
-fn titlecase(word: &str) -> String {
-    let mut chars = word.chars();
-    match chars.next() {
-        None => String::new(),
-        Some(first) => first.to_uppercase().collect::<String>() + chars.as_str(),
-    }
-}
-
-fn generate_blog(generator: &mut Generator, blog_name: String) {
-    let enum_name = slug_constr(&blog_name);
-    let enum_ident = parse_str::<Ident>(&enum_name).expect("enum name");
-
-    generator.enumerators.append_all(quote! {
-        #enum_ident,
-    });
-
-    generator.display.append_all(quote! {
-        Self::#enum_ident => #blog_name,
-    });
-
-    generator.from_str.append_all(quote! {
-        #blog_name => Ok(Self::#enum_ident),
-    });
-}
-
 fn generate(input: BlogModelsInput) -> Result<TokenStream, io::Error> {
     let Generator {
         enumerators,
@@ -88,14 +55,14 @@ fn generate(input: BlogModelsInput) -> Result<TokenStream, io::Error> {
         let mut generator = Generator::default();
 
         for blog_name in load_blogs(&input.directory.value())? {
-            generate_blog(&mut generator, blog_name);
+            generator.add_blog(blog_name);
         }
 
         generator
     };
 
     Ok(TokenStream::from(quote! {
-        #[derive(Copy, Clone, PartialEq, enum_iterator::Sequence)]
+        #[derive(Copy, Clone, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize, enum_iterator::Sequence)]
         pub enum BlogId {
             #enumerators
         }
@@ -126,7 +93,7 @@ fn generate(input: BlogModelsInput) -> Result<TokenStream, io::Error> {
 }
 
 #[proc_macro]
-pub fn generate_blog_models(input: TokenStream) -> TokenStream {
+pub fn generate_blog_id(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as BlogModelsInput);
     generate(input).expect("Generating blog models")
 }

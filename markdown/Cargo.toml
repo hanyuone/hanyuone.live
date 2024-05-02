@@ -5,4 +5,7 @@ edition = "2021"
 
 [dependencies]
 enum-iterator = "2.1.0"
+gray_matter = "0.2.6"
 macros = { path = "../macros" }
+postcard = { version = "1.0.8", features = ["use-std"] }
+serde = "1.0.200"
