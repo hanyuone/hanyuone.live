@@ -1,8 +1,23 @@
-use website::app::App;
+use gloo_net::http::Request;
+use wasm_bindgen::prelude::*;
+use website::{
+    app::{App, AppProps},
+    context::BlogContext,
+};
 
-fn main() {
-    let app = yew::Renderer::<App>::new();
-    
+#[wasm_bindgen(main)]
+async fn main() {
+    let raw_content = Request::get("/public/blog/blog_cards")
+            .send()
+            .await
+            .unwrap()
+            .text()
+            .await
+            .unwrap();
+
+    let blog = BlogContext::new(raw_content.as_bytes());
+    let app = yew::Renderer::<App>::with_props(AppProps { blog });
+
     #[cfg(feature = "hydration")]
     app.hydrate();
 

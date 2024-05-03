@@ -1,7 +1,4 @@
-use yew::{
-    function_component, html, html::PhantomComponent, suspense::use_future, Children,
-    ContextProvider, Html, HtmlResult, Properties, Suspense,
-};
+use yew::{function_component, html, html::PhantomComponent, ContextProvider, Html, Properties};
 use yew_router::{
     history::{AnyHistory, MemoryHistory},
     BrowserRouter, Routable, Router, Switch,
@@ -23,34 +20,19 @@ fn app_content() -> Html {
 }
 
 #[derive(PartialEq, Properties)]
-struct BlogContextWrapperProps {
-    pub children: Children,
-}
-
-#[function_component(BlogContextWrapper)]
-fn blog_context_wrapper(props: &BlogContextWrapperProps) -> HtmlResult {
-    let blog_context = use_future(BlogContext::new)?;
-
-    Ok(html! {
-        <ContextProvider<BlogContext> context={blog_context.clone()}>
-            {props.children.clone()}
-        </ContextProvider<BlogContext>>
-    })
+pub struct AppProps {
+    pub blog: BlogContext,
 }
 
 #[function_component(App)]
-pub fn app() -> Html {
-    let fallback = html! { <p>{"Loading..."}</p> };
-
+pub fn app(props: &AppProps) -> Html {
     html! {
         <PhantomComponent<ContextProvider<HeadContext>>>
-            <Suspense {fallback}>
-                <BlogContextWrapper>
-                    <BrowserRouter>
-                        <AppContent />
-                    </BrowserRouter>
-                </BlogContextWrapper>
-            </Suspense>
+            <ContextProvider<BlogContext> context={props.blog.clone()}>
+                <BrowserRouter>
+                    <AppContent />
+                </BrowserRouter>
+            </ContextProvider<BlogContext>>
         </PhantomComponent<ContextProvider<HeadContext>>>
     }
 }
@@ -59,6 +41,7 @@ pub fn app() -> Html {
 pub struct StaticAppProps {
     pub route: Route,
     pub head: HeadContext,
+    pub blog: BlogContext,
 }
 
 impl StaticAppProps {
@@ -71,19 +54,15 @@ impl StaticAppProps {
 
 #[function_component(StaticApp)]
 pub fn static_app(props: &StaticAppProps) -> Html {
-    let fallback = html! { <p>{"Loading..."}</p> };
-
     let history = props.create_history();
 
     html! {
         <ContextProvider<HeadContext> context={props.head.clone()}>
-            <Suspense {fallback}>
-                <BlogContextWrapper>
-                    <Router history={history}>
-                        <AppContent />
-                    </Router>
-                </BlogContextWrapper>
-            </Suspense>
+            <ContextProvider<BlogContext> context={props.blog.clone()}>
+                <Router history={history}>
+                    <AppContent />
+                </Router>
+            </ContextProvider<BlogContext>>
         </ContextProvider<HeadContext>>
     }
 }

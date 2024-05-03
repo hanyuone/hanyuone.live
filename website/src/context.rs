@@ -1,6 +1,5 @@
 use std::{cell::RefCell, rc::Rc};
 
-use gloo_net::http::Request;
 use markdown::blog::BlogCard;
 use yew::Html;
 
@@ -35,17 +34,8 @@ impl PartialEq for BlogContext {
 }
 
 impl BlogContext {
-    pub async fn new() -> Self {
-        let raw_content = Request::get("/public/blog/blog_cards")
-            .send()
-            .await
-            .unwrap()
-            .text()
-            .await
-            .unwrap();
-
-        let content = postcard::from_bytes::<Vec<BlogCard>>(raw_content.as_bytes()).unwrap();
-
+    pub fn new(bytes: &[u8]) -> Self {
+        let content = postcard::from_bytes::<Vec<BlogCard>>(bytes).unwrap();
         Self { content }
     }
 }

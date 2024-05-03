@@ -6,7 +6,7 @@ use std::{
 use website::{
     app::{StaticApp, StaticAppProps},
     components::head::{HeadRender, HeadRenderProps},
-    context::HeadContext,
+    context::{BlogContext, HeadContext},
     pages::Route,
 };
 use yew::LocalServerRenderer;
@@ -65,18 +65,25 @@ impl Template {
 /// A "holder" for the `index.html` template and the directory where generated
 /// HTML files should go.
 struct Env {
-    template: Template,
     target_dir: PathBuf,
+    template: Template,
+    blog_context: BlogContext,
 }
 
 impl Env {
     async fn new() -> io::Result<Self> {
-        let target_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../dist");
+        let root_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+
+        let target_dir = root_dir.join("../dist");
         let template = Template::load(target_dir.join("index.html")).await?;
 
+        let raw_blog_context = tokio::fs::read(target_dir.join("public/blog/blog_cards")).await?;
+        let blog_context = BlogContext::new(&raw_blog_context);
+
         Ok(Self {
-            template,
             target_dir,
+            template,
+            blog_context,
         })
     }
 
@@ -86,7 +93,7 @@ impl Env {
 
         let render = {
             let head = head.clone();
-            LocalServerRenderer::<StaticApp>::with_props(StaticAppProps { route, head })
+            LocalServerRenderer::<StaticApp>::with_props(StaticAppProps { route, head, blog: self.blog_context.clone() })
         };
 
         let mut body = String::new();

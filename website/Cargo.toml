@@ -27,6 +27,7 @@ gloo = "0.11.0"
 gloo-net = "0.5.0"
 markdown = { path = "../markdown" }
 postcard = { version = "1.0.8", features = ["use-std"] }
+wasm-bindgen = "0.2.92"
 wasm-bindgen-futures = "0.4"
 web-sys = "0.3.69"
 yew = { version = "0.21.0", features = ["csr"] }
@@ -42,9 +43,10 @@ features = [
 ]
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-wasm-bindgen-futures = { version = "0.4" }
-wasm-logger = { version = "0.2" }
+wasm-bindgen = "0.2.92"
+wasm-bindgen-futures = "0.4"
+wasm-logger = "0.2"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
-env_logger = { version = "0.10" }
+env_logger = "0.10"
 tokio = { version = "1.37.0", features = ["full"] }
