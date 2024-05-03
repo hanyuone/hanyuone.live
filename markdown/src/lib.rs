@@ -1,21 +1,14 @@
-pub mod blog_id;
+pub mod blog;
 mod front_matter;
 
-use blog_id::BlogId;
+use blog::{BlogCard, BlogId};
 use front_matter::FrontMatter;
 use gray_matter::{engine::YAML, Matter, ParsedEntityStruct};
-use serde::{Deserialize, Serialize};
 use std::{
     fs, io,
     path::{Path, PathBuf},
     str::FromStr,
 };
-
-#[derive(Deserialize, Serialize)]
-struct BlogCard {
-    id: BlogId,
-    front_matter: FrontMatter,
-}
 
 struct BlogFile {
     id: BlogId,
@@ -85,8 +78,8 @@ fn write_blog_files(target_dir: impl AsRef<Path>, files: Vec<BlogFile>) -> io::R
 }
 
 // Guaranteed that these directories exist - if not, panicking is okay
-pub fn build_md_files(blog_dir: &str, dist_dir: &str) -> io::Result<()> {
-    let target_dir = PathBuf::from(dist_dir).join("public/blog");
+pub fn build_md_files(blog_dir: &str, target_dir: &str) -> io::Result<()> {
+    let target_dir = PathBuf::from(target_dir);
     let files = create_blog_files(blog_dir)?;
     write_blog_files(target_dir, files)?;
 

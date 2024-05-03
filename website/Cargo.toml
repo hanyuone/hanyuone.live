@@ -26,6 +26,7 @@ enum-iterator = "2.0.1"
 gloo = "0.11.0"
 gloo-net = "0.5.0"
 markdown = { path = "../markdown" }
+postcard = { version = "1.0.8", features = ["use-std"] }
 wasm-bindgen-futures = "0.4"
 web-sys = "0.3.69"
 yew = { version = "0.21.0", features = ["csr"] }

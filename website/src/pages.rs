@@ -1,9 +1,10 @@
 use enum_iterator::Sequence;
-use markdown::blog_id::BlogId;
+use markdown::blog::BlogId;
 use yew::{html, Html};
 use yew_router::Routable;
 
 mod about;
+mod blog;
 mod blog_post;
 mod home;
 
@@ -13,6 +14,8 @@ pub enum Route {
     Home,
     #[at("/about")]
     About,
+    #[at("/blog")]
+    Blog,
     #[at("/blog/:blog_id")]
     BlogPost { blog_id: BlogId },
 }
@@ -22,6 +25,7 @@ impl Route {
         match self {
             Route::Home => html! { <home::Page /> },
             Route::About => html! { <about::Page /> },
+            Route::Blog => html! { <blog::Page /> },
             Route::BlogPost { blog_id } => html! { <blog_post::Page {blog_id} /> },
         }
     }

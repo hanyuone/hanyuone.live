@@ -1,10 +1,10 @@
-use std::{cell::RefCell, rc::Rc};
-
 use web_sys::HtmlHeadElement;
 use yew::{
     create_portal, function_component, html, use_context, use_state, Children, Html, Properties,
 };
 use yew_hooks::use_effect_once;
+
+use crate::context::HeadContext;
 
 #[derive(Properties, PartialEq)]
 pub struct HeadProps {
@@ -81,25 +81,6 @@ pub fn head(props: &HeadProps) -> Html {
     };
 
     html! { <div>{portal}</div> }
-}
-
-#[derive(Default)]
-pub struct HeadContext {
-    content: Rc<RefCell<Html>>,
-}
-
-impl PartialEq for HeadContext {
-    fn eq(&self, _: &Self) -> bool {
-        true
-    }
-}
-
-impl Clone for HeadContext {
-    fn clone(&self) -> Self {
-        Self {
-            content: self.content.clone(),
-        }
-    }
 }
 
 #[derive(Properties, PartialEq)]

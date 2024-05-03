@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "cd website && trunk serve",
     "build:md": "cargo run -p markdown",
+    "dev": "pnpm build:md && cd website && trunk serve",
     "build:wasm": "cd website && trunk build --release --features hydration",
     "build:ssg": "cargo run -p website --bin ssr --features static release",
-    "build": "pnpm build:wasm && pnpm build:ssg && pnpm build:md"
+    "build": "pnpm build:md && pnpm build:wasm && pnpm build:ssg"
   },
   "keywords": [],
   "author": "",

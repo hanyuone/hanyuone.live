@@ -1,7 +1,5 @@
-use std::path::PathBuf;
-
 use gloo_net::http::Request;
-use markdown::blog_id::BlogId;
+use markdown::blog::BlogId;
 use yew::{function_component, html, use_state, Html, Properties};
 use yew_hooks::use_effect_once;
 
