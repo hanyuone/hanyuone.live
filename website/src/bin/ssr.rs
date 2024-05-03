@@ -5,7 +5,8 @@ use std::{
 
 use website::{
     app::{StaticApp, StaticAppProps},
-    components::head::{HeadContext, HeadRender, HeadRenderProps},
+    components::head::{HeadRender, HeadRenderProps},
+    context::HeadContext,
     pages::Route,
 };
 use yew::LocalServerRenderer;
