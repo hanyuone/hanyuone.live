@@ -26,13 +26,14 @@ impl Template {
     /// `<head>` tags into) or `</body>` (for injecting `<body>` tags into).
     async fn load(path: impl AsRef<Path>) -> io::Result<Self> {
         let content = tokio::fs::read_to_string(path).await?;
+        eprintln!("{}", content);
 
         let Some(head_index) = content.find("<script id=head-ssg-after") else {
-            return Err(io::Error::new(io::ErrorKind::Other, "Malformed index.html"));
+            return Err(io::Error::new(io::ErrorKind::Other, "Malformed index.html: no head"));
         };
 
         let Some(body_index) = content.find("</body>") else {
-            return Err(io::Error::new(io::ErrorKind::Other, "Malformed index.html"));
+            return Err(io::Error::new(io::ErrorKind::Other, "Malformed index.html: no body"));
         };
 
         Ok(Self {
@@ -72,9 +73,7 @@ struct Env {
 
 impl Env {
     async fn new() -> io::Result<Self> {
-        let root_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-
-        let target_dir = root_dir.join("../dist");
+        let target_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../dist");
         let template = Template::load(target_dir.join("index.html")).await?;
 
         let raw_blog_context = tokio::fs::read(target_dir.join("public/blog/blog_cards")).await?;
