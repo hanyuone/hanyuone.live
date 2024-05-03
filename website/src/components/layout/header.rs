@@ -20,6 +20,9 @@ pub fn header() -> Html {
                     <Link<Route> classes="px-4 py-4 text-white hover:bg-secondary transition-colors" to={Route::About}>
                         {"About"}
                     </Link<Route>>
+                    <Link<Route> classes="px-4 py-4 text-white hover:bg-secondary transition-colors" to={Route::Blog}>
+                        {"Blog"}
+                    </Link<Route>>
                     <a
                         href="/public/resume.pdf"
                         class="px-4 py-4 text-white hover:bg-secondary transition-colors">
