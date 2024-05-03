@@ -26,9 +26,8 @@ impl Template {
     /// `<head>` tags into) or `</body>` (for injecting `<body>` tags into).
     async fn load(path: impl AsRef<Path>) -> io::Result<Self> {
         let content = tokio::fs::read_to_string(path).await?;
-        eprintln!("{}", content);
 
-        let Some(head_index) = content.find("<script id=head-ssg-after") else {
+        let Some(head_index) = content.find("<script id=\"head-ssg-after\"") else {
             return Err(io::Error::new(io::ErrorKind::Other, "Malformed index.html: no head"));
         };
 
