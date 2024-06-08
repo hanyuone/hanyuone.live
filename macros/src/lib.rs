@@ -22,7 +22,7 @@ impl Parse for BlogModelsInput {
     }
 }
 
-// Loads all blogs as a list of strings.
+/// Loads all blogs as a list of strings.
 fn load_blogs(dir: &str) -> Result<Vec<String>, io::Error> {
     let mut blog_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     blog_dir.pop();
@@ -46,6 +46,16 @@ fn load_blogs(dir: &str) -> Result<Vec<String>, io::Error> {
     Ok(blog_names)
 }
 
+/// Generates the `BlogId` enum dynamically, given a list of blogs.
+/// 
+/// `BlogId` serves as a "bridge" between Yew's routing and the (dynamic) list
+/// of blogs themselves - it contains all blogs as individual enum members that
+/// can be enumerated into proper routes.
+///
+/// # Errors
+///
+/// This function will return an error if the directory specified in `input`
+/// does not exist.
 fn generate(input: BlogModelsInput) -> Result<TokenStream, io::Error> {
     let Generator {
         enumerators,

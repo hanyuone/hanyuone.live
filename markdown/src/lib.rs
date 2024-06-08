@@ -1,5 +1,5 @@
 pub mod blog;
-mod front_matter;
+pub mod front_matter;
 
 use blog::{BlogCard, BlogId};
 use front_matter::FrontMatter;
