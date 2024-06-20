@@ -14,11 +14,13 @@ module.exports = {
                 blink: "blink 1s infinite",
             },
             colors: {
-                primary: {
-                    light: "#637075",
-                    dark: "#0E1428"
-                },
-                secondary: "#7B9E89",
+                black: "#32302F",
+                red: "#EA6962",
+                orange: "#E78A4E",
+                yellow: "#D8A657",
+                green: "#A9B665",
+                blue: "#7DAEA3",
+                purple: "#D3869B",
             },
             keyframes: {
                 blink: {

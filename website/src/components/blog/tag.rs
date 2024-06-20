@@ -8,7 +8,7 @@ pub struct TagProps {
 #[function_component(Tag)]
 pub fn tag(props: &TagProps) -> Html {
     html! {
-        <div class="bg-secondary inline-block">
+        <div class="bg-green inline-block">
             {props.name.clone()}
         </div>
     }

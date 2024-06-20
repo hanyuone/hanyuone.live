@@ -13,7 +13,7 @@ pub struct CardProps {
 #[function_component(Card)]
 pub fn card(props: &CardProps) -> Html {
     html! {
-        <div class="rounded-sm bg-primary-light">
+        <div class="rounded-sm bg-blue">
             <Link<Route> to={Route::BlogPost { blog_id: props.id }}>
                 {props.front_matter.title.clone()}
             </Link<Route>>
