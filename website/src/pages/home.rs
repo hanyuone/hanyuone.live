@@ -40,10 +40,14 @@ pub fn page() -> Html {
                     on_finish={Callback::from(move |_| {
                         typing_complete.set(true);
                     })} />
-                <div class="flex flex-row">
-                    <p class={format!("{} {}", "transition", opacity)}>
-                        {"I am a penultimate-year Computer Science student at UNSW."}
-                    </p>
+                <div class={format!("{} {}", "flex flex-row transition duration-500", opacity)}>
+                    <p>{"I am a penultimate-year Computer Science student at\u{00a0}"}</p>
+                    <a
+                        class="text-green underline transition hover:bg-black-light"
+                        href="https://www.unsw.edu.au/engineering/our-schools/computer-science-and-engineering">
+                        {"UNSW"}
+                    </a>
+                    <p>{"."}</p>
                 </div>
             </div>
         </>

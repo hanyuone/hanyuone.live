@@ -14,7 +14,10 @@ module.exports = {
                 blink: "blink 1s infinite",
             },
             colors: {
-                black: "#32302F",
+                black: {
+                    dark: "#32302F",
+                    light: "#504945",
+                },
                 red: "#EA6962",
                 orange: "#E78A4E",
                 yellow: "#D8A657",
