@@ -2,20 +2,19 @@ use yew::{function_component, html, html_nested, use_state, Callback, Html, Prop
 use yew_hooks::use_interval;
 
 #[derive(Clone, PartialEq)]
-pub struct ParagraphData {
+pub struct Block {
     pub text: &'static str,
     pub class: &'static str,
 }
 
-struct DisplayData {
-    text: &'static str,
-    class: &'static str,
+struct TypewriterBlock {
+    block: Block,
     start: usize,
 }
 
 #[derive(Properties, PartialEq)]
 pub struct TypewriterProps {
-    pub paragraphs: Vec<ParagraphData>,
+    pub blocks: Vec<Block>,
     pub on_finish: Callback<()>,
 }
 
@@ -26,15 +25,13 @@ pub fn typewriter(props: &TypewriterProps) -> Html {
     let mut length = 0;
     let mut display_list = vec![];
 
-    for paragraph in &props.paragraphs {
-        let ParagraphData { text, class } = paragraph;
-        display_list.push(DisplayData {
-            text,
-            class,
+    for block in &props.blocks {
+        display_list.push(TypewriterBlock {
+            block: block.clone(),
             start: length,
         });
 
-        length += text.len();
+        length += block.text.chars().count();
     }
 
     {
@@ -59,22 +56,19 @@ pub fn typewriter(props: &TypewriterProps) -> Html {
                 display_list
                     .iter()
                     .map(|display| {
-                        let DisplayData { text, class, start } = display;
+                        let TypewriterBlock { block, start } = display;
 
                         let display_text = if *index.clone() < *start {
-                            ""
+                            String::new()
                         } else {
                             let adjusted_index = *index.clone() - start;
-
-                            if adjusted_index < text.len() {
-                                &text[..adjusted_index]
-                            } else {
-                                text
-                            }
+                            block.text.chars()
+                                .take(adjusted_index)
+                                .collect::<String>()
                         };
 
                         html_nested! {
-                            <p class={class.to_string()}>{display_text}</p>
+                            <p class={block.class.to_string()}>{display_text}</p>
                         }
                     })
                     .collect::<Vec<_>>()

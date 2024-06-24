@@ -1,17 +1,19 @@
 use yew::{function_component, html, use_state, Callback, Html};
 
-use crate::components::{head::Head, home::typewriter::{ParagraphData, Typewriter}};
+use crate::components::{head::Head, home::typewriter::{Block, Typewriter}};
 
-const PARAGRAPHS: [ParagraphData; 3] = [
-    ParagraphData {
-        text: "Hi, my name is &nbsp;",
+const BLOCKS: [Block; 3] = [
+    Block {
+        // We need Unicode escape here (equivalent to "&nbsp;") since Yew
+        // does not allow for us to do <p>&nbsp;</p> by itself
+        text: "Hi, my name is\u{00a0}",
         class: "font-bold text-3xl",
     },
-    ParagraphData {
+    Block {
         text: "Hanyuan",
         class: "font-bold text-3xl text-blue",
     },
-    ParagraphData {
+    Block {
         text: ".",
         class: "font-bold text-3xl",
     },
@@ -34,7 +36,7 @@ pub fn page() -> Html {
             </Head>
             <div class="ml-20 flex flex-col">
                 <Typewriter
-                    paragraphs={PARAGRAPHS.to_vec()}
+                    blocks={BLOCKS.to_vec()}
                     on_finish={Callback::from(move |_| {
                         typing_complete.set(true);
                     })} />
