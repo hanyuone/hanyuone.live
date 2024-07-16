@@ -1,6 +1,6 @@
 use std::{cell::RefCell, rc::Rc};
 
-use markdown::blog::BlogCard;
+use markdown::structs::blog::BlogCard;
 use yew::Html;
 
 #[derive(Default)]

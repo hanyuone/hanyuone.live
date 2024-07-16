@@ -1,5 +1,5 @@
 use enum_iterator::Sequence;
-use markdown::blog::BlogId;
+use markdown::structs::blog::BlogId;
 use yew::{html, Html};
 use yew_router::Routable;
 

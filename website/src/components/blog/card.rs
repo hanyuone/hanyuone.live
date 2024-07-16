@@ -1,4 +1,4 @@
-use markdown::{blog::BlogId, front_matter::FrontMatter};
+use markdown::structs::{blog::BlogId, front_matter::FrontMatter};
 use yew::{function_component, html, html_nested, Html, Properties};
 use yew_router::components::Link;
 

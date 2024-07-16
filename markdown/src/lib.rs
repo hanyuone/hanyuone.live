@@ -1,19 +1,22 @@
-pub mod blog;
-pub mod front_matter;
+pub mod render;
+pub mod structs;
 
-use blog::{BlogCard, BlogId};
-use front_matter::FrontMatter;
 use gray_matter::{engine::YAML, Matter, ParsedEntityStruct};
+use render::to_bytestring;
 use std::{
     fs, io,
     path::{Path, PathBuf},
     str::FromStr,
 };
+use structs::{
+    blog::{BlogCard, BlogId},
+    front_matter::FrontMatter,
+};
 
 struct BlogFile {
     id: BlogId,
     front_matter: FrontMatter,
-    content: String,
+    content: Vec<u8>,
 }
 
 fn create_blog_files(content_dir: &str) -> io::Result<Vec<BlogFile>> {
@@ -23,10 +26,16 @@ fn create_blog_files(content_dir: &str) -> io::Result<Vec<BlogFile>> {
 
     for entry in fs::read_dir(PathBuf::from(content_dir))? {
         let entry = entry?;
-        let contents = fs::read_to_string(entry.path())?;
 
-        let ParsedEntityStruct { data, content, .. } =
-            matter.parse_with_struct::<FrontMatter>(&contents).unwrap();
+        let raw_content = fs::read_to_string(entry.path())?;
+
+        let ParsedEntityStruct { data, content, .. } = matter
+            .parse_with_struct::<FrontMatter>(&raw_content)
+            .unwrap();
+
+        let render_info = to_bytestring(&content);
+
+        // TODO: add reading time from render_info to frontmatter
 
         let filename = entry
             .path()
@@ -39,7 +48,7 @@ fn create_blog_files(content_dir: &str) -> io::Result<Vec<BlogFile>> {
         results.push(BlogFile {
             id: BlogId::from_str(&filename).expect("valid MD name"),
             front_matter: data,
-            content,
+            content: render_info.bytes,
         });
     }
 
@@ -61,10 +70,7 @@ fn write_blog_files(target_dir: impl AsRef<Path>, files: Vec<BlogFile>) -> io::R
         });
 
         // Write content to file
-        let filename = target_dir
-            .as_ref()
-            .join(file.id.to_string())
-            .with_extension("md");
+        let filename = target_dir.as_ref().join(file.id.to_string());
 
         fs::write(filename, file.content)?;
     }
