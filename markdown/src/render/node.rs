@@ -1,5 +1,6 @@
 use std::fmt::Display;
 
+use pulldown_cmark::HeadingLevel;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
@@ -10,13 +11,40 @@ pub enum RenderNode {
 
 #[derive(Serialize, Deserialize, PartialEq)]
 pub enum RenderTag {
+    H1,
+    H2,
+    H3,
+    H4,
+    H5,
+    H6,
     P,
 }
 
 impl Display for RenderTag {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match *self {
-            RenderTag::P => write!(f, "p"),
+        let as_str = match *self {
+            RenderTag::H1 => "h1",
+            RenderTag::H2 => "h2",
+            RenderTag::H3 => "h3",
+            RenderTag::H4 => "h4",
+            RenderTag::H5 => "h5",
+            RenderTag::H6 => "h6",
+            RenderTag::P => "p",
+        };
+
+        write!(f, "{}", as_str)
+    }
+}
+
+impl From<HeadingLevel> for RenderTag {
+    fn from(value: HeadingLevel) -> Self {
+        match value {
+            HeadingLevel::H1 => RenderTag::H1,
+            HeadingLevel::H2 => RenderTag::H2,
+            HeadingLevel::H3 => RenderTag::H3,
+            HeadingLevel::H4 => RenderTag::H4,
+            HeadingLevel::H5 => RenderTag::H5,
+            HeadingLevel::H6 => RenderTag::H6,
         }
     }
 }
@@ -27,9 +55,9 @@ pub enum AttributeName {
     Id,
 }
 
-impl AttributeName {
-    pub fn as_str(&self) -> &'static str {
-        match self {
+impl From<AttributeName> for &'static str {
+    fn from(value: AttributeName) -> Self {
+        match value {
             AttributeName::Class => "class",
             AttributeName::Id => "id",
         }
@@ -56,5 +84,13 @@ impl RenderElement {
             attributes: vec![],
             children: vec![],
         }
+    }
+
+    pub fn add_attribute(&mut self, key: AttributeName, value: String) {
+        self.attributes.push(Attribute { key, value })
+    }
+
+    pub fn add_child(&mut self, child: RenderNode) {
+        self.children.push(child)
     }
 }

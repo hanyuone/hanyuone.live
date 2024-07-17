@@ -4,7 +4,7 @@ use yew::{
     Html,
 };
 
-pub fn to_html(node: &RenderNode) -> Html {
+pub fn to_html(node: RenderNode) -> Html {
     match node {
         RenderNode::Text(text) => VText::new(text.clone()).into(),
         RenderNode::Element(RenderElement {
@@ -15,11 +15,11 @@ pub fn to_html(node: &RenderNode) -> Html {
             let mut tag = VTag::new(tag.to_string());
 
             for attribute in attributes {
-                tag.add_attribute(attribute.key.as_str(), attribute.value.clone());
+                tag.add_attribute(attribute.key.into(), attribute.value.clone());
             }
 
             for child in children {
-                tag.add_child(to_html(&child));
+                tag.add_child(to_html(child));
             }
 
             tag.into()

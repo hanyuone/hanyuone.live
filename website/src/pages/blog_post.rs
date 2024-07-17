@@ -45,7 +45,7 @@ pub fn page(props: &BlogProps) -> Html {
                 <title>{"Blog | Hanyuan's Website"}</title>
             </Head>
             {
-                nodes.iter()
+                nodes.into_iter()
                     .map(|node| {
                         to_html(node)
                     })

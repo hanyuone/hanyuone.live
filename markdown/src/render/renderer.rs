@@ -2,7 +2,7 @@ use std::marker::PhantomData;
 
 use pulldown_cmark::{Event, Tag, TagEnd};
 
-use super::node::{RenderElement, RenderNode, RenderTag};
+use super::node::{AttributeName, RenderElement, RenderNode, RenderTag};
 
 pub struct Renderer<'a, I> {
     tokens: I,
@@ -24,6 +24,14 @@ where
         }
     }
 
+    fn output(&mut self, node: RenderNode) {
+        if let Some(top) = self.stack.last_mut() {
+            top.add_child(node);
+        } else {
+            self.output.push(node);
+        }
+    }
+
     fn enter(&mut self, element: RenderElement) {
         self.stack.push(element);
     }
@@ -40,24 +48,37 @@ where
             top.tag
         );
 
-        if let Some(new_top) = self.stack.last_mut() {
-            new_top.children.push(RenderNode::Element(top));
-        } else {
-            self.output.push(RenderNode::Element(top));
-        }
+        self.output(RenderNode::Element(top))
     }
 
     fn run_start(&mut self, tag: Tag) {
         match tag {
             Tag::Paragraph => self.enter(RenderElement::new(RenderTag::P)),
-            _ => {},
+            Tag::Heading {
+                level, id, classes, ..
+            } => {
+                let mut element = RenderElement::new(level.into());
+
+                if let Some(id) = id {
+                    element.add_attribute(AttributeName::Id, id.into_string());
+                }
+
+                if !classes.is_empty() {
+                    let classes_string = classes.join(" ");
+                    element.add_attribute(AttributeName::Class, classes_string);
+                }
+
+                self.enter(element)
+            }
+            _ => {}
         }
     }
 
     fn run_end(&mut self, tag: TagEnd) {
         match tag {
             TagEnd::Paragraph => self.leave(RenderTag::P),
-            _ => {},
+            TagEnd::Heading(level) => self.leave(level.into()),
+            _ => {}
         }
     }
 
@@ -67,7 +88,7 @@ where
             Event::End(tag) => self.run_end(tag),
             Event::Text(text) => {
                 let node = RenderNode::Text(text.to_string());
-                self.output.push(node);
+                self.output(node);
             }
             _ => todo!(),
         }
