@@ -1,2 +1,2 @@
 pub mod blog;
-pub mod front_matter;
+pub mod metadata;

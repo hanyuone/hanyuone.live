@@ -1,23 +1,23 @@
 pub mod node;
 pub mod renderer;
 
-use std::time::Duration;
-
 use pulldown_cmark::{Options, Parser};
-use renderer::Renderer;
+use renderer::{RenderOutput, Renderer};
 
-pub struct RenderInfo {
+use crate::structs::metadata::PostRenderData;
+
+pub struct RenderOutputBytes {
     pub bytes: Vec<u8>,
-    pub read_time: Duration,
+    pub post_render: PostRenderData,
 }
 
-pub fn to_bytestring(raw: &str) -> RenderInfo {
+pub fn to_bytestring(raw: &str) -> RenderOutputBytes {
     let parser = Parser::new_ext(raw, Options::all());
     let renderer = Renderer::new(parser);
-    let nodes = renderer.run();
+    let RenderOutput { nodes, post_render } = renderer.run();
 
-    RenderInfo {
+    RenderOutputBytes {
         bytes: postcard::to_stdvec(&nodes).expect("encoded nodes into bytestring"),
-        read_time: Duration::ZERO,
+        post_render,
     }
 }

@@ -10,10 +10,10 @@ pub fn page() -> Html {
         <div class="m-4 grid grid-cols-3 gap-4">
         {
             blog_context.content.into_iter()
-                .map(|card| html_nested! {
+                .map(|(id, metadata)| html_nested! {
                     <Card
-                        id={card.id}
-                        front_matter={card.front_matter} />
+                        id={id}
+                        metadata={metadata} />
                 })
                 .collect::<Vec<_>>()
         }

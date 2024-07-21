@@ -1,6 +1,6 @@
-use std::{cell::RefCell, rc::Rc};
+use std::{cell::RefCell, collections::HashMap, rc::Rc};
 
-use markdown::structs::blog::BlogCard;
+use markdown::structs::{blog::BlogId, metadata::BlogMetadata};
 use yew::Html;
 
 #[derive(Default)]
@@ -24,7 +24,7 @@ impl Clone for HeadContext {
 
 #[derive(Clone)]
 pub struct BlogContext {
-    pub content: Vec<BlogCard>,
+    pub content: HashMap<BlogId, BlogMetadata>,
 }
 
 impl PartialEq for BlogContext {
@@ -35,7 +35,7 @@ impl PartialEq for BlogContext {
 
 impl BlogContext {
     pub fn new(bytes: &[u8]) -> Self {
-        let content = postcard::from_bytes::<Vec<BlogCard>>(bytes).unwrap();
+        let content = postcard::from_bytes::<HashMap<BlogId, BlogMetadata>>(bytes).unwrap();
         Self { content }
     }
 }

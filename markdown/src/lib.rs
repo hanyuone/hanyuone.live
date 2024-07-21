@@ -2,20 +2,18 @@ pub mod render;
 pub mod structs;
 
 use gray_matter::{engine::YAML, Matter, ParsedEntityStruct};
-use render::to_bytestring;
+use render::{to_bytestring, RenderOutputBytes};
 use std::{
-    fs, io,
-    path::{Path, PathBuf},
-    str::FromStr,
+    collections::HashMap, fs, io, path::{Path, PathBuf}, str::FromStr
 };
 use structs::{
-    blog::{BlogCard, BlogId},
-    front_matter::FrontMatter,
+    blog::BlogId,
+    metadata::{BlogMetadata, FrontMatter},
 };
 
 struct BlogFile {
     id: BlogId,
-    front_matter: FrontMatter,
+    metadata: BlogMetadata,
     content: Vec<u8>,
 }
 
@@ -29,13 +27,15 @@ fn create_blog_files(content_dir: &str) -> io::Result<Vec<BlogFile>> {
 
         let raw_content = fs::read_to_string(entry.path())?;
 
-        let ParsedEntityStruct { data, content, .. } = matter
+        let ParsedEntityStruct {
+            data: front_matter,
+            content,
+            ..
+        } = matter
             .parse_with_struct::<FrontMatter>(&raw_content)
             .unwrap();
 
-        let render_info = to_bytestring(&content);
-
-        // TODO: add reading time from render_info to frontmatter
+        let RenderOutputBytes { bytes, post_render } = to_bytestring(&content);
 
         let filename = entry
             .path()
@@ -47,8 +47,8 @@ fn create_blog_files(content_dir: &str) -> io::Result<Vec<BlogFile>> {
 
         results.push(BlogFile {
             id: BlogId::from_str(&filename).expect("valid MD name"),
-            front_matter: data,
-            content: render_info.bytes,
+            metadata: BlogMetadata { front_matter, post_render },
+            content: bytes,
         });
     }
 
@@ -60,14 +60,11 @@ fn write_blog_files(target_dir: impl AsRef<Path>, files: Vec<BlogFile>) -> io::R
     fs::create_dir_all(&target_dir)?;
 
     // Mapping between blog IDs and frontmatter
-    let mut blog_cards = vec![];
+    let mut blog_cards: HashMap<BlogId, BlogMetadata> = HashMap::new();
 
     for file in files {
         // Insert frontmatter into mapping
-        blog_cards.push(BlogCard {
-            id: file.id,
-            front_matter: file.front_matter,
-        });
+        blog_cards.insert(file.id, file.metadata);
 
         // Write content to file
         let filename = target_dir.as_ref().join(file.id.to_string());

@@ -1,9 +1,9 @@
 use gloo_net::http::Request;
 use markdown::{render::node::RenderNode, structs::blog::BlogId};
-use yew::{function_component, html, use_state, Html, Properties, UseStateHandle};
+use yew::{function_component, html, use_context, use_state, Html, Properties, UseStateHandle};
 use yew_hooks::use_effect_once;
 
-use crate::{components::head::Head, render::to_html};
+use crate::{components::head::Head, context::BlogContext, render::to_html};
 
 #[derive(PartialEq, Properties)]
 pub struct BlogProps {
@@ -12,6 +12,7 @@ pub struct BlogProps {
 
 #[function_component(Page)]
 pub fn page(props: &BlogProps) -> Html {
+    let blog_context = use_context::<BlogContext>().unwrap();
     let content: UseStateHandle<Vec<u8>> = use_state(Vec::new);
 
     {
@@ -37,12 +38,13 @@ pub fn page(props: &BlogProps) -> Html {
         });
     }
 
+    let title = &blog_context.content[&props.blog_id].front_matter.title;
     let nodes = postcard::from_bytes::<Vec<RenderNode>>(&content).unwrap_or_default();
 
     html! {
         <>
             <Head>
-                <title>{"Blog | Hanyuan's Website"}</title>
+                <title>{format!("{} | Hanyuan's Website", title)}</title>
             </Head>
             {
                 nodes.into_iter()

@@ -1,8 +1,15 @@
-use std::marker::PhantomData;
+use std::{marker::PhantomData, time::Duration};
 
 use pulldown_cmark::{Event, Tag, TagEnd};
 
+use crate::structs::metadata::PostRenderData;
+
 use super::node::{AttributeName, RenderElement, RenderNode, RenderTag};
+
+pub struct RenderOutput {
+    pub nodes: Vec<RenderNode>,
+    pub post_render: PostRenderData,
+}
 
 pub struct Renderer<'a, I> {
     tokens: I,
@@ -94,11 +101,14 @@ where
         }
     }
 
-    pub fn run(mut self) -> Vec<RenderNode> {
+    pub fn run(mut self) -> RenderOutput {
         while let Some(token) = self.tokens.next() {
             self.run_token(token);
         }
 
-        self.output
+        RenderOutput {
+            nodes: self.output,
+            post_render: PostRenderData { read_time: Duration::ZERO },
+        }
     }
 }
