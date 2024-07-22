@@ -40,7 +40,7 @@ pub fn blog_card(props: &BlogCardProps) -> Html {
                 <div class="flex-col basis-1/4 p-4">
                     <img
                         src={front_matter.image.clone()}
-                        class="aspect-video" />
+                        class="aspect-video object-cover" />
                 </div>
                 <div class="flex flex-col basis-3/4 p-4">
                     <h2 class="text-xl">{&front_matter.title}</h2>
