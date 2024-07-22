@@ -1,5 +1,6 @@
-use std::{marker::PhantomData, time::Duration};
+use std::marker::PhantomData;
 
+use chrono::TimeDelta;
 use pulldown_cmark::{Event, Tag, TagEnd};
 
 use crate::structs::metadata::PostRenderData;
@@ -108,7 +109,9 @@ where
 
         RenderOutput {
             nodes: self.output,
-            post_render: PostRenderData { read_time: Duration::ZERO },
+            post_render: PostRenderData {
+                read_time: TimeDelta::zero(),
+            },
         }
     }
 }

@@ -21,6 +21,14 @@ pub fn blog_card(props: &BlogCardProps) -> Html {
                 <div class="flex-col">
                     <h2 class="text-xl">{&front_matter.title}</h2>
                     <div>
+                        <span class="text-gray-500">
+                            {
+                                format!(
+                                    "{} · ",
+                                    &front_matter.publish_date.format("%d %b %Y").to_string(),
+                                )
+                            }
+                        </span>
                         {
                             front_matter.tags
                                 .iter()

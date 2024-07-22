@@ -12,13 +12,23 @@ pub struct BlogItemProps {
 
 #[function_component(BlogItem)]
 pub fn blog_item(props: &BlogItemProps) -> Html {
+    let front_matter = &props.metadata.front_matter;
+
     html! {
         <Link<Route> to={Route::BlogPost { blog_id: props.id }}>
             <div class="flex-col border-t-[1px] border-white hover:bg-black-light">
-                <h3>{&props.metadata.front_matter.title}</h3>
+                <h3>{&front_matter.title}</h3>
                 <div>
+                    <span class="text-gray-500">
+                        {
+                            format!(
+                                "{} · ",
+                                &front_matter.publish_date.format("%d %b %Y").to_string(),
+                            )
+                        }
+                    </span>
                     {
-                        props.metadata.front_matter.tags.iter()
+                        front_matter.tags.iter()
                             .map(|tag_name| html_nested! {
                                 <Tag
                                     name={tag_name.clone()} />

@@ -8,7 +8,7 @@ use std::{
 };
 use structs::{
     blog::BlogId,
-    metadata::{BlogMetadata, FrontMatter},
+    metadata::{BlogMetadata, RawFrontMatter},
 };
 
 struct BlogFile {
@@ -32,7 +32,7 @@ fn create_blog_files(content_dir: &str) -> io::Result<Vec<BlogFile>> {
             content,
             ..
         } = matter
-            .parse_with_struct::<FrontMatter>(&raw_content)
+            .parse_with_struct::<RawFrontMatter>(&raw_content)
             .unwrap();
 
         let RenderOutputBytes { bytes, post_render } = to_bytestring(&content);
@@ -47,7 +47,10 @@ fn create_blog_files(content_dir: &str) -> io::Result<Vec<BlogFile>> {
 
         results.push(BlogFile {
             id: BlogId::from_str(&filename).expect("valid MD name"),
-            metadata: BlogMetadata { front_matter, post_render },
+            metadata: BlogMetadata {
+                front_matter: front_matter.into(),
+                post_render,
+            },
             content: bytes,
         });
     }

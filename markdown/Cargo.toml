@@ -4,9 +4,11 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+chrono = "0.4.38"
 enum-iterator = "2.1.0"
 gray_matter = "0.2.6"
 macros = { path = "../macros" }
 postcard = { version = "1.0.8", features = ["use-std"] }
 pulldown-cmark = "0.11.0"
 serde = "1.0.200"
+serde_with = { version = "3.9.0", features = ["chrono_0_4"] }
