@@ -10,7 +10,11 @@ fn capitalise(word: &str) -> String {
 }
 
 fn to_title_case(kebab_case: &str) -> String {
-    kebab_case.split('-').map(capitalise).collect::<Vec<_>>().join("")
+    kebab_case
+        .split('-')
+        .map(capitalise)
+        .collect::<Vec<_>>()
+        .join("")
 }
 
 #[derive(Default)]

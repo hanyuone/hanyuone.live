@@ -1,6 +1,9 @@
 use yew::{function_component, html, use_state, Callback, Html};
 
-use crate::components::{head::Head, home::typewriter::{Block, Typewriter}};
+use crate::components::{
+    head::Head,
+    home::typewriter::{Block, Typewriter},
+};
 
 const BLOCKS: [Block; 3] = [
     Block {

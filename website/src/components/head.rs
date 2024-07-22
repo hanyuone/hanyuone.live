@@ -15,7 +15,7 @@ pub struct HeadProps {
 /// Removes any tags that exist between `head-ssg-before` and `head-ssg-after`
 /// defined in `index.html`, essentially acting as a manual hydration of
 /// tags that need to be refreshed in `head` when we switch pages.
-/// 
+///
 /// Only applies to server-side rendering - the client injects custom `head` tags
 /// into the bottom anyway, not within the two `script` tags.
 fn clean_head_ssg(head: &HtmlHeadElement) {

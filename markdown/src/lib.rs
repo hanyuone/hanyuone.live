@@ -4,7 +4,10 @@ pub mod structs;
 use gray_matter::{engine::YAML, Matter, ParsedEntityStruct};
 use render::{to_bytestring, RenderOutputBytes};
 use std::{
-    collections::HashMap, fs, io, path::{Path, PathBuf}, str::FromStr
+    collections::HashMap,
+    fs, io,
+    path::{Path, PathBuf},
+    str::FromStr,
 };
 use structs::{
     blog::BlogId,

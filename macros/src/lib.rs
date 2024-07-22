@@ -47,7 +47,7 @@ fn load_blogs(dir: &str) -> Result<Vec<String>, io::Error> {
 }
 
 /// Generates the `BlogId` enum dynamically, given a list of blogs.
-/// 
+///
 /// `BlogId` serves as a "bridge" between Yew's routing and the (dynamic) list
 /// of blogs themselves - it contains all blogs as individual enum members that
 /// can be enumerated into proper routes.
