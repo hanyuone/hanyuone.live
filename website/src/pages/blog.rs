@@ -12,7 +12,10 @@ use crate::{
 pub fn page() -> Html {
     let blog_context = use_context::<BlogContext>().unwrap();
 
-    let blogs = &mut blog_context.content.into_iter();
+    let mut blogs = blog_context.content.into_iter().collect::<Vec<_>>();
+    blogs.sort_by(|(_, a), (_, b)| b.front_matter.publish_date.cmp(&a.front_matter.publish_date));
+        
+    let mut blogs = blogs.into_iter();
     let first_blog = blogs.next();
 
     if let Some((first_id, first_metadata)) = first_blog {

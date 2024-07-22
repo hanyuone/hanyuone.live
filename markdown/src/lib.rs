@@ -63,11 +63,11 @@ fn write_blog_files(target_dir: impl AsRef<Path>, files: Vec<BlogFile>) -> io::R
     fs::create_dir_all(&target_dir)?;
 
     // Mapping between blog IDs and frontmatter
-    let mut blog_cards: HashMap<BlogId, BlogMetadata> = HashMap::new();
+    let mut blog_map: HashMap<BlogId, BlogMetadata> = HashMap::new();
 
     for file in files {
         // Insert frontmatter into mapping
-        blog_cards.insert(file.id, file.metadata);
+        blog_map.insert(file.id, file.metadata);
 
         // Write content to file
         let filename = target_dir.as_ref().join(file.id.to_string());
@@ -76,9 +76,9 @@ fn write_blog_files(target_dir: impl AsRef<Path>, files: Vec<BlogFile>) -> io::R
     }
 
     // Write list of blog cards to target dir
-    let blog_cards_filename = target_dir.as_ref().join("blog_cards");
-    let bytestring = postcard::to_stdvec(&blog_cards).expect("valid utf-8");
-    fs::write(blog_cards_filename, bytestring)?;
+    let blog_map_filename = target_dir.as_ref().join("blog_map");
+    let bytestring = postcard::to_stdvec(&blog_map).expect("valid utf-8");
+    fs::write(blog_map_filename, bytestring)?;
 
     Ok(())
 }

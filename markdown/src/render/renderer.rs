@@ -16,6 +16,7 @@ pub struct Renderer<'a, I> {
     tokens: I,
     output: Vec<RenderNode>,
     stack: Vec<RenderElement>,
+    post_render: PostRenderData,
     phantom: PhantomData<&'a I>,
 }
 
@@ -28,6 +29,9 @@ where
             tokens,
             output: vec![],
             stack: vec![],
+            post_render: PostRenderData {
+                read_time: TimeDelta::zero(),
+            },
             phantom: PhantomData,
         }
     }
@@ -95,6 +99,9 @@ where
             Event::Start(tag) => self.run_start(tag),
             Event::End(tag) => self.run_end(tag),
             Event::Text(text) => {
+                let words = text.split(' ').count();
+                self.post_render.read_time += TimeDelta::seconds((words as i64) / 200);
+
                 let node = RenderNode::Text(text.to_string());
                 self.output(node);
             }
@@ -109,9 +116,7 @@ where
 
         RenderOutput {
             nodes: self.output,
-            post_render: PostRenderData {
-                read_time: TimeDelta::zero(),
-            },
+            post_render: self.post_render,
         }
     }
 }

@@ -34,7 +34,7 @@ pub fn page() -> Html {
             <Head>
                 <title>{"Hanyuan's Website"}</title>
             </Head>
-            <div class="ml-20 flex flex-col">
+            <div class="flex flex-col">
                 <Typewriter
                     blocks={BLOCKS.to_vec()}
                     on_finish={Callback::from(move |_| {

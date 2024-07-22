@@ -19,14 +19,8 @@ pub fn blog_item(props: &BlogItemProps) -> Html {
             <div class="flex-col border-t-[1px] border-white hover:bg-black-light">
                 <h3>{&front_matter.title}</h3>
                 <div>
-                    <span class="text-gray-500">
-                        {
-                            format!(
-                                "{} · ",
-                                &front_matter.publish_date.format("%d %b %Y").to_string(),
-                            )
-                        }
-                    </span>
+                    <span class="text-gray-500">{&front_matter.publish_date.format("%d %b %Y").to_string()}</span>
+                    <span class="text-white">{" · "}</span>
                     {
                         front_matter.tags.iter()
                             .map(|tag_name| html_nested! {

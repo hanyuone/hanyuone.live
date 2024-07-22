@@ -7,7 +7,7 @@ use website::{
 
 #[wasm_bindgen(main)]
 async fn main() {
-    let raw_content = Request::get("/public/blog/blog_cards")
+    let raw_content = Request::get("/public/blog/blog_map")
             .send()
             .await
             .unwrap()
