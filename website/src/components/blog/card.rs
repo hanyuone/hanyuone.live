@@ -5,32 +5,34 @@ use yew_router::components::Link;
 use crate::{components::blog::tag::Tag, pages::Route};
 
 #[derive(Properties, PartialEq)]
-pub struct CardProps {
+pub struct BlogCardProps {
     pub id: BlogId,
     pub metadata: BlogMetadata,
 }
 
-#[function_component(Card)]
-pub fn card(props: &CardProps) -> Html {
+#[function_component(BlogCard)]
+pub fn blog_card(props: &BlogCardProps) -> Html {
     let front_matter = &props.metadata.front_matter;
 
     html! {
-        <div class="rounded-sm bg-blue">
-            <Link<Route> to={Route::BlogPost { blog_id: props.id }}>
-                {front_matter.title.clone()}
-            </Link<Route>>
-            <br />
-            <div>
-            {
-                front_matter.tags
-                    .iter()
-                    .map(|tag_name| html_nested! {
-                        <Tag
-                            name={tag_name.clone()} />
-                    })
-                    .collect::<Vec<_>>()
-            }
+        <Link<Route> to={Route::BlogPost { blog_id: props.id }}>
+            <div class="flex-row hover:bg-black-light">
+                <img />
+                <div class="flex-col">
+                    <h2 class="text-xl">{&front_matter.title}</h2>
+                    <div>
+                        {
+                            front_matter.tags
+                                .iter()
+                                .map(|tag_name| html_nested! {
+                                    <Tag
+                                        name={tag_name.clone()} />
+                                })
+                                .collect::<Vec<_>>()
+                        }
+                    </div>
+                </div>
             </div>
-        </div>
+        </Link<Route>>
     }
 }

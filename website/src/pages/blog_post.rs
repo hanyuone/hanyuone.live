@@ -46,13 +46,15 @@ pub fn page(props: &BlogProps) -> Html {
             <Head>
                 <title>{format!("{} | Hanyuan's Website", title)}</title>
             </Head>
-            {
-                nodes.into_iter()
-                    .map(|node| {
-                        to_html(node)
-                    })
-                    .collect::<Vec<_>>()
-            }
+            <article class="prose dark:prose-invert">
+                {
+                    nodes.into_iter()
+                        .map(|node| {
+                            to_html(node)
+                        })
+                        .collect::<Vec<_>>()
+                }
+            </article>
         </>
     }
 }

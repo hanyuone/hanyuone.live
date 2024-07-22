@@ -38,4 +38,8 @@ impl BlogContext {
         let content = postcard::from_bytes::<HashMap<BlogId, BlogMetadata>>(bytes).unwrap();
         Self { content }
     }
+
+    pub fn get(&self, id: &BlogId) -> Option<&BlogMetadata> {
+        self.content.get(id)
+    }
 }
