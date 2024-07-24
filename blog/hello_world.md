@@ -9,3 +9,5 @@ tags:
 # Hello, World!
 
 This is my first blog :D
+
+![Caption displayed here](/public/blog_media/hello_world/title.png)

@@ -11,25 +11,35 @@ pub enum RenderNode {
 
 #[derive(Serialize, Deserialize, PartialEq)]
 pub enum RenderTag {
+    Em,
+    FigCaption,
+    Figure,
     H1,
     H2,
     H3,
     H4,
     H5,
     H6,
+    Img,
     P,
+    Strong,
 }
 
 impl Display for RenderTag {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let as_str = match *self {
+            RenderTag::Em => "em",
+            RenderTag::FigCaption => "figcaption",
+            RenderTag::Figure => "figure",
             RenderTag::H1 => "h1",
             RenderTag::H2 => "h2",
             RenderTag::H3 => "h3",
             RenderTag::H4 => "h4",
             RenderTag::H5 => "h5",
             RenderTag::H6 => "h6",
+            RenderTag::Img => "img",
             RenderTag::P => "p",
+            RenderTag::Strong => "strong",
         };
 
         write!(f, "{}", as_str)
@@ -51,15 +61,22 @@ impl From<HeadingLevel> for RenderTag {
 
 #[derive(Serialize, Deserialize)]
 pub enum AttributeName {
+    Alt,
     Class,
     Id,
+    Src,
+    Title,
 }
 
 impl From<AttributeName> for &'static str {
     fn from(value: AttributeName) -> Self {
         match value {
+            AttributeName::Alt => "alt",
             AttributeName::Class => "class",
             AttributeName::Id => "id",
+            AttributeName::Src => "src",
+            AttributeName::Title => "title",
+            
         }
     }
 }
