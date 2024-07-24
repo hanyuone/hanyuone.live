@@ -5,6 +5,7 @@ use serde_with::{serde_as, DurationSeconds};
 #[derive(Deserialize)]
 pub struct RawFrontMatter {
     pub title: String,
+    pub description: String,
     pub image: String,
     pub publish_date: String,
     pub tags: Vec<String>,
@@ -13,6 +14,7 @@ pub struct RawFrontMatter {
 #[derive(Clone, Deserialize, Serialize, PartialEq)]
 pub struct FrontMatter {
     pub title: String,
+    pub description: String,
     pub image: String,
     pub publish_date: NaiveDateTime,
     pub tags: Vec<String>,
@@ -24,6 +26,7 @@ impl From<RawFrontMatter> for FrontMatter {
 
         Self {
             title: value.title,
+            description: value.description,
             image: value.image,
             publish_date: parsed,
             tags: value.tags,

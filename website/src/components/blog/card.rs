@@ -1,30 +1,16 @@
-use chrono::TimeDelta;
 use markdown::structs::{blog::BlogId, metadata::BlogMetadata};
 use yew::{function_component, html, html_nested, Html, Properties};
 use yew_router::components::Link;
 
-use crate::{components::blog::tag::Tag, pages::Route};
+use crate::{
+    components::blog::{tag::Tag, to_readable},
+    pages::Route,
+};
 
 #[derive(Properties, PartialEq)]
 pub struct BlogCardProps {
     pub id: BlogId,
     pub metadata: BlogMetadata,
-}
-
-fn to_readable(time_delta: &TimeDelta) -> String {
-    let seconds = time_delta.num_seconds();
-
-    if seconds < 60 {
-        return "<1 min".to_string();
-    }
-
-    let minutes = time_delta.num_minutes();
-
-    if minutes < 60 {
-        return format!("{} min", minutes);
-    }
-
-    "long read".to_string()
 }
 
 #[function_component(BlogCard)]
@@ -43,7 +29,8 @@ pub fn blog_card(props: &BlogCardProps) -> Html {
                         class="aspect-video object-cover" />
                 </div>
                 <div class="flex flex-col basis-3/4 p-4">
-                    <h2 class="text-xl">{&front_matter.title}</h2>
+                    <h2 class="font-bold text-2xl">{&front_matter.title}</h2>
+                    <p class="flex grow">{&front_matter.description}</p>
                     <div>
                         <span class="text-gray-500">{&front_matter.publish_date.format("%d %b %Y").to_string()}</span>
                         <span class="text-white">{" · "}</span>

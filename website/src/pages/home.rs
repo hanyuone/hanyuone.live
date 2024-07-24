@@ -5,7 +5,7 @@ use crate::components::{
     home::typewriter::{Block, Typewriter},
 };
 
-const BLOCKS: [Block; 3] = [
+const INTRO_BLOCKS: [Block; 3] = [
     Block {
         // We need Unicode escape here (equivalent to "&nbsp;") since Yew
         // does not allow for us to do <p>&nbsp;</p> by itself
@@ -37,9 +37,9 @@ pub fn page() -> Html {
             <Head>
                 <title>{"Hanyuan's Website"}</title>
             </Head>
-            <div class="flex flex-col">
+            <div class="items-center flex flex-col">
                 <Typewriter
-                    blocks={BLOCKS.to_vec()}
+                    blocks={INTRO_BLOCKS.to_vec()}
                     on_finish={Callback::from(move |_| {
                         typing_complete.set(true);
                     })} />

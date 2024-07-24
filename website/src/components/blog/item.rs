@@ -2,7 +2,10 @@ use markdown::structs::{blog::BlogId, metadata::BlogMetadata};
 use yew::{function_component, html, html_nested, Html, Properties};
 use yew_router::components::Link;
 
-use crate::{components::blog::tag::Tag, pages::Route};
+use crate::{
+    components::blog::{tag::Tag, to_readable},
+    pages::Route,
+};
 
 #[derive(PartialEq, Properties)]
 pub struct BlogItemProps {
@@ -12,14 +15,19 @@ pub struct BlogItemProps {
 
 #[function_component(BlogItem)]
 pub fn blog_item(props: &BlogItemProps) -> Html {
-    let front_matter = &props.metadata.front_matter;
+    let BlogMetadata {
+        front_matter,
+        post_render,
+    } = &props.metadata;
 
     html! {
         <Link<Route> to={Route::BlogPost { blog_id: props.id }}>
             <div class="flex-col border-t-[1px] border-white hover:bg-black-light">
-                <h3>{&front_matter.title}</h3>
+                <h3 class="font-bold text-xl">{&front_matter.title}</h3>
                 <div>
                     <span class="text-gray-500">{&front_matter.publish_date.format("%d %b %Y").to_string()}</span>
+                    <span class="text-white">{" · "}</span>
+                    <span class="text-gray-500">{to_readable(&post_render.read_time)}</span>
                     <span class="text-white">{" · "}</span>
                     {
                         front_matter.tags.iter()
