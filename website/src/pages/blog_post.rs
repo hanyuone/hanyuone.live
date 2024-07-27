@@ -46,7 +46,7 @@ pub fn page(props: &BlogProps) -> Html {
             <Head>
                 <title>{format!("{} | Hanyuan's Website", title)}</title>
             </Head>
-            <article class="prose dark:prose-invert">
+            <article class="prose dark:prose-invert prose-callouts">
                 {
                     nodes.into_iter()
                         .map(|node| {

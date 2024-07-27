@@ -11,7 +11,7 @@ pub fn header() -> Html {
             <div class="flex flex-row mx-4 border-b-[1px] border-white">
                 // Home page link
                 <div class="flex">
-                    <Link<Route> classes="px-4 py-4 font-mono hover:bg-black-light transition-colors" to={Route::Home}>
+                    <Link<Route> classes="px-4 py-4 font-mono hover:bg-gray transition-colors" to={Route::Home}>
                         {"hanyuone.live"}
                     </Link<Route>>
                 </div>

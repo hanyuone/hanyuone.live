@@ -22,7 +22,7 @@ pub fn blog_card(props: &BlogCardProps) -> Html {
 
     html! {
         <Link<Route> to={Route::BlogPost { blog_id: props.id }}>
-            <div class="flex flex-row hover:bg-black-light">
+            <div class="flex flex-row hover:bg-gray">
                 <div class="flex-col basis-1/4 p-4">
                     <img
                         src={front_matter.image.clone()}

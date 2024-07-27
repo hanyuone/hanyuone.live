@@ -1,7 +1,7 @@
 use std::marker::PhantomData;
 
 use chrono::TimeDelta;
-use pulldown_cmark::{Event, Tag, TagEnd};
+use pulldown_cmark::{BlockQuoteKind, Event, Tag, TagEnd};
 
 use crate::structs::metadata::PostRenderData;
 
@@ -114,6 +114,26 @@ where
 
                 self.enter(element)
             }
+            // Blockquotes and callouts
+            Tag::BlockQuote(kind) => {
+                let mut element = RenderElement::new(RenderTag::Div);
+
+                let callout_class = if let Some(kind) = kind {
+                    match kind {
+                        BlockQuoteKind::Note => "callout-info",
+                        BlockQuoteKind::Tip => "callout-tip",
+                        BlockQuoteKind::Important => "callout-important",
+                        BlockQuoteKind::Warning => "callout-warning",
+                        BlockQuoteKind::Caution => "callout-caution",
+                    }
+                } else {
+                    "callout-blockquote"
+                };
+
+                element.add_attribute(AttributeName::Class, callout_class.to_string());
+
+                self.enter(element)
+            }
             // Images and links
             Tag::Image {
                 dest_url,
@@ -164,6 +184,8 @@ where
             TagEnd::Emphasis => self.leave(RenderTag::Em),
             TagEnd::Strong => self.leave(RenderTag::Strong),
             TagEnd::Heading(level) => self.leave(level.into()),
+            // We render blockquotes as divs
+            TagEnd::BlockQuote => self.leave(RenderTag::Div),
             // We already generated the image in `start` (it's self-contained), so do nothing
             TagEnd::Image => {}
             _ => todo!(),
@@ -172,8 +194,6 @@ where
 
     fn run_token(&mut self, token: Event<'a>) {
         match token {
-            Event::Start(tag) => self.run_start(tag),
-            Event::End(tag) => self.run_end(tag),
             Event::Text(text) => {
                 let words = text.split(' ').count();
                 self.post_render.read_time += TimeDelta::seconds((words as i64) / 200);
@@ -181,6 +201,9 @@ where
                 let node = RenderNode::Text(text.to_string());
                 self.output(node)
             }
+            Event::SoftBreak => self.output(RenderNode::Text("\n".to_string())),
+            Event::Start(tag) => self.run_start(tag),
+            Event::End(tag) => self.run_end(tag),
             _ => todo!(),
         }
     }

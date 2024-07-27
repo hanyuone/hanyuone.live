@@ -10,4 +10,9 @@ tags:
 
 This is my first blog :D
 
+> Testing blockquotes
+
+> [!note]
+> Testing bigger blockquotes
+
 ![Caption displayed here](/public/blog_media/hello_world/title.png)

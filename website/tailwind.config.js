@@ -11,14 +11,13 @@ module.exports = {
                 blink: "blink 1s infinite",
             },
             colors: {
-                black: {
-                    dark: "#32302F",
-                    light: "#504945",
-                },
+                black: "#32302F",
+                gray: "#504945",
                 red: "#EA6962",
                 orange: "#E78A4E",
                 yellow: "#D8A657",
                 green: "#A9B665",
+                cyan: "#89B482",
                 blue: "#7DAEA3",
                 purple: "#D3869B",
             },
@@ -32,6 +31,30 @@ module.exports = {
                     },
                 },
             },
+            typography: (theme) => ({
+                DEFAULT: {
+                    css: {
+                        ".callout-blockquote": {
+                            backgroundColor: theme("colors.gray"),
+                        },
+                        ".callout-info": {
+                            backgroundColor: theme("colors.blue"),
+                        },
+                        ".callout-tip": {
+                            backgroundColor: theme("colors.green"),
+                        },
+                        ".callout-important": {
+                            backgroundColor: theme("colors.cyan"),
+                        },
+                        ".callout-warning": {
+                            backgroundColor: theme("colors.orange"),
+                        },
+                        ".callout-caution": {
+                            backgroundColor: theme("colors.yellow"),
+                        },
+                    }
+                }
+            }),
         },
     },
     variants: {},

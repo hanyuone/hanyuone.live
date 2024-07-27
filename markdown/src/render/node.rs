@@ -11,6 +11,7 @@ pub enum RenderNode {
 
 #[derive(Serialize, Deserialize, PartialEq)]
 pub enum RenderTag {
+    Div,
     Em,
     FigCaption,
     Figure,
@@ -28,6 +29,7 @@ pub enum RenderTag {
 impl Display for RenderTag {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let as_str = match *self {
+            RenderTag::Div => "div",
             RenderTag::Em => "em",
             RenderTag::FigCaption => "figcaption",
             RenderTag::Figure => "figure",
