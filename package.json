@@ -4,13 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev:md": "cargo watch -w markdown/src -w blog -x \"run -p markdown\"",
+    "dev": "concurrently -c auto \"pnpm dev:md\" \"cd website && trunk serve\"",
     "build:md": "cargo run -p markdown",
-    "dev": "pnpm build:md && cd website && trunk serve",
     "build:wasm": "cd website && trunk build --release --features hydration",
     "build:ssg": "cargo run -p website --bin ssr --features static release",
     "build": "pnpm build:md && pnpm build:wasm && pnpm build:ssg"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
 }

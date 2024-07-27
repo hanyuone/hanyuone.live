@@ -26,9 +26,13 @@ are some aspects of the app which deserve attention:
 
 Make sure you have the following installed:
 - Rust (confirmed to work on `v1.74.1`)
+- `cargo-watch` (for local MD development)
 - `trunk` (for building Rust files into WebAssembly)
 - `node` and `pnpm` (for building Tailwind, running commands)
 
 To run the local version (client-side rendering), run `pnpm dev`, which will run
-`trunk serve` in the background. To build static HTML/CSS/JS/WASM files, run
-`pnpm build`.
+the following processes in the background:
+- `cargo watch` for any blog/MD rendering changes
+- `trunk serve` for the website itself
+
+To build static HTML/CSS/JS/WASM files, run `pnpm build`.
