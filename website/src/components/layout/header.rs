@@ -17,9 +17,6 @@ pub fn header() -> Html {
                 </div>
                 // Other pages
                 <div class="flex px-4">
-                    <Link<Route> classes="px-4 py-4 text-white hover:bg-blue transition-colors" to={Route::About}>
-                        {"About"}
-                    </Link<Route>>
                     <Link<Route> classes="px-4 py-4 text-white hover:bg-blue transition-colors" to={Route::Blog}>
                         {"Blog"}
                     </Link<Route>>
