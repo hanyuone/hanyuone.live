@@ -37,20 +37,26 @@ pub fn page() -> Html {
             <Head>
                 <title>{"Hanyuan's Website"}</title>
             </Head>
-            <div class="items-center flex flex-col">
-                <Typewriter
-                    blocks={INTRO_BLOCKS.to_vec()}
-                    on_finish={Callback::from(move |_| {
-                        typing_complete.set(true);
-                    })} />
-                <div class={format!("{} {}", "flex flex-row transition duration-500", opacity)}>
-                    <p>{"I am a penultimate-year Computer Science student at\u{00a0}"}</p>
-                    <a
-                        class="text-green underline transition hover:bg-black-light"
-                        href="https://www.unsw.edu.au/engineering/our-schools/computer-science-and-engineering">
-                        {"UNSW"}
-                    </a>
-                    <p>{"."}</p>
+            <div class="flex flex-col">
+                <div class="h-screen content-center">
+                    <div class="flex flex-col">
+                        <div class="flex flex-row justify-center">
+                            <Typewriter
+                                blocks={INTRO_BLOCKS.to_vec()}
+                                on_finish={Callback::from(move |_| {
+                                    typing_complete.set(true);
+                                })} />
+                        </div>
+                        <div class={format!("{} {}", "flex flex-row justify-center transition duration-500", opacity)}>
+                            <p>{"I am a penultimate-year Computer Science student at\u{00a0}"}</p>
+                            <a
+                                class="text-green underline transition hover:bg-black-light"
+                                href="https://www.unsw.edu.au/engineering/our-schools/computer-science-and-engineering">
+                                {"UNSW"}
+                            </a>
+                            <p>{"."}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </>
