@@ -4,9 +4,12 @@ use pulldown_cmark::HeadingLevel;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
-pub enum RenderNode {
-    Text(String),
-    Element(RenderElement),
+pub enum RenderIcon {
+    Note,
+    Tip,
+    Important,
+    Warning,
+    Caution,
 }
 
 #[derive(Serialize, Deserialize, PartialEq)]
@@ -29,19 +32,19 @@ pub enum RenderTag {
 impl Display for RenderTag {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let as_str = match *self {
-            RenderTag::Div => "div",
-            RenderTag::Em => "em",
-            RenderTag::FigCaption => "figcaption",
-            RenderTag::Figure => "figure",
-            RenderTag::H1 => "h1",
-            RenderTag::H2 => "h2",
-            RenderTag::H3 => "h3",
-            RenderTag::H4 => "h4",
-            RenderTag::H5 => "h5",
-            RenderTag::H6 => "h6",
-            RenderTag::Img => "img",
-            RenderTag::P => "p",
-            RenderTag::Strong => "strong",
+            Self::Div => "div",
+            Self::Em => "em",
+            Self::FigCaption => "figcaption",
+            Self::Figure => "figure",
+            Self::H1 => "h1",
+            Self::H2 => "h2",
+            Self::H3 => "h3",
+            Self::H4 => "h4",
+            Self::H5 => "h5",
+            Self::H6 => "h6",
+            Self::Img => "img",
+            Self::P => "p",
+            Self::Strong => "strong",
         };
 
         write!(f, "{}", as_str)
@@ -112,4 +115,11 @@ impl RenderElement {
     pub fn add_child(&mut self, child: RenderNode) {
         self.children.push(child)
     }
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum RenderNode {
+    Text(String),
+    Icon(RenderIcon),
+    Element(RenderElement),
 }

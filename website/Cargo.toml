@@ -38,8 +38,13 @@ yew-router = "0.18.0"
 [dependencies.yew_icons]
 version = "0.8"
 features = [
+    "BootstrapCheckCircleFill",
+    "BootstrapExclamationTriangleFill",
     "BootstrapGithub",
+    "BootstrapInfoCircleFill",
+    "BootstrapLightbulbFill",
     "BootstrapLinkedin",
+    "BootstrapXOctagonFill",
     "LucideMail",
 ]
 

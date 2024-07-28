@@ -13,6 +13,18 @@ This is my first blog :D
 > Testing blockquotes
 
 > [!note]
-> Testing bigger blockquotes
+> Testing notes
+
+> [!tip]
+> Testing tips
+
+> [!important]
+> Testing important quotes
+
+> [!warning]
+> Testing warnings
+
+> [!caution]
+> Testing caution notes
 
 ![Caption displayed here](/public/blog_media/hello_world/title.png)

@@ -1,15 +1,51 @@
-use std::marker::PhantomData;
+use std::{collections::HashMap, marker::PhantomData};
 
 use chrono::TimeDelta;
 use pulldown_cmark::{BlockQuoteKind, Event, Tag, TagEnd};
 
 use crate::structs::metadata::PostRenderData;
 
-use super::node::{AttributeName, RenderElement, RenderNode, RenderTag};
+use super::node::{AttributeName, RenderElement, RenderIcon, RenderNode, RenderTag};
 
 pub struct RenderOutput {
     pub nodes: Vec<RenderNode>,
     pub post_render: PostRenderData,
+}
+
+struct CalloutMetadata {
+    class: &'static str,
+    title: &'static str,
+    icon: RenderIcon,
+}
+
+fn get_metadata(kind: BlockQuoteKind) -> CalloutMetadata {
+    match kind {
+        BlockQuoteKind::Note => CalloutMetadata {
+            class: "callout-note",
+            title: "Note",
+            icon: RenderIcon::Note,
+        },
+        BlockQuoteKind::Tip => CalloutMetadata {
+            class: "callout-tip",
+            title: "Tip",
+            icon: RenderIcon::Tip,
+        },
+        BlockQuoteKind::Important => CalloutMetadata {
+            class: "callout-important",
+            title: "Important",
+            icon: RenderIcon::Important,
+        },
+        BlockQuoteKind::Warning => CalloutMetadata {
+            class: "callout-warning",
+            title: "Warning",
+            icon: RenderIcon::Warning,
+        },
+        BlockQuoteKind::Caution => CalloutMetadata {
+            class: "callout-caution",
+            title: "Caution",
+            icon: RenderIcon::Caution,
+        },
+    }
 }
 
 /// Helper struct used for converting Markdown events (generated via `pulldown_cmark`)
@@ -91,6 +127,30 @@ where
         captured
     }
 
+    fn generate_callout(&mut self, kind: BlockQuoteKind) {
+        // TODO: style MD callouts properly (consider moving to FE?)
+        let mut callout = RenderElement::new(RenderTag::Div);
+
+        let metadata = get_metadata(kind);
+
+        // Add class for colour background
+        callout.add_attribute(AttributeName::Class, metadata.class.to_string());
+
+        // Add icon and title
+        let mut heading = RenderElement::new(RenderTag::Div);
+        heading.add_attribute(AttributeName::Class, "flex flex-row".to_string());
+
+        let mut title = RenderElement::new(RenderTag::Strong);
+        title.add_child(RenderNode::Text(metadata.title.to_string()));
+
+        heading.add_child(RenderNode::Icon(metadata.icon));
+        heading.add_child(RenderNode::Element(title));
+
+        callout.add_child(RenderNode::Element(heading));
+
+        self.enter(callout);
+    }
+
     fn run_start(&mut self, tag: Tag) {
         match tag {
             // Text styles
@@ -115,25 +175,14 @@ where
                 self.enter(element)
             }
             // Blockquotes and callouts
-            Tag::BlockQuote(kind) => {
-                let mut element = RenderElement::new(RenderTag::Div);
-
-                let callout_class = if let Some(kind) = kind {
-                    match kind {
-                        BlockQuoteKind::Note => "callout-info",
-                        BlockQuoteKind::Tip => "callout-tip",
-                        BlockQuoteKind::Important => "callout-important",
-                        BlockQuoteKind::Warning => "callout-warning",
-                        BlockQuoteKind::Caution => "callout-caution",
-                    }
-                } else {
-                    "callout-blockquote"
-                };
-
-                element.add_attribute(AttributeName::Class, callout_class.to_string());
-
-                self.enter(element)
-            }
+            Tag::BlockQuote(kind) => match kind {
+                Some(kind) => self.generate_callout(kind),
+                None => {
+                    let mut blockquote = RenderElement::new(RenderTag::Div);
+                    blockquote.add_attribute(AttributeName::Class, "blockquote".to_string());
+                    self.enter(blockquote);
+                }
+            },
             // Images and links
             Tag::Image {
                 dest_url,
@@ -184,7 +233,7 @@ where
             TagEnd::Emphasis => self.leave(RenderTag::Em),
             TagEnd::Strong => self.leave(RenderTag::Strong),
             TagEnd::Heading(level) => self.leave(level.into()),
-            // We render blockquotes as divs
+            // Blockquotes are always rendered as divs
             TagEnd::BlockQuote => self.leave(RenderTag::Div),
             // We already generated the image in `start` (it's self-contained), so do nothing
             TagEnd::Image => {}

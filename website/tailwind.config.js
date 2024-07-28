@@ -13,12 +13,12 @@ module.exports = {
             colors: {
                 black: "#32302F",
                 gray: "#504945",
-                red: "#EA6962",
-                orange: "#E78A4E",
-                yellow: "#D8A657",
-                green: "#A9B665",
-                cyan: "#89B482",
-                blue: "#7DAEA3",
+                red: "#FB4934",
+                orange: "#FE8019",
+                yellow: "#FABD2F",
+                green: "#B8BB26",
+                cyan: "#8EC07C",
+                blue: "#83A598",
                 purple: "#D3869B",
             },
             keyframes: {
@@ -31,30 +31,30 @@ module.exports = {
                     },
                 },
             },
-            typography: (theme) => ({
+            typography: {
                 DEFAULT: {
                     css: {
-                        ".callout-blockquote": {
-                            backgroundColor: theme("colors.gray"),
+                        ".blockquote": {
+                            backgroundColor: "#5049457F",
                         },
-                        ".callout-info": {
-                            backgroundColor: theme("colors.blue"),
+                        ".callout-note": {
+                            backgroundColor: "#83A5987F",
                         },
                         ".callout-tip": {
-                            backgroundColor: theme("colors.green"),
+                            backgroundColor: "#B8BB267F",
                         },
                         ".callout-important": {
-                            backgroundColor: theme("colors.cyan"),
+                            backgroundColor: "#D3869B7F",
                         },
                         ".callout-warning": {
-                            backgroundColor: theme("colors.orange"),
+                            backgroundColor: "#FABD2F7F",
                         },
                         ".callout-caution": {
-                            backgroundColor: theme("colors.yellow"),
+                            backgroundColor: "#FB49347F",
                         },
-                    }
-                }
-            }),
+                    },
+                },
+            },
         },
     },
     variants: {},
