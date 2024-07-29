@@ -129,3 +129,21 @@ pub enum RenderNode {
     Icon(RenderIcon),
     Element(RenderElement),
 }
+
+impl From<String> for RenderNode {
+    fn from(value: String) -> Self {
+        RenderNode::Text(value)
+    }
+}
+
+impl From<RenderIcon> for RenderNode {
+    fn from(value: RenderIcon) -> Self {
+        RenderNode::Icon(value)
+    }
+}
+
+impl From<RenderElement> for RenderNode {
+    fn from(value: RenderElement) -> Self {
+        RenderNode::Element(value)
+    }
+}

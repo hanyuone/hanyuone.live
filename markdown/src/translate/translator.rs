@@ -74,11 +74,14 @@ where
         }
     }
 
-    fn output(&mut self, node: RenderNode) {
+    fn output<N>(&mut self, node: N)
+    where
+        N: Into<RenderNode>,
+    {
         if let Some(top) = self.stack.last_mut() {
-            top.add_child(node);
+            top.add_child(node.into());
         } else {
-            self.output.push(node);
+            self.output.push(node.into());
         }
     }
 
@@ -98,7 +101,7 @@ where
             top.tag
         );
 
-        self.output(RenderNode::Element(top))
+        self.output(top)
     }
 
     /// Consumes the next HTML element in our Markdown text and returns it as a single-lined string.
@@ -217,7 +220,7 @@ where
                     None
                 };
 
-                self.output(RenderNode::Element(element));
+                self.output(element);
 
                 if let Some(p) = p {
                     self.enter(p);
@@ -247,10 +250,9 @@ where
                 let words = text.split(' ').count();
                 self.post_translate.read_time += TimeDelta::seconds((words as i64) / 200);
 
-                let node = RenderNode::Text(text.to_string());
-                self.output(node)
+                self.output(text.to_string())
             }
-            Event::SoftBreak => self.output(RenderNode::Text("\n".to_string())),
+            Event::SoftBreak => self.output("\n".to_string()),
             Event::Start(tag) => self.run_start(tag),
             Event::End(tag) => self.run_end(tag),
             _ => todo!(),
