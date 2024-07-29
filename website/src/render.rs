@@ -36,6 +36,7 @@ pub fn to_html(node: RenderNode) -> Html {
             }
 
             tag.into()
-        }
+        },
+        _ => todo!()
     }
 }
