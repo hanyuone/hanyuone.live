@@ -14,6 +14,7 @@ pub enum RenderIcon {
 
 #[derive(Serialize, Deserialize, PartialEq)]
 pub enum RenderTag {
+    // HTML tags
     Div,
     Em,
     FigCaption,
@@ -27,11 +28,14 @@ pub enum RenderTag {
     Img,
     P,
     Strong,
+    // AST-specific tags
+    Callout,
 }
 
 impl Display for RenderTag {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let as_str = match *self {
+            // HTML tags
             Self::Div => "div",
             Self::Em => "em",
             Self::FigCaption => "figcaption",
@@ -45,6 +49,8 @@ impl Display for RenderTag {
             Self::Img => "img",
             Self::P => "p",
             Self::Strong => "strong",
+            // AST-specific tags (for debugging purposes)
+            Self::Callout => "!callout",
         };
 
         write!(f, "{}", as_str)
