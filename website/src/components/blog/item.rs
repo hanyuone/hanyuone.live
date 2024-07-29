@@ -17,7 +17,7 @@ pub struct BlogItemProps {
 pub fn blog_item(props: &BlogItemProps) -> Html {
     let BlogMetadata {
         front_matter,
-        post_render,
+        post_translate,
     } = &props.metadata;
 
     html! {
@@ -27,7 +27,7 @@ pub fn blog_item(props: &BlogItemProps) -> Html {
                 <div>
                     <span class="text-gray-500">{&front_matter.publish_date.format("%d %b %Y").to_string()}</span>
                     <span class="text-white">{" · "}</span>
-                    <span class="text-gray-500">{to_readable(&post_render.read_time)}</span>
+                    <span class="text-gray-500">{to_readable(&post_translate.read_time)}</span>
                     <span class="text-white">{" · "}</span>
                     {
                         front_matter.tags.iter()

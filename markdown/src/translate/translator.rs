@@ -1,15 +1,15 @@
-use std::{collections::HashMap, marker::PhantomData};
+use std::marker::PhantomData;
 
 use chrono::TimeDelta;
 use pulldown_cmark::{BlockQuoteKind, Event, Tag, TagEnd};
 
-use crate::structs::metadata::PostRenderData;
+use crate::structs::metadata::PostTranslateData;
 
 use super::node::{AttributeName, RenderElement, RenderIcon, RenderNode, RenderTag};
 
-pub struct RenderOutput {
+pub struct TranslateOutput {
     pub nodes: Vec<RenderNode>,
-    pub post_render: PostRenderData,
+    pub post_translate: PostTranslateData,
 }
 
 struct CalloutMetadata {
@@ -50,15 +50,15 @@ fn get_metadata(kind: BlockQuoteKind) -> CalloutMetadata {
 
 /// Helper struct used for converting Markdown events (generated via `pulldown_cmark`)
 /// into a simplified virtual DOM that can easily be converted to work with Yew.
-pub struct Renderer<'a, I> {
+pub struct Translator<'a, I> {
     tokens: I,
     output: Vec<RenderNode>,
     stack: Vec<RenderElement>,
-    post_render: PostRenderData,
+    post_translate: PostTranslateData,
     phantom: PhantomData<&'a I>,
 }
 
-impl<'a, I> Renderer<'a, I>
+impl<'a, I> Translator<'a, I>
 where
     I: Iterator<Item = Event<'a>>,
 {
@@ -67,7 +67,7 @@ where
             tokens,
             output: vec![],
             stack: vec![],
-            post_render: PostRenderData {
+            post_translate: PostTranslateData {
                 read_time: TimeDelta::zero(),
             },
             phantom: PhantomData,
@@ -245,7 +245,7 @@ where
         match token {
             Event::Text(text) => {
                 let words = text.split(' ').count();
-                self.post_render.read_time += TimeDelta::seconds((words as i64) / 200);
+                self.post_translate.read_time += TimeDelta::seconds((words as i64) / 200);
 
                 let node = RenderNode::Text(text.to_string());
                 self.output(node)
@@ -257,14 +257,14 @@ where
         }
     }
 
-    pub fn run(mut self) -> RenderOutput {
+    pub fn run(mut self) -> TranslateOutput {
         while let Some(token) = self.tokens.next() {
             self.run_token(token);
         }
 
-        RenderOutput {
+        TranslateOutput {
             nodes: self.output,
-            post_render: self.post_render,
+            post_translate: self.post_translate,
         }
     }
 }

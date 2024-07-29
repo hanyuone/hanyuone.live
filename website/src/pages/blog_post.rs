@@ -1,5 +1,5 @@
 use gloo_net::http::Request;
-use markdown::{render::node::RenderNode, structs::blog::BlogId};
+use markdown::{translate::node::RenderNode, structs::blog::BlogId};
 use yew::{function_component, html, use_context, use_state, Html, Properties, UseStateHandle};
 use yew_hooks::use_effect_once;
 

@@ -36,7 +36,7 @@ impl From<RawFrontMatter> for FrontMatter {
 
 #[serde_as]
 #[derive(Clone, Deserialize, Serialize, PartialEq)]
-pub struct PostRenderData {
+pub struct PostTranslateData {
     #[serde_as(as = "DurationSeconds<i64>")]
     pub read_time: TimeDelta,
 }
@@ -44,5 +44,5 @@ pub struct PostRenderData {
 #[derive(Clone, Deserialize, Serialize, PartialEq)]
 pub struct BlogMetadata {
     pub front_matter: FrontMatter,
-    pub post_render: PostRenderData,
+    pub post_translate: PostTranslateData,
 }

@@ -1,6 +1,6 @@
 use gray_matter::{engine::YAML, Matter, ParsedEntityStruct};
 use markdown::{
-    render::{to_bytestring, RenderOutputBytes},
+    translate::{to_bytestring, TranslateOutputBytes},
     structs::{
         blog::BlogId,
         metadata::{BlogMetadata, RawFrontMatter},
@@ -41,7 +41,7 @@ fn create_blog_files(content_dir: &str) -> io::Result<Vec<BlogFile>> {
             .parse_with_struct::<RawFrontMatter>(&raw_content)
             .unwrap();
 
-        let RenderOutputBytes { bytes, post_render } = to_bytestring(&content);
+        let TranslateOutputBytes { bytes, post_translate } = to_bytestring(&content);
 
         let filename = entry
             .path()
@@ -55,7 +55,7 @@ fn create_blog_files(content_dir: &str) -> io::Result<Vec<BlogFile>> {
             id: BlogId::from_str(&filename).expect("valid MD name"),
             metadata: BlogMetadata {
                 front_matter: front_matter.into(),
-                post_render,
+                post_translate,
             },
             content: bytes,
         });

@@ -1,4 +1,4 @@
-use markdown::render::node::{RenderElement, RenderIcon, RenderNode};
+use markdown::translate::node::{RenderElement, RenderIcon, RenderNode};
 use yew::{
     html, virtual_dom::{VTag, VText}, Html
 };
