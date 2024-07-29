@@ -31,30 +31,6 @@ module.exports = {
                     },
                 },
             },
-            typography: {
-                DEFAULT: {
-                    css: {
-                        ".blockquote": {
-                            backgroundColor: "#5049457F",
-                        },
-                        ".callout-note": {
-                            backgroundColor: "#83A5987F",
-                        },
-                        ".callout-tip": {
-                            backgroundColor: "#B8BB267F",
-                        },
-                        ".callout-important": {
-                            backgroundColor: "#D3869B7F",
-                        },
-                        ".callout-warning": {
-                            backgroundColor: "#FABD2F7F",
-                        },
-                        ".callout-caution": {
-                            backgroundColor: "#FB49347F",
-                        },
-                    },
-                },
-            },
         },
     },
     variants: {},
