@@ -2,10 +2,7 @@ use markdown::structs::{blog::BlogId, metadata::BlogMetadata};
 use yew::{function_component, html, html_nested, Html, Properties};
 use yew_router::components::Link;
 
-use crate::{
-    components::blog::{tag::Tag, to_readable},
-    pages::Route,
-};
+use crate::{components::blog::tag::Tag, pages::Route};
 
 #[derive(Properties, PartialEq)]
 pub struct BlogCardProps {
@@ -34,7 +31,7 @@ pub fn blog_card(props: &BlogCardProps) -> Html {
                     <div>
                         <span class="text-gray-500">{&front_matter.publish_date.format("%d %b %Y").to_string()}</span>
                         <span class="text-white">{" · "}</span>
-                        <span class="text-gray-500">{to_readable(&post_translate.read_time)}</span>
+                        <span class="text-gray-500">{&post_translate.read_time}</span>
                         <span class="text-white">{" · "}</span>
                         {
                             front_matter.tags

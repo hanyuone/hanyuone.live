@@ -1,6 +1,5 @@
-use chrono::{NaiveDateTime, TimeDelta};
+use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
-use serde_with::{serde_as, DurationSeconds};
 
 #[derive(Deserialize)]
 pub struct RawFrontMatter {
@@ -11,7 +10,7 @@ pub struct RawFrontMatter {
     pub tags: Vec<String>,
 }
 
-#[derive(Clone, Deserialize, Serialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct FrontMatter {
     pub title: String,
     pub description: String,
@@ -34,14 +33,12 @@ impl From<RawFrontMatter> for FrontMatter {
     }
 }
 
-#[serde_as]
-#[derive(Clone, Deserialize, Serialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct PostTranslateData {
-    #[serde_as(as = "DurationSeconds<i64>")]
-    pub read_time: TimeDelta,
+    pub read_time: String,
 }
 
-#[derive(Clone, Deserialize, Serialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BlogMetadata {
     pub front_matter: FrontMatter,
     pub post_translate: PostTranslateData,

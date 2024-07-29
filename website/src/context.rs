@@ -35,8 +35,9 @@ impl PartialEq for BlogContext {
 
 impl BlogContext {
     pub fn new(bytes: &[u8]) -> Self {
-        let content = postcard::from_bytes::<HashMap<BlogId, BlogMetadata>>(bytes).unwrap();
-        Self { content }
+        let content = postcard::from_bytes::<HashMap<BlogId, BlogMetadata>>(bytes);
+        web_sys::console::log_1(&format!("{:?}", content).into());
+        Self { content: content.unwrap() }
     }
 
     pub fn get(&self, id: &BlogId) -> Option<&BlogMetadata> {

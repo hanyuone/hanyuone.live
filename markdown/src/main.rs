@@ -3,7 +3,8 @@ use markdown::{
     structs::{
         blog::BlogId,
         metadata::{BlogMetadata, RawFrontMatter},
-    }, translate::{node::RenderNode, to_bytestring, TranslateOutputBytes}
+    },
+    translate::{to_bytestring, TranslateOutputBytes},
 };
 use std::{
     collections::HashMap,
@@ -40,7 +41,10 @@ fn create_blog_files(content_dir: &str) -> io::Result<Vec<BlogFile>> {
             .parse_with_struct::<RawFrontMatter>(&raw_content)
             .unwrap();
 
-        let TranslateOutputBytes { bytes, post_translate } = to_bytestring(&content);
+        let TranslateOutputBytes {
+            bytes,
+            post_translate,
+        } = to_bytestring(&content);
 
         let filename = entry
             .path()
@@ -84,8 +88,6 @@ fn write_blog_files(target_dir: impl AsRef<Path>, files: Vec<BlogFile>) -> io::R
     let blog_map_filename = target_dir.as_ref().join("blog_map");
     let bytestring = postcard::to_stdvec(&blog_map).expect("valid utf-8");
     fs::write(blog_map_filename, bytestring.clone())?;
-
-    println!("{:?}", postcard::from_bytes::<Vec<RenderNode>>(&bytestring));
 
     Ok(())
 }

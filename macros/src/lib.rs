@@ -72,7 +72,7 @@ fn generate(input: BlogModelsInput) -> Result<TokenStream, io::Error> {
     };
 
     Ok(TokenStream::from(quote! {
-        #[derive(Copy, Clone, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize, enum_iterator::Sequence)]
+        #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize, enum_iterator::Sequence)]
         pub enum BlogId {
             #enumerators
         }

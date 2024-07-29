@@ -16,13 +16,33 @@ pub struct TranslateOutput {
     pub post_translate: PostTranslateData,
 }
 
+// TODO: currently here because postcard mangles numbers between 64-bit (local)
+// and 32-bit (wasm32) - consider moving back to FE once issue is researched
+// and addressed properly
+pub fn to_read_time(words: usize) -> String {
+    let time_delta = TimeDelta::seconds((words / 3) as i64);
+    let seconds = time_delta.num_seconds();
+
+    if seconds < 60 {
+        return "<1 min".to_string();
+    }
+
+    let minutes = time_delta.num_minutes();
+
+    if minutes < 60 {
+        return format!("{} min", minutes);
+    }
+
+    "long read".to_string()
+}
+
 /// Helper struct used for converting Markdown events (generated via `pulldown_cmark`)
 /// into a simplified virtual DOM that can easily be converted to work with Yew.
 pub struct Translator<'a, I> {
     tokens: I,
     output: Vec<RenderNode>,
     stack: Vec<RenderNode>,
-    post_translate: PostTranslateData,
+    words: usize,
     phantom: PhantomData<&'a I>,
 }
 
@@ -37,9 +57,7 @@ where
             tokens,
             output: vec![],
             stack: vec![],
-            post_translate: PostTranslateData {
-                read_time: TimeDelta::zero(),
-            },
+            words: 0,
             phantom: PhantomData,
         }
     }
@@ -230,9 +248,7 @@ where
             },
             // Links and images
             Tag::Link {
-                dest_url,
-                title,
-                ..
+                dest_url, title, ..
             } => {
                 let mut a = RenderElement::new(ElementTag::A);
                 a.add_attribute(AttributeName::Title, title.to_string());
@@ -290,7 +306,7 @@ where
         match token {
             Event::Text(text) => {
                 let words = text.split(' ').count();
-                self.post_translate.read_time += TimeDelta::seconds((words as i64) / 200);
+                self.words += words;
 
                 self.output(text.to_string())
             }
@@ -312,7 +328,9 @@ where
 
         TranslateOutput {
             nodes: self.output,
-            post_translate: self.post_translate,
+            post_translate: PostTranslateData {
+                read_time: to_read_time(self.words),
+            },
         }
     }
 }
