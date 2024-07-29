@@ -1,6 +1,11 @@
-use markdown::translate::node::{RenderElement, RenderIcon, RenderNode};
+use markdown::translate::{
+    element::RenderElement,
+    node::{RenderIcon, RenderNode},
+};
 use yew::{
-    html, virtual_dom::{VTag, VText}, Html
+    html,
+    virtual_dom::{VTag, VText},
+    Html,
 };
 use yew_icons::{Icon, IconId};
 
@@ -36,7 +41,7 @@ pub fn to_html(node: RenderNode) -> Html {
             }
 
             tag.into()
-        },
-        _ => todo!()
+        }
+        _ => todo!(),
     }
 }

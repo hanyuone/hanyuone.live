@@ -5,7 +5,7 @@ use pulldown_cmark::{BlockQuoteKind, Event, Tag, TagEnd};
 
 use crate::structs::metadata::PostTranslateData;
 
-use super::node::{AttributeName, RenderElement, RenderIcon, RenderNode, RenderTag};
+use super::{element::{AttributeName, ElementTag, RenderElement}, node::{RenderIcon, RenderNode}};
 
 pub struct TranslateOutput {
     pub nodes: Vec<RenderNode>,
@@ -89,7 +89,7 @@ where
         self.stack.push(element);
     }
 
-    fn leave(&mut self, tag: RenderTag) {
+    fn leave(&mut self, tag: ElementTag) {
         let Some(top) = self.stack.pop() else {
             panic!("Stack underflow");
         };
@@ -132,7 +132,7 @@ where
 
     fn generate_callout(&mut self, kind: BlockQuoteKind) {
         // TODO: style MD callouts properly (consider moving to FE?)
-        let mut callout = RenderElement::new(RenderTag::Div);
+        let mut callout = RenderElement::new(ElementTag::Div);
 
         let metadata = get_metadata(kind);
 
@@ -140,10 +140,10 @@ where
         callout.add_attribute(AttributeName::Class, metadata.class.to_string());
 
         // Add icon and title
-        let mut heading = RenderElement::new(RenderTag::Div);
+        let mut heading = RenderElement::new(ElementTag::Div);
         heading.add_attribute(AttributeName::Class, "flex flex-row".to_string());
 
-        let mut title = RenderElement::new(RenderTag::Strong);
+        let mut title = RenderElement::new(ElementTag::Strong);
         title.add_child(RenderNode::Text(metadata.title.to_string()));
 
         heading.add_child(RenderNode::Icon(metadata.icon));
@@ -157,9 +157,9 @@ where
     fn run_start(&mut self, tag: Tag) {
         match tag {
             // Text styles
-            Tag::Paragraph => self.enter(RenderElement::new(RenderTag::P)),
-            Tag::Emphasis => self.enter(RenderElement::new(RenderTag::Em)),
-            Tag::Strong => self.enter(RenderElement::new(RenderTag::Strong)),
+            Tag::Paragraph => self.enter(RenderElement::new(ElementTag::P)),
+            Tag::Emphasis => self.enter(RenderElement::new(ElementTag::Em)),
+            Tag::Strong => self.enter(RenderElement::new(ElementTag::Strong)),
             // Headings
             Tag::Heading {
                 level, id, classes, ..
@@ -181,7 +181,7 @@ where
             Tag::BlockQuote(kind) => match kind {
                 Some(kind) => self.generate_callout(kind),
                 None => {
-                    let mut blockquote = RenderElement::new(RenderTag::Div);
+                    let mut blockquote = RenderElement::new(ElementTag::Div);
                     blockquote.add_attribute(AttributeName::Class, "blockquote".to_string());
                     self.enter(blockquote);
                 }
@@ -197,22 +197,22 @@ where
                 let alt = self.capture_next_as_text();
 
                 // Images are converted to <figure /> under the hood, so that we can support captions
-                let mut element = RenderElement::new(RenderTag::Figure);
+                let mut element = RenderElement::new(ElementTag::Figure);
                 element.add_attribute(AttributeName::Id, id.into_string());
                 element.add_attribute(AttributeName::Title, title.into_string());
 
-                let mut img = RenderElement::new(RenderTag::Img);
+                let mut img = RenderElement::new(ElementTag::Img);
                 img.add_attribute(AttributeName::Src, dest_url.into_string());
                 img.add_attribute(AttributeName::Alt, alt.clone());
                 element.add_child(RenderNode::Element(img));
 
-                let mut figcaption = RenderElement::new(RenderTag::FigCaption);
+                let mut figcaption = RenderElement::new(ElementTag::FigCaption);
                 figcaption.add_child(RenderNode::Text(alt));
                 element.add_child(RenderNode::Element(figcaption));
 
                 // Cannot place <figure /> in <p>, so we must get rid of it on the stack and put it back later
                 let p = if let Some(RenderElement {
-                    tag: RenderTag::P, ..
+                    tag: ElementTag::P, ..
                 }) = self.stack.last()
                 {
                     self.stack.pop()
@@ -232,12 +232,12 @@ where
 
     fn run_end(&mut self, tag: TagEnd) {
         match tag {
-            TagEnd::Paragraph => self.leave(RenderTag::P),
-            TagEnd::Emphasis => self.leave(RenderTag::Em),
-            TagEnd::Strong => self.leave(RenderTag::Strong),
+            TagEnd::Paragraph => self.leave(ElementTag::P),
+            TagEnd::Emphasis => self.leave(ElementTag::Em),
+            TagEnd::Strong => self.leave(ElementTag::Strong),
             TagEnd::Heading(level) => self.leave(level.into()),
             // Blockquotes are always rendered as divs
-            TagEnd::BlockQuote => self.leave(RenderTag::Div),
+            TagEnd::BlockQuote => self.leave(ElementTag::Div),
             // We already generated the image in `start` (it's self-contained), so do nothing
             TagEnd::Image => {}
             _ => todo!(),
