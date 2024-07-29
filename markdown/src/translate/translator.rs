@@ -7,48 +7,13 @@ use crate::structs::metadata::PostTranslateData;
 
 use super::{
     element::{AttributeName, ElementTag, RenderElement},
-    node::{RenderIcon, RenderNode, RenderTag},
+    error::TranslateError,
+    node::{RenderCallout, RenderNode, RenderTag},
 };
 
 pub struct TranslateOutput {
     pub nodes: Vec<RenderNode>,
     pub post_translate: PostTranslateData,
-}
-
-struct CalloutMetadata {
-    class: &'static str,
-    title: &'static str,
-    icon: RenderIcon,
-}
-
-fn get_metadata(kind: BlockQuoteKind) -> CalloutMetadata {
-    match kind {
-        BlockQuoteKind::Note => CalloutMetadata {
-            class: "callout-note",
-            title: "Note",
-            icon: RenderIcon::Note,
-        },
-        BlockQuoteKind::Tip => CalloutMetadata {
-            class: "callout-tip",
-            title: "Tip",
-            icon: RenderIcon::Tip,
-        },
-        BlockQuoteKind::Important => CalloutMetadata {
-            class: "callout-important",
-            title: "Important",
-            icon: RenderIcon::Important,
-        },
-        BlockQuoteKind::Warning => CalloutMetadata {
-            class: "callout-warning",
-            title: "Warning",
-            icon: RenderIcon::Warning,
-        },
-        BlockQuoteKind::Caution => CalloutMetadata {
-            class: "callout-caution",
-            title: "Caution",
-            icon: RenderIcon::Caution,
-        },
-    }
 }
 
 /// Helper struct used for converting Markdown events (generated via `pulldown_cmark`)
@@ -104,38 +69,64 @@ where
         self.stack.push(element.into());
     }
 
-    /// Leaves the container, checking that there's nothing wrong
-    /// with our entering/leaving process.
-    fn leave(&mut self, tag: RenderTag) {
-        let Some(top) = self.stack.pop() else {
-            panic!("Stack underflow");
-        };
-
+    fn check_top(&self, top: &RenderNode, tag: RenderTag) -> Result<(), TranslateError> {
         match tag {
             // Match element with element
             RenderTag::Element(etag) => {
                 let RenderNode::Element(element) = top else {
-                    panic!("Top item should be an element");
+                    return Err(TranslateError::ElementError {
+                        expected: etag,
+                        result: None,
+                    });
                 };
 
-                assert!(
-                    element.tag == etag,
-                    "Expected to pop <{}>, found <{}>",
-                    etag,
-                    element.tag
-                );
+                if element.tag != etag {
+                    return Err(TranslateError::ElementError {
+                        expected: etag,
+                        result: Some(element.tag),
+                    });
+                }
 
-                self.output(element)
+                Ok(())
             }
             // Match callout with callout
             RenderTag::Callout => {
-                let RenderNode::Callout(callout) = top else {
-                    panic!("Top item should be a callout");
+                let RenderNode::Callout(_) = top else {
+                    return Err(TranslateError::CalloutError);
                 };
 
-                self.output(callout)
+                Ok(())
             }
         }
+    }
+
+    /// Leaves the container, checking that there's nothing wrong
+    /// with our entering/leaving process.
+    fn leave(&mut self, tag: RenderTag) -> Result<(), TranslateError> {
+        let Some(top) = self.stack.pop() else {
+            panic!("Stack underflow");
+        };
+
+        self.check_top(&top, tag)?;
+        self.output(top);
+        Ok(())
+    }
+
+    fn leave_any(&mut self, tags: Vec<RenderTag>) -> Result<(), TranslateError> {
+        let Some(top) = self.stack.pop() else {
+            panic!("Stack underflow");
+        };
+
+        for tag in tags.clone() {
+            let result = self.check_top(&top, tag);
+
+            if let Ok(()) = result {
+                self.output(top);
+                return Ok(());
+            }
+        }
+
+        Err(TranslateError::NoMatchError { tags })
     }
 
     /// Consumes the next HTML element in our Markdown text and returns it as
@@ -166,26 +157,7 @@ where
     }
 
     fn generate_callout(&mut self, kind: BlockQuoteKind) {
-        // TODO: style MD callouts properly (consider moving to FE?)
-        let mut callout = RenderElement::new(ElementTag::Div);
-
-        let metadata = get_metadata(kind);
-
-        // Add class for colour background
-        callout.add_attribute(AttributeName::Class, metadata.class.to_string());
-
-        // Add icon and title
-        let mut heading = RenderElement::new(ElementTag::Div);
-        heading.add_attribute(AttributeName::Class, "flex flex-row".to_string());
-
-        let mut title = RenderElement::new(ElementTag::Strong);
-        title.add_child(RenderNode::Text(metadata.title.to_string()));
-
-        heading.add_child(RenderNode::Icon(metadata.icon));
-        heading.add_child(RenderNode::Element(title));
-
-        callout.add_child(RenderNode::Element(heading));
-
+        let callout = RenderCallout::new(kind.into());
         self.enter(callout);
     }
 
@@ -251,7 +223,7 @@ where
             Tag::BlockQuote(kind) => match kind {
                 Some(kind) => self.generate_callout(kind),
                 None => {
-                    let mut blockquote = RenderElement::new(ElementTag::Div);
+                    let mut blockquote = RenderElement::new(ElementTag::BlockQuote);
                     blockquote.add_attribute(AttributeName::Class, "blockquote".to_string());
                     self.enter(blockquote);
                 }
@@ -268,16 +240,23 @@ where
     }
 
     fn run_end(&mut self, tag: TagEnd) {
-        match tag {
+        let result = match tag {
             TagEnd::Paragraph => self.leave(RenderTag::Element(ElementTag::P)),
             TagEnd::Emphasis => self.leave(RenderTag::Element(ElementTag::Em)),
             TagEnd::Strong => self.leave(RenderTag::Element(ElementTag::Strong)),
             TagEnd::Heading(level) => self.leave(RenderTag::Element(level.into())),
             // Blockquotes are always rendered as divs
-            TagEnd::BlockQuote => self.leave(RenderTag::Element(ElementTag::Div)),
+            TagEnd::BlockQuote => self.leave_any(vec![
+                RenderTag::Element(ElementTag::BlockQuote),
+                RenderTag::Callout,
+            ]),
             // We already generated the image in `start` (it's self-contained), so do nothing
-            TagEnd::Image => {}
+            TagEnd::Image => Ok(()),
             _ => todo!(),
+        };
+
+        if let Err(e) = result {
+            panic!("{}", e);
         }
     }
 

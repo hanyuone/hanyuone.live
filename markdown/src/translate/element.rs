@@ -5,9 +5,9 @@ use serde::{Deserialize, Serialize};
 
 use super::node::RenderNode;
 
-#[derive(Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq)]
 pub enum ElementTag {
-    // HTML tags
+    BlockQuote,
     Div,
     Em,
     FigCaption,
@@ -26,7 +26,7 @@ pub enum ElementTag {
 impl Display for ElementTag {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let as_str = match *self {
-            // HTML tags
+            Self::BlockQuote => "blockquote",
             Self::Div => "div",
             Self::Em => "em",
             Self::FigCaption => "figcaption",

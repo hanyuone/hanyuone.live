@@ -1,3 +1,6 @@
+use std::fmt::Display;
+
+use pulldown_cmark::BlockQuoteKind;
 use serde::{Deserialize, Serialize};
 
 use super::element::{ElementTag, RenderElement};
@@ -18,6 +21,18 @@ pub enum CalloutKind {
     Important,
     Warning,
     Caution,
+}
+
+impl From<BlockQuoteKind> for CalloutKind {
+    fn from(value: BlockQuoteKind) -> Self {
+        match value {
+            BlockQuoteKind::Note => CalloutKind::Note,
+            BlockQuoteKind::Tip => CalloutKind::Tip,
+            BlockQuoteKind::Important => CalloutKind::Important,
+            BlockQuoteKind::Warning => CalloutKind::Warning,
+            BlockQuoteKind::Caution => CalloutKind::Caution,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize)]
@@ -72,7 +87,19 @@ impl From<RenderCallout> for RenderNode {
     }
 }
 
+#[derive(Debug, Clone)]
 pub enum RenderTag {
     Element(ElementTag),
     Callout,
+}
+
+impl Display for RenderTag {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let formatted = match self {
+            RenderTag::Element(tag) => &tag.to_string(),
+            RenderTag::Callout => "callout",
+        };
+
+        write!(f, "{}", formatted)
+    }
 }

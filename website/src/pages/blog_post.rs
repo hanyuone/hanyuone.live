@@ -1,9 +1,9 @@
 use gloo_net::http::Request;
-use markdown::{translate::node::RenderNode, structs::blog::BlogId};
+use markdown::{structs::blog::BlogId, translate::node::RenderNode};
 use yew::{function_component, html, use_context, use_state, Html, Properties, UseStateHandle};
 use yew_hooks::use_effect_once;
 
-use crate::{components::head::Head, context::BlogContext, render::to_html};
+use crate::{components::head::Head, context::BlogContext, render::Renderer};
 
 #[derive(PartialEq, Properties)]
 pub struct BlogProps {
@@ -46,15 +46,7 @@ pub fn page(props: &BlogProps) -> Html {
             <Head>
                 <title>{format!("{} | Hanyuan's Website", title)}</title>
             </Head>
-            <article class="prose dark:prose-invert prose-callouts">
-                {
-                    nodes.into_iter()
-                        .map(|node| {
-                            to_html(node)
-                        })
-                        .collect::<Vec<_>>()
-                }
-            </article>
+            {Renderer::new().run(nodes)}
         </>
     }
 }
