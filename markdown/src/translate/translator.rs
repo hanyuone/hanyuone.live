@@ -1,11 +1,14 @@
 use std::marker::PhantomData;
 
 use chrono::TimeDelta;
-use pulldown_cmark::{BlockQuoteKind, Event, Tag, TagEnd};
+use pulldown_cmark::{BlockQuoteKind, CowStr, Event, Tag, TagEnd};
 
 use crate::structs::metadata::PostTranslateData;
 
-use super::{element::{AttributeName, ElementTag, RenderElement}, node::{RenderIcon, RenderNode, RenderTag}};
+use super::{
+    element::{AttributeName, ElementTag, RenderElement},
+    node::{RenderIcon, RenderNode, RenderTag},
+};
 
 pub struct TranslateOutput {
     pub nodes: Vec<RenderNode>,
@@ -62,6 +65,8 @@ impl<'a, I> Translator<'a, I>
 where
     I: Iterator<Item = Event<'a>>,
 {
+    /// Creates a new translator, loaded with a list of tokens provided
+    /// by `pulldown_cmark`.
     pub fn new(tokens: I) -> Self {
         Self {
             tokens,
@@ -74,6 +79,8 @@ where
         }
     }
 
+    /// Adds a new node either into the topmost container, or directly
+    /// into the output.
     fn output<N>(&mut self, node: N)
     where
         N: Into<RenderNode>,
@@ -85,10 +92,13 @@ where
         }
     }
 
+    /// Enters into the current container.
     fn enter(&mut self, element: RenderElement) {
         self.stack.push(element);
     }
 
+    /// Leaves the container, checking that there's nothing wrong
+    /// with our entering/leaving process.
     fn leave(&mut self, tag: RenderTag) {
         let Some(top) = self.stack.pop() else {
             panic!("Stack underflow");
@@ -101,15 +111,16 @@ where
                     "Expected to pop <{}>, found <{}>",
                     etag,
                     top.tag
-                );        
-            },
+                );
+            }
             RenderTag::Callout => todo!(),
         }
-        
+
         self.output(top)
     }
 
-    /// Consumes the next HTML element in our Markdown text and returns it as a single-lined string.
+    /// Consumes the next HTML element in our Markdown text and returns it as
+    /// a single-lined string.
     fn capture_next_as_text(&mut self) -> String {
         let mut nest_level = 0;
         let mut captured = String::new();
@@ -159,6 +170,41 @@ where
         self.enter(callout);
     }
 
+    fn generate_image(&mut self, dest_url: CowStr, title: CowStr, id: CowStr) {
+        // Alt text - used for both the figure caption and in <img /> itself
+        let alt = self.capture_next_as_text();
+
+        // Images are converted to <figure /> under the hood, so that we can support captions
+        let mut element = RenderElement::new(ElementTag::Figure);
+        element.add_attribute(AttributeName::Id, id.into_string());
+        element.add_attribute(AttributeName::Title, title.into_string());
+
+        let mut img = RenderElement::new(ElementTag::Img);
+        img.add_attribute(AttributeName::Src, dest_url.into_string());
+        img.add_attribute(AttributeName::Alt, alt.clone());
+        element.add_child(RenderNode::Element(img));
+
+        let mut figcaption = RenderElement::new(ElementTag::FigCaption);
+        figcaption.add_child(RenderNode::Text(alt));
+        element.add_child(RenderNode::Element(figcaption));
+
+        // Cannot place <figure /> in <p>, so we must get rid of it on the stack and put it back later
+        let p = if let Some(RenderElement {
+            tag: ElementTag::P, ..
+        }) = self.stack.last()
+        {
+            self.stack.pop()
+        } else {
+            None
+        };
+
+        self.output(element);
+
+        if let Some(p) = p {
+            self.enter(p);
+        }
+    }
+
     fn run_start(&mut self, tag: Tag) {
         match tag {
             // Text styles
@@ -197,40 +243,7 @@ where
                 title,
                 id,
                 ..
-            } => {
-                // Alt text - used for both the figure caption and in <img /> itself
-                let alt = self.capture_next_as_text();
-
-                // Images are converted to <figure /> under the hood, so that we can support captions
-                let mut element = RenderElement::new(ElementTag::Figure);
-                element.add_attribute(AttributeName::Id, id.into_string());
-                element.add_attribute(AttributeName::Title, title.into_string());
-
-                let mut img = RenderElement::new(ElementTag::Img);
-                img.add_attribute(AttributeName::Src, dest_url.into_string());
-                img.add_attribute(AttributeName::Alt, alt.clone());
-                element.add_child(RenderNode::Element(img));
-
-                let mut figcaption = RenderElement::new(ElementTag::FigCaption);
-                figcaption.add_child(RenderNode::Text(alt));
-                element.add_child(RenderNode::Element(figcaption));
-
-                // Cannot place <figure /> in <p>, so we must get rid of it on the stack and put it back later
-                let p = if let Some(RenderElement {
-                    tag: ElementTag::P, ..
-                }) = self.stack.last()
-                {
-                    self.stack.pop()
-                } else {
-                    None
-                };
-
-                self.output(element);
-
-                if let Some(p) = p {
-                    self.enter(p);
-                }
-            }
+            } => self.generate_image(dest_url, title, id),
             _ => todo!(),
         }
     }
