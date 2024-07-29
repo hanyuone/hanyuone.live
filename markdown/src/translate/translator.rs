@@ -56,7 +56,7 @@ fn get_metadata(kind: BlockQuoteKind) -> CalloutMetadata {
 pub struct Translator<'a, I> {
     tokens: I,
     output: Vec<RenderNode>,
-    stack: Vec<RenderElement>,
+    stack: Vec<RenderNode>,
     post_translate: PostTranslateData,
     phantom: PhantomData<&'a I>,
 }
@@ -86,15 +86,22 @@ where
         N: Into<RenderNode>,
     {
         if let Some(top) = self.stack.last_mut() {
-            top.add_child(node.into());
+            match top {
+                RenderNode::Element(element) => element.add_child(node.into()),
+                RenderNode::Callout(callout) => callout.add_child(node.into()),
+                _ => unreachable!("Only containers should be put onto stack"),
+            }
         } else {
             self.output.push(node.into());
         }
     }
 
     /// Enters into the current container.
-    fn enter(&mut self, element: RenderElement) {
-        self.stack.push(element);
+    fn enter<N>(&mut self, element: N)
+    where
+        N: Into<RenderNode>,
+    {
+        self.stack.push(element.into());
     }
 
     /// Leaves the container, checking that there's nothing wrong
@@ -105,18 +112,30 @@ where
         };
 
         match tag {
+            // Match element with element
             RenderTag::Element(etag) => {
+                let RenderNode::Element(element) = top else {
+                    panic!("Top item should be an element");
+                };
+
                 assert!(
-                    top.tag == etag,
+                    element.tag == etag,
                     "Expected to pop <{}>, found <{}>",
                     etag,
-                    top.tag
+                    element.tag
                 );
-            }
-            RenderTag::Callout => todo!(),
-        }
 
-        self.output(top)
+                self.output(element)
+            }
+            // Match callout with callout
+            RenderTag::Callout => {
+                let RenderNode::Callout(callout) = top else {
+                    panic!("Top item should be a callout");
+                };
+
+                self.output(callout)
+            }
+        }
     }
 
     /// Consumes the next HTML element in our Markdown text and returns it as
@@ -189,9 +208,9 @@ where
         element.add_child(RenderNode::Element(figcaption));
 
         // Cannot place <figure /> in <p>, so we must get rid of it on the stack and put it back later
-        let p = if let Some(RenderElement {
+        let p = if let Some(RenderNode::Element(RenderElement {
             tag: ElementTag::P, ..
-        }) = self.stack.last()
+        })) = self.stack.last()
         {
             self.stack.pop()
         } else {

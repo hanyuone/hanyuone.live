@@ -26,6 +26,19 @@ pub struct RenderCallout {
     pub children: Vec<RenderNode>,
 }
 
+impl RenderCallout {
+    pub fn new(kind: CalloutKind) -> Self {
+        Self {
+            kind,
+            children: vec![],
+        }
+    }
+
+    pub fn add_child(&mut self, child: RenderNode) {
+        self.children.push(child)
+    }
+}
+
 #[derive(Serialize, Deserialize)]
 pub enum RenderNode {
     Text(String),
