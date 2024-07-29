@@ -1,5 +1,6 @@
 use gloo_net::http::Request;
 use markdown::{structs::blog::BlogId, translate::node::RenderNode};
+use web_sys::console;
 use yew::{function_component, html, use_context, use_state, Html, Properties, UseStateHandle};
 use yew_hooks::use_effect_once;
 
@@ -39,7 +40,11 @@ pub fn page(props: &BlogProps) -> Html {
     }
 
     let title = &blog_context.content[&props.blog_id].front_matter.title;
-    let nodes = postcard::from_bytes::<Vec<RenderNode>>(&content).unwrap_or_default();
+    console::log_1(&content.len().into());
+    let nodes = postcard::from_bytes::<Vec<RenderNode>>(&content).unwrap_or_else(|err| {
+        console::log_1(&format!("{:?}", err).into());
+        vec![]
+    });
 
     html! {
         <>

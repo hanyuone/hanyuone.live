@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 
 use super::element::{ElementTag, RenderElement};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum RenderIcon {
     Note,
     Tip,
@@ -14,7 +14,7 @@ pub enum RenderIcon {
     Caution,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum CalloutKind {
     Note,
     Tip,
@@ -35,7 +35,7 @@ impl From<BlockQuoteKind> for CalloutKind {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct RenderCallout {
     pub kind: CalloutKind,
     pub children: Vec<RenderNode>,
@@ -54,7 +54,7 @@ impl RenderCallout {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum RenderNode {
     Text(String),
     Icon(RenderIcon),

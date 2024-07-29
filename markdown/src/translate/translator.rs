@@ -228,19 +228,36 @@ where
                     self.enter(blockquote);
                 }
             },
-            // Images and links
+            // Links and images
+            Tag::Link {
+                dest_url,
+                title,
+                ..
+            } => {
+                let mut a = RenderElement::new(ElementTag::A);
+                a.add_attribute(AttributeName::Title, title.to_string());
+                a.add_attribute(AttributeName::Href, dest_url.to_string());
+                self.enter(a);
+            }
             Tag::Image {
                 dest_url,
                 title,
                 id,
                 ..
             } => self.generate_image(dest_url, title, id),
+            // Lists
+            Tag::List(_) => self.enter(RenderElement::new(ElementTag::Ul)),
+            Tag::Item => self.enter(RenderElement::new(ElementTag::Li)),
+            // Footnotes
+            // TODO: finalise implementation
+            Tag::FootnoteDefinition(footnote) => println!("{}", footnote),
             _ => todo!(),
         }
     }
 
     fn run_end(&mut self, tag: TagEnd) {
         let result = match tag {
+            // Text and decorations
             TagEnd::Paragraph => self.leave(RenderTag::Element(ElementTag::P)),
             TagEnd::Emphasis => self.leave(RenderTag::Element(ElementTag::Em)),
             TagEnd::Strong => self.leave(RenderTag::Element(ElementTag::Strong)),
@@ -250,8 +267,17 @@ where
                 RenderTag::Element(ElementTag::BlockQuote),
                 RenderTag::Callout,
             ]),
+            // Links and images
+            TagEnd::Link => self.leave(RenderTag::Element(ElementTag::A)),
             // We already generated the image in `start` (it's self-contained), so do nothing
             TagEnd::Image => Ok(()),
+            // Lists
+            TagEnd::List(_) => self.leave(RenderTag::Element(ElementTag::Ul)),
+            TagEnd::Item => self.leave(RenderTag::Element(ElementTag::Li)),
+            TagEnd::FootnoteDefinition => {
+                println!("footnote ended");
+                Ok(())
+            }
             _ => todo!(),
         };
 
@@ -269,8 +295,12 @@ where
                 self.output(text.to_string())
             }
             Event::SoftBreak => self.output("\n".to_string()),
+            Event::HardBreak => {
+                self.output(RenderElement::new(ElementTag::Br));
+            }
             Event::Start(tag) => self.run_start(tag),
             Event::End(tag) => self.run_end(tag),
+            Event::FootnoteReference(footnote) => println!("{}", footnote),
             _ => todo!(),
         }
     }

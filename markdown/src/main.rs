@@ -1,10 +1,9 @@
 use gray_matter::{engine::YAML, Matter, ParsedEntityStruct};
 use markdown::{
-    translate::{to_bytestring, TranslateOutputBytes},
     structs::{
         blog::BlogId,
         metadata::{BlogMetadata, RawFrontMatter},
-    },
+    }, translate::{node::RenderNode, to_bytestring, TranslateOutputBytes}
 };
 use std::{
     collections::HashMap,
@@ -84,7 +83,9 @@ fn write_blog_files(target_dir: impl AsRef<Path>, files: Vec<BlogFile>) -> io::R
     // Write list of blog cards to target dir
     let blog_map_filename = target_dir.as_ref().join("blog_map");
     let bytestring = postcard::to_stdvec(&blog_map).expect("valid utf-8");
-    fs::write(blog_map_filename, bytestring)?;
+    fs::write(blog_map_filename, bytestring.clone())?;
+
+    println!("{:?}", postcard::from_bytes::<Vec<RenderNode>>(&bytestring));
 
     Ok(())
 }
