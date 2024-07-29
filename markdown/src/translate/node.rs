@@ -59,7 +59,7 @@ impl From<RenderCallout> for RenderNode {
     }
 }
 
-enum RenderTag {
+pub enum RenderTag {
     Element(ElementTag),
     Callout,
 }

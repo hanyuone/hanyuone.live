@@ -5,7 +5,7 @@ use pulldown_cmark::{BlockQuoteKind, Event, Tag, TagEnd};
 
 use crate::structs::metadata::PostTranslateData;
 
-use super::{element::{AttributeName, ElementTag, RenderElement}, node::{RenderIcon, RenderNode}};
+use super::{element::{AttributeName, ElementTag, RenderElement}, node::{RenderIcon, RenderNode, RenderTag}};
 
 pub struct TranslateOutput {
     pub nodes: Vec<RenderNode>,
@@ -89,18 +89,23 @@ where
         self.stack.push(element);
     }
 
-    fn leave(&mut self, tag: ElementTag) {
+    fn leave(&mut self, tag: RenderTag) {
         let Some(top) = self.stack.pop() else {
             panic!("Stack underflow");
         };
 
-        assert!(
-            top.tag == tag,
-            "Expected to pop <{}>, found <{}>",
-            tag,
-            top.tag
-        );
-
+        match tag {
+            RenderTag::Element(etag) => {
+                assert!(
+                    top.tag == etag,
+                    "Expected to pop <{}>, found <{}>",
+                    etag,
+                    top.tag
+                );        
+            },
+            RenderTag::Callout => todo!(),
+        }
+        
         self.output(top)
     }
 
@@ -232,12 +237,12 @@ where
 
     fn run_end(&mut self, tag: TagEnd) {
         match tag {
-            TagEnd::Paragraph => self.leave(ElementTag::P),
-            TagEnd::Emphasis => self.leave(ElementTag::Em),
-            TagEnd::Strong => self.leave(ElementTag::Strong),
-            TagEnd::Heading(level) => self.leave(level.into()),
+            TagEnd::Paragraph => self.leave(RenderTag::Element(ElementTag::P)),
+            TagEnd::Emphasis => self.leave(RenderTag::Element(ElementTag::Em)),
+            TagEnd::Strong => self.leave(RenderTag::Element(ElementTag::Strong)),
+            TagEnd::Heading(level) => self.leave(RenderTag::Element(level.into())),
             // Blockquotes are always rendered as divs
-            TagEnd::BlockQuote => self.leave(ElementTag::Div),
+            TagEnd::BlockQuote => self.leave(RenderTag::Element(ElementTag::Div)),
             // We already generated the image in `start` (it's self-contained), so do nothing
             TagEnd::Image => {}
             _ => todo!(),
