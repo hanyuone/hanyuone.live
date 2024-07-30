@@ -102,8 +102,8 @@ Further interviews indicate that SCP-CN-985's culture is, specifically, extremel
 
 Since then, SCP-CN-985 has behaved abnormally, requesting large amounts of university textbooks and study materials from Foundation personnel. SCP-CN-985 has frequently been reading the above textbooks and attempting to answer exercise questions within. Foundation personnel have since asked about this change in behaviour in scheduled interviews.
 
-**Time**: ██/██/20██
-**Interviewer**: Professor ███
+**Time**: ██/██/20██\
+**Interviewer**: Professor ███\
 **Interviewee**: SCP-CN-985
 
 **Professor ███**: Hello, SCP-CN-985.\
