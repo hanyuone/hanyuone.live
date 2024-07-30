@@ -16,7 +16,7 @@ async fn main() {
             .await
             .unwrap();
 
-    let blog = BlogContext::new(raw_content.as_bytes());
+    let blog = BlogContext::new(&raw_content);
     let app = yew::Renderer::<App>::with_props(AppProps { blog });
 
     #[cfg(feature = "hydration")]
