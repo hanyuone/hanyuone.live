@@ -75,8 +75,8 @@ impl Env {
         let target_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../dist");
         let template = Template::load(target_dir.join("index.html")).await?;
 
-        let raw_blog_context = tokio::fs::read(target_dir.join("public/blog/blog_map")).await?;
-        let blog_context = BlogContext::new(&String::from_utf8(raw_blog_context));
+        let raw_blog_context = tokio::fs::read_to_string(target_dir.join("public/blog/blog_map")).await?;
+        let blog_context = BlogContext::new(&raw_blog_context);
 
         Ok(Self {
             target_dir,
