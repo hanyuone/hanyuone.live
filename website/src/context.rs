@@ -34,9 +34,8 @@ impl PartialEq for BlogContext {
 }
 
 impl BlogContext {
-    pub fn new(bytes: &[u8]) -> Self {
-        let content = postcard::from_bytes::<HashMap<BlogId, BlogMetadata>>(bytes);
-        web_sys::console::log_1(&format!("{:?}", content).into());
+    pub fn new(bytes: &str) -> Self {
+        let content = ron::from_str::<HashMap<BlogId, BlogMetadata>>(bytes);
         Self { content: content.unwrap() }
     }
 

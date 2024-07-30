@@ -4,7 +4,7 @@ pub mod card;
 pub mod item;
 pub mod tag;
 
-pub fn to_read_time(words: u32) -> String {
+pub fn to_read_time(words: usize) -> String {
     let time_delta = TimeDelta::seconds((words / 3) as i64);
     let seconds = time_delta.num_seconds();
 

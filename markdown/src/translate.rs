@@ -9,7 +9,7 @@ use translator::{TranslateOutput, Translator};
 use crate::structs::metadata::PostTranslateData;
 
 pub struct TranslateOutputBytes {
-    pub bytes: Vec<u8>,
+    pub bytes: String,
     pub post_translate: PostTranslateData,
 }
 
@@ -22,7 +22,7 @@ pub fn to_bytestring(raw: &str) -> TranslateOutputBytes {
     } = translator.run();
 
     TranslateOutputBytes {
-        bytes: postcard::to_stdvec(&nodes).expect("encoded nodes into bytestring"),
+        bytes: ron::to_string(&nodes).expect("encoded nodes into bytestring"),
         post_translate,
     }
 }

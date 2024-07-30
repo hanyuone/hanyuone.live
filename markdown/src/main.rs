@@ -20,7 +20,7 @@ static TARGET_DIR: &str = "website/public/blog";
 struct BlogFile {
     id: BlogId,
     metadata: BlogMetadata,
-    content: Vec<u8>,
+    content: String,
 }
 
 fn create_blog_files(content_dir: &str) -> io::Result<Vec<BlogFile>> {
@@ -86,7 +86,8 @@ fn write_blog_files(target_dir: impl AsRef<Path>, files: Vec<BlogFile>) -> io::R
 
     // Write list of blog cards to target dir
     let blog_map_filename = target_dir.as_ref().join("blog_map");
-    let bytestring = postcard::to_stdvec(&blog_map).expect("valid utf-8");
+    let bytestring = ron::to_string(&blog_map).expect("Written as bytes");
+
     fs::write(blog_map_filename, bytestring.clone())?;
 
     Ok(())
