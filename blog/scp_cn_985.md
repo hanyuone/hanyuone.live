@@ -78,8 +78,8 @@ Further interviews indicate that SCP-CN-985's culture is, specifically, extremel
 
 **Addendum CN-985-2**: Interview Log 2 - Social life
 
-**Time**: ██/██/20██
-**Interviewer**: Professor ███
+**Time**: ██/██/20██\
+**Interviewer**: Professor ███\
 **Interviewee**: SCP-CN-985
 
 **Professor ███**: Hello, SCP-CN-985.\
