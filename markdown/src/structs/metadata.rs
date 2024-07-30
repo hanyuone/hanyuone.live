@@ -1,7 +1,7 @@
 use chrono::NaiveDateTime;
-use serde::{Deserialize, Serialize};
+use rkyv::{Archive, Deserialize, Serialize};
 
-#[derive(Deserialize)]
+#[derive(serde::Deserialize)]
 pub struct RawFrontMatter {
     pub title: String,
     pub description: String,
@@ -10,7 +10,8 @@ pub struct RawFrontMatter {
     pub tags: Vec<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Archive, Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[archive(check_bytes)]
 pub struct FrontMatter {
     pub title: String,
     pub description: String,
@@ -33,12 +34,14 @@ impl From<RawFrontMatter> for FrontMatter {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Archive, Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[archive(check_bytes)]
 pub struct PostTranslateData {
     pub read_time: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Archive, Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[archive(check_bytes)]
 pub struct BlogMetadata {
     pub front_matter: FrontMatter,
     pub post_translate: PostTranslateData,

@@ -6,8 +6,8 @@ use markdown::{
     },
     translate::{to_bytestring, TranslateOutputBytes},
 };
+use rkyv::AlignedVec;
 use std::{
-    collections::HashMap,
     fs, io,
     path::{Path, PathBuf},
     str::FromStr,
@@ -20,7 +20,7 @@ static TARGET_DIR: &str = "website/public/blog";
 struct BlogFile {
     id: BlogId,
     metadata: BlogMetadata,
-    content: Vec<u8>,
+    content: AlignedVec,
 }
 
 fn create_blog_files(content_dir: &str) -> io::Result<Vec<BlogFile>> {
@@ -72,11 +72,11 @@ fn write_blog_files(target_dir: impl AsRef<Path>, files: Vec<BlogFile>) -> io::R
     fs::create_dir_all(&target_dir)?;
 
     // Mapping between blog IDs and frontmatter
-    let mut blog_map: HashMap<BlogId, BlogMetadata> = HashMap::new();
+    let mut blog_map: Vec<(BlogId, BlogMetadata)> = vec![];
 
     for file in files {
         // Insert frontmatter into mapping
-        blog_map.insert(file.id, file.metadata);
+        blog_map.push((file.id, file.metadata));
 
         // Write content to file
         let filename = target_dir.as_ref().join(file.id.to_string());
@@ -86,7 +86,8 @@ fn write_blog_files(target_dir: impl AsRef<Path>, files: Vec<BlogFile>) -> io::R
 
     // Write list of blog cards to target dir
     let blog_map_filename = target_dir.as_ref().join("blog_map");
-    let bytestring = postcard::to_stdvec(&blog_map).expect("valid utf-8");
+    let bytestring = rkyv::to_bytes::<_, 1_024>(&blog_map).expect("valid utf-8");
+
     fs::write(blog_map_filename, bytestring.clone())?;
 
     Ok(())

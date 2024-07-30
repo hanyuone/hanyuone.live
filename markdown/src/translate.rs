@@ -3,13 +3,15 @@ pub mod error;
 pub mod node;
 pub mod translator;
 
+use node::RenderNode;
 use pulldown_cmark::{Options, Parser};
+use rkyv::util::AlignedVec;
 use translator::{TranslateOutput, Translator};
 
 use crate::structs::metadata::PostTranslateData;
 
 pub struct TranslateOutputBytes {
-    pub bytes: Vec<u8>,
+    pub bytes: AlignedVec,
     pub post_translate: PostTranslateData,
 }
 
@@ -22,7 +24,7 @@ pub fn to_bytestring(raw: &str) -> TranslateOutputBytes {
     } = translator.run();
 
     TranslateOutputBytes {
-        bytes: postcard::to_stdvec(&nodes).expect("encoded nodes into bytestring"),
+        bytes: rkyv::to_bytes::<Vec<RenderNode>, 16_384>(&nodes).expect("encoded nodes into bytestring"),
         post_translate,
     }
 }

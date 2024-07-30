@@ -1,6 +1,7 @@
-use std::{cell::RefCell, collections::HashMap, rc::Rc};
+use std::{cell::RefCell, rc::Rc};
 
 use markdown::structs::{blog::BlogId, metadata::BlogMetadata};
+use rkyv::Deserialize;
 use yew::Html;
 
 #[derive(Default)]
@@ -24,7 +25,7 @@ impl Clone for HeadContext {
 
 #[derive(Clone)]
 pub struct BlogContext {
-    pub content: HashMap<BlogId, BlogMetadata>,
+    pub content: Vec<(BlogId, BlogMetadata)>,
 }
 
 impl PartialEq for BlogContext {
@@ -35,12 +36,17 @@ impl PartialEq for BlogContext {
 
 impl BlogContext {
     pub fn new(bytes: &[u8]) -> Self {
-        let content = postcard::from_bytes::<HashMap<BlogId, BlogMetadata>>(bytes);
-        web_sys::console::log_1(&format!("{:?}", content).into());
-        Self { content: content.unwrap() }
+        let archived = rkyv::check_archived_root::<Vec<(BlogId, BlogMetadata)>>(bytes).expect("Archived properly");
+        let content = archived.deserialize(&mut rkyv::Infallible).unwrap();
+
+        Self {
+            content,
+        }
     }
 
     pub fn get(&self, id: &BlogId) -> Option<&BlogMetadata> {
-        self.content.get(id)
+        self.content.iter()
+            .find(|(target_id, _)| id == target_id)
+            .map(|(_, metadata)| metadata)
     }
 }
