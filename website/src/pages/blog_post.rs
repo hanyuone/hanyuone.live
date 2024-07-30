@@ -13,7 +13,7 @@ pub struct BlogProps {
 #[function_component(Page)]
 pub fn page(props: &BlogProps) -> Html {
     let blog_context = use_context::<BlogContext>().unwrap();
-    let content: UseStateHandle<Vec<u8>> = use_state(Vec::new);
+    let content: UseStateHandle<String> = use_state(String::new);
 
     {
         let content = content.clone();
@@ -31,7 +31,7 @@ pub fn page(props: &BlogProps) -> Html {
                     .await
                     .unwrap();
 
-                content.set(raw_content.as_bytes().to_vec());
+                content.set(raw_content);
             });
 
             || ()
@@ -39,7 +39,7 @@ pub fn page(props: &BlogProps) -> Html {
     }
 
     let title = &blog_context.content[&props.blog_id].front_matter.title;
-    let nodes = postcard::from_bytes::<Vec<RenderNode>>(&content).unwrap_or_default();
+    let nodes = ron::from_str::<Vec<RenderNode>>(&content).unwrap_or_default();
 
     html! {
         <>

@@ -1,6 +1,5 @@
 use std::marker::PhantomData;
 
-use chrono::TimeDelta;
 use pulldown_cmark::{BlockQuoteKind, CowStr, Event, Tag, TagEnd};
 
 use crate::structs::metadata::PostTranslateData;
@@ -16,33 +15,13 @@ pub struct TranslateOutput {
     pub post_translate: PostTranslateData,
 }
 
-// TODO: currently here because postcard mangles numbers between 64-bit (local)
-// and 32-bit (wasm32) - consider moving back to FE once issue is researched
-// and addressed properly
-pub fn to_read_time(words: usize) -> String {
-    let time_delta = TimeDelta::seconds((words / 3) as i64);
-    let seconds = time_delta.num_seconds();
-
-    if seconds < 60 {
-        return "<1 min".to_string();
-    }
-
-    let minutes = time_delta.num_minutes();
-
-    if minutes < 60 {
-        return format!("{} min", minutes);
-    }
-
-    "long read".to_string()
-}
-
 /// Helper struct used for converting Markdown events (generated via `pulldown_cmark`)
 /// into a simplified virtual DOM that can easily be converted to work with Yew.
 pub struct Translator<'a, I> {
     tokens: I,
     output: Vec<RenderNode>,
     stack: Vec<RenderNode>,
-    words: usize,
+    post_translate: PostTranslateData,
     phantom: PhantomData<&'a I>,
 }
 
@@ -57,7 +36,7 @@ where
             tokens,
             output: vec![],
             stack: vec![],
-            words: 0,
+            post_translate: PostTranslateData { words: 0 },
             phantom: PhantomData,
         }
     }
@@ -306,7 +285,7 @@ where
         match token {
             Event::Text(text) => {
                 let words = text.split(' ').count();
-                self.words += words;
+                self.post_translate.words += words;
 
                 self.output(text.to_string())
             }
@@ -328,9 +307,7 @@ where
 
         TranslateOutput {
             nodes: self.output,
-            post_translate: PostTranslateData {
-                read_time: to_read_time(self.words),
-            },
+            post_translate: self.post_translate,
         }
     }
 }

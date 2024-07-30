@@ -35,7 +35,7 @@ impl From<RawFrontMatter> for FrontMatter {
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct PostTranslateData {
-    pub read_time: String,
+    pub words: usize,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
