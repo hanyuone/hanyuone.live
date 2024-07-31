@@ -21,8 +21,8 @@ pub struct Translator<'a, I> {
     tokens: I,
     output: Vec<RenderNode>,
     stack: Vec<RenderNode>,
-    post_translate: PostTranslateData,
     footnotes: HashMap<CowStr<'a>, usize>,
+    post_translate: PostTranslateData,
 }
 
 impl<'a, I> Translator<'a, I>
@@ -36,15 +36,19 @@ where
             tokens,
             output: vec![],
             stack: vec![],
-            post_translate: PostTranslateData { words: 0 },
             footnotes: HashMap::new(),
+            post_translate: PostTranslateData { words: 0 },
         }
     }
+
+    //// HELPER FUNCTIONS
 
     fn get_footnote_index(&mut self, name: CowStr<'a>) -> usize {
         let next = self.footnotes.len() + 1;
         *self.footnotes.entry(name).or_insert(next)
     }
+
+    //// TRANSLATION FUNCTIONS
 
     /// Adds a new node either into the topmost container, or directly
     /// into the output.
