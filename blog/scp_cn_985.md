@@ -125,3 +125,5 @@ Since then, SCP-CN-985 has behaved abnormally, requesting large amounts of unive
 *Continued observation for some time is recommended. In the future, I may request for the Foundation front organisation "Matthew Catherine University" to provide distance education to SCP-CN-985.* - Professor ███
 
 [^a]: This is not a comprehensive list, please see Document CN-985-5 for more details.
+
+[^b]:
