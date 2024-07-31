@@ -1,4 +1,4 @@
-use std::marker::PhantomData;
+use std::collections::HashMap;
 
 use pulldown_cmark::{BlockQuoteKind, CowStr, Event, Tag, TagEnd};
 
@@ -22,7 +22,7 @@ pub struct Translator<'a, I> {
     output: Vec<RenderNode>,
     stack: Vec<RenderNode>,
     post_translate: PostTranslateData,
-    phantom: PhantomData<&'a I>,
+    footnotes: HashMap<CowStr<'a>, usize>,
 }
 
 impl<'a, I> Translator<'a, I>
@@ -37,8 +37,13 @@ where
             output: vec![],
             stack: vec![],
             post_translate: PostTranslateData { words: 0 },
-            phantom: PhantomData,
+            footnotes: HashMap::new(),
         }
+    }
+
+    fn get_footnote_index(&mut self, name: CowStr<'a>) -> usize {
+        let next = self.footnotes.len() + 1;
+        *self.footnotes.entry(name).or_insert(next)
     }
 
     /// Adds a new node either into the topmost container, or directly
@@ -193,7 +198,7 @@ where
         }
     }
 
-    fn run_start(&mut self, tag: Tag) {
+    fn run_start(&mut self, tag: Tag<'a>) {
         match tag {
             // Text styles
             Tag::Paragraph => self.enter(RenderElement::new(ElementTag::P)),
@@ -244,8 +249,22 @@ where
             Tag::List(_) => self.enter(RenderElement::new(ElementTag::Ul)),
             Tag::Item => self.enter(RenderElement::new(ElementTag::Li)),
             // Footnotes
-            // TODO: finalise implementation
-            Tag::FootnoteDefinition(footnote) => println!("{}", footnote),
+            // FIXME: footnotes not aligned properly
+            Tag::FootnoteDefinition(name) => {
+                let mut footnote = RenderElement::new(ElementTag::Div);
+                footnote.add_attribute(AttributeName::Class, "flex flex-row items-start".to_string());
+                footnote.add_attribute(AttributeName::Id, name.to_string());
+
+                let index = self.get_footnote_index(name);
+                let mut left = RenderElement::new(ElementTag::Div);
+                left.add_child(RenderNode::Text(format!("{}: ", index)));
+                footnote.add_child(RenderNode::Element(left));
+
+                let right = RenderElement::new(ElementTag::Div);
+
+                self.enter(footnote);
+                self.enter(right);
+            }
             _ => todo!(),
         }
     }
@@ -269,10 +288,9 @@ where
             // Lists
             TagEnd::List(_) => self.leave(RenderTag::Element(ElementTag::Ul)),
             TagEnd::Item => self.leave(RenderTag::Element(ElementTag::Li)),
-            TagEnd::FootnoteDefinition => {
-                println!("footnote ended");
-                Ok(())
-            }
+            TagEnd::FootnoteDefinition => self
+                .leave(RenderTag::Element(ElementTag::Div))
+                .and(self.leave(RenderTag::Element(ElementTag::Div))),
             _ => todo!(),
         };
 
@@ -295,7 +313,17 @@ where
             }
             Event::Start(tag) => self.run_start(tag),
             Event::End(tag) => self.run_end(tag),
-            Event::FootnoteReference(footnote) => println!("{}", footnote),
+            Event::FootnoteReference(name) => {
+                let mut sup = RenderElement::new(ElementTag::Sup);
+                let mut anchor = RenderElement::new(ElementTag::A);
+                anchor.add_attribute(AttributeName::Href, format!("#{name}"));
+
+                let index = self.get_footnote_index(name);
+                anchor.add_child(RenderNode::Text(index.to_string()));
+
+                sup.add_child(RenderNode::Element(anchor));
+                self.output(sup);
+            }
             _ => todo!(),
         }
     }
