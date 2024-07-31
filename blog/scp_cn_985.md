@@ -20,7 +20,7 @@ tags:
 
 **Special Containment Procedures**: Based on SCP-CN-985's good behaviour and the advice of the Ethics Committee, SCP-CN-985 is currently contained in a 10m * 10m * 5m modified fish tank in Site-CN-18 with an automatic water change system. The tank is to contain aquatic plant life, coral and other decorations, as well as one sanitation device designed according to SCP-CN-985's specifications. 10kg of fresh fish is to be fed to SCP-CN-985 daily. The tank is to be cleaned every two weeks.
 
-Since containment, SCP-CN-985 has made the following requests[^1] :
+Since containment, SCP-CN-985 has made the following requests[^a]:
 - The installation of various facilities to mimic SCP-CN-985's previous living conditions (approved)
 - A personal computer (approved based on good behaviour, waterproofed)
 - Computer games (approved based on good behaviour)
@@ -39,7 +39,7 @@ Personnel are encouraged to interact with SCP-CN-985 in order to maintain its me
 - SCP-CN-985's speech organs are located in the back of its mouth, and generates sound via the ingestion and ejection of water. During interviews, SCP-CN-985 could still be heard clearly despite its sound travelling through water and glass;
 - SCP-CN-985's visual acuity is similar to that of a human's, further analysis indicates that its eyes have been significantly mutated.
 
-**SCP-CN-985** was discovered in ██/██/20██, when a Foundation patrol boat discovered three single-occupant submarines gathered at the same location. As the boat approached, the three submarines immediately descended, with no traces visible via sonar. The Foundation then discovered an injured SCP-CN-985, and brought it to Maritime Research Station CN-03 for treatment and containment following confirmation of its anomalous nature. SCP-CN-985 believed it was the victim of a "beating from thugs" and believed Foundation personnel to be employees of an animal welfare organisation. According to reports at the time, the subject "expressed its gratitude to Foundation personnel in a multitude of ways".
+SCP-CN-985 was discovered in ██/██/20██, when a Foundation patrol boat discovered three single-occupant submarines gathered at the same location. As the boat approached, the three submarines immediately descended, with no traces visible via sonar. The Foundation then discovered an injured SCP-CN-985, and brought it to Maritime Research Station CN-03 for treatment and containment following confirmation of its anomalous nature. SCP-CN-985 believed it was the victim of a "beating from thugs" and believed Foundation personnel to be employees of an animal welfare organisation. According to reports at the time, the subject "expressed its gratitude to Foundation personnel in a multitude of ways".
 
 Since containment, SCP-CN-985 has been exceedingly cooperative, and has not demonstrated hostilities to personnel or caused any containment breaches.
 
@@ -56,10 +56,10 @@ Since containment, SCP-CN-985 has been exceedingly cooperative, and has not demo
 **Professor ███**: I'll make sure to report it to my superiors. Let me ask you a couple of questions first.\
 **SCP-CN-985**: Sure.\
 **Professor ███**: Where are you from?\
-**SCP-CN-985**: Pacific Ocean, South China Sea, Xihai District, 3rd North Channel, Unit 1/15...
+**SCP-CN-985**: Pacific Ocean, South China Sea, Xihai District, 3rd North Channel, Unit 1/15...\
 **Professor ███**: That's enough, you don't need to be that specific. You're a nurse shark, correct?\
 **SCP-CN-985**: Yeah, scientific name *Ginglymostoma cirratum*. Not to brag, but I was pretty good at biology in high school.\
-**Professor ███**: Let's get back on topic. Do the nurse sharks around you have your abilities?  
+**Professor ███**: Let's get back on topic. Do the nurse sharks around you have your abilities?\
 **SCP-CN-985**: What abilities, Doc?\
 **Professor ███**: Language abilities and telekinesis.\
 **SCP-CN-985**: Language abilities... the guy in my bottom bunk's really good at English, passed Grade 6 in his first year.\
@@ -124,4 +124,4 @@ Since then, SCP-CN-985 has behaved abnormally, requesting large amounts of unive
 
 *Continued observation for some time is recommended. In the future, I may request for the Foundation front organisation "Matthew Catherine University" to provide distance education to SCP-CN-985.* - Professor ███
 
-[^1] : This is not a comprehensive list, please see Document CN-985-5 for more details.
+[^a]: This is not a comprehensive list, please see Document CN-985-5 for more details.

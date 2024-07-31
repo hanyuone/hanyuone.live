@@ -24,6 +24,7 @@ pub enum ElementTag {
     Li,
     P,
     Strong,
+    Sup,
     Ul,
 }
 
@@ -47,6 +48,7 @@ impl Display for ElementTag {
             Self::Li => "li",
             Self::P => "p",
             Self::Strong => "strong",
+            Self::Sup => "sup",
             Self::Ul => "ul",
         };
 
