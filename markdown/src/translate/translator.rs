@@ -315,6 +315,8 @@ where
                 footnote.add_child(RenderNode::Element(p_index));
 
                 self.enter(footnote);
+                // We want to make sure the footnote flag triggers on the first item we add
+                // *after* we enter the footnote
                 self.is_footnote = true;
             }
             _ => todo!(),
