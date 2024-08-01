@@ -22,6 +22,7 @@ pub struct Translator<'a, I> {
     output: Vec<RenderNode>,
     stack: Vec<RenderNode>,
     footnotes: HashMap<CowStr<'a>, usize>,
+    is_footnote: bool,
     post_translate: PostTranslateData,
 }
 
@@ -37,6 +38,7 @@ where
             output: vec![],
             stack: vec![],
             footnotes: HashMap::new(),
+            is_footnote: false,
             post_translate: PostTranslateData { words: 0 },
         }
     }
@@ -67,12 +69,62 @@ where
         }
     }
 
-    /// Enters into the current container.
-    fn enter<N>(&mut self, element: N)
+    /// Called whenever we encounter the *first* element after a footnote. This edgecase
+    /// needs to be checked because we don't want the index `<p>` have a line separator with
+    /// the footnote contents if the node we're adding is also a `<p>` element.
+    fn enter_footnote<N>(&mut self, node: N)
     where
         N: Into<RenderNode>,
     {
-        self.stack.push(element.into());
+        // We know that we have a footnote on the top of stack
+        let RenderNode::Element(footnote_element) = self.stack.last_mut().unwrap() else {
+            unreachable!()
+        };
+
+        // We only want to do footnote manipulation if the element we're adding is another <p>
+        let node = node.into();
+
+        let RenderNode::Element(mut added_element) = node else {
+            footnote_element.add_child(node);
+            return;
+        };
+
+        if added_element.tag != ElementTag::P {
+            footnote_element.add_child(added_element.into());
+            return;
+        }
+
+        // We know that the footnote on the top of stack has one element in it so far,
+        // in the format <p>{index}: </p>. Wipe it from the existing footnote element using pop()
+        let RenderNode::Element(mut index_element) = footnote_element.children.pop().unwrap() else {
+            unreachable!()
+        };
+
+        let RenderNode::Text(index_text) = index_element.children.pop().unwrap() else {
+            unreachable!()
+        };
+        
+        // The text is now part of the <p> we're adding, as if it never existed in the
+        // footnote in the first place
+        added_element
+            .children
+            .insert(0, RenderNode::Text(index_text));
+
+        self.stack.push(added_element.into());
+    }
+
+    /// Enters into the current container.
+    fn enter<N>(&mut self, node: N)
+    where
+        N: Into<RenderNode>,
+    {
+        if self.is_footnote {
+            self.enter_footnote(node);
+            self.is_footnote = false;
+            return;
+        }
+
+        self.stack.push(node.into());
     }
 
     fn check_top(&self, top: &RenderNode, tag: RenderTag) -> Result<(), TranslateError> {
@@ -263,63 +315,10 @@ where
                 footnote.add_child(RenderNode::Element(p_index));
 
                 self.enter(footnote);
+                self.is_footnote = true;
             }
             _ => todo!(),
         }
-    }
-
-    // Called whenever we're trying to exit a footnote. Attaches the footnote
-    // index onto the rest of the footnote itself, if possible.
-    fn attach_footnote_index(&mut self) {
-        // We know the top item of the stack (if a stack exists) or the output
-        // *must* be our footnote
-        let footnote_node = if self.stack.is_empty() {
-            self.output.last_mut().unwrap()
-        } else {
-            self.stack.last_mut().unwrap()
-        };
-
-        let RenderNode::Element(ref mut footnote) = footnote_node else {
-            unreachable!();
-        };
-
-        let children = &mut footnote.children;
-        // Reverse because we're removing the first two elements and potentially
-        // adding them back later, popping is an O(1) operation
-        children.reverse();
-
-        // Footnote element must contain the footnote index itself
-        let RenderNode::Element(mut index) = children.pop().unwrap() else {
-            unreachable!();
-        };
-
-        // Guards to ensure we're pushing to an element with <p> as first tag
-        let Some(first_content) = children.pop() else {
-            children.push(index.into());
-            children.reverse();
-            return;
-        };
-
-        let RenderNode::Element(mut first_content) = first_content else {
-            children.push(first_content);
-            children.push(index.into());
-            children.reverse();
-            return;
-        };
-
-        if first_content.tag != ElementTag::P {
-            children.push(first_content.into());
-            children.push(index.into());
-            children.reverse();
-            return;
-        }
-
-        // Attach footnote index text to <p>
-        let index_text = index.children.pop().unwrap();
-        first_content.children.insert(0, index_text);
-
-        children.push(first_content.into());
-        children.reverse();
     }
 
     fn run_end(&mut self, tag: TagEnd) {
@@ -341,13 +340,7 @@ where
             // Lists
             TagEnd::List(_) => self.leave(RenderTag::Element(ElementTag::Ul)),
             TagEnd::Item => self.leave(RenderTag::Element(ElementTag::Li)),
-            TagEnd::FootnoteDefinition => {
-                self.leave(RenderTag::Element(ElementTag::Div))
-                    .and_then(|_| {
-                        self.attach_footnote_index();
-                        Ok(())
-                    })
-            }
+            TagEnd::FootnoteDefinition => self.leave(RenderTag::Element(ElementTag::Div)),
             _ => todo!(),
         };
 
