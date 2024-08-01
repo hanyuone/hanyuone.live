@@ -1,30 +1,23 @@
 ---
 title: Hello, World!
-description: This is my very first blog! I don't know how well-received this will be...
+description: A brief intro into the blog, what I plan on posting.
 image: public/blog_media/hello_world/title.png
-publish_date: 2024-07-06 00:00
+publish_date: 2024-07-25 00:00
 tags:
-- test
+- meta
 ---
 # Hello, World!
 
-This is my first blog :D
+Hi! My name is Hanyuan, and I made this website mainly as a vehicle for me
+to write blogs - things I want to share with the world. This could include
+creative endeavours (mostly in terms of writing), self-promotions, or things
+I have general thoughts/opinions on. Some general things you can expect here are:
 
-> Testing blockquotes
+- **Programming**. This is what I study at university, what I will most likely be
+doing as a job in the future, and something I do as a hobby.
+- **Translations**. This is probably my main creative medium, and a nice way to
+improve both my Chinese and English creative writing skills.
+- **Writing**. I want to try writing more in general. One big project that I've got
+in store to publish is a full Magic: the Gathering guide.
 
-> [!note]
-> Testing notes
-
-> [!tip]
-> Testing tips
-
-> [!important]
-> Testing important quotes
-
-> [!warning]
-> Testing warnings
-
-> [!caution]
-> Testing caution notes
-
-![Caption displayed here](/public/blog_media/hello_world/title.png)
+Hope you enjoy your time here!
