@@ -37,4 +37,7 @@ module.exports = {
     plugins: [
         require('@tailwindcss/typography'),
     ],
+    safelist: [
+        "bg-green", "bg-blue", "bg-purple"
+    ]
 };

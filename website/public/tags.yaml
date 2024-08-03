@@ -1,0 +1,6 @@
+- name: meta
+  colour: purple
+- name: translation
+  colour: purple
+- name: scp
+  colour: blue

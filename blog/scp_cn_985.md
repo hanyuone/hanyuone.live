@@ -4,8 +4,8 @@ description: My very first translation on this blog!
 image: public/blog_media/scp_cn_985/shark.jpg
 publish_date: 2024-07-29 19:21
 tags:
-- scp
 - translation
+- scp
 ---
 
 > [!note]

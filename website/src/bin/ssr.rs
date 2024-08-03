@@ -6,7 +6,7 @@ use std::{
 use website::{
     app::{StaticApp, StaticAppProps},
     components::head::{HeadRender, HeadRenderProps},
-    context::{BlogContext, HeadContext},
+    context::{BlogContext, HeadContext, TagContext},
     pages::Route,
 };
 use yew::LocalServerRenderer;
@@ -28,11 +28,17 @@ impl Template {
         let content = tokio::fs::read_to_string(path).await?;
 
         let Some(head_index) = content.find("<script id=\"head-ssg-after\"") else {
-            return Err(io::Error::new(io::ErrorKind::Other, "Malformed index.html: no head"));
+            return Err(io::Error::new(
+                io::ErrorKind::Other,
+                "Malformed index.html: no head",
+            ));
         };
 
         let Some(body_index) = content.find("</body>") else {
-            return Err(io::Error::new(io::ErrorKind::Other, "Malformed index.html: no body"));
+            return Err(io::Error::new(
+                io::ErrorKind::Other,
+                "Malformed index.html: no body",
+            ));
         };
 
         Ok(Self {
@@ -68,6 +74,7 @@ struct Env {
     target_dir: PathBuf,
     template: Template,
     blog_context: BlogContext,
+    tag_context: TagContext,
 }
 
 impl Env {
@@ -75,13 +82,19 @@ impl Env {
         let target_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../dist");
         let template = Template::load(target_dir.join("index.html")).await?;
 
-        let raw_blog_context = tokio::fs::read_to_string(target_dir.join("public/blog/blog_map")).await?;
+        let raw_blog_context =
+            tokio::fs::read_to_string(target_dir.join("public/blog/blog_map")).await?;
         let blog_context = BlogContext::new(&raw_blog_context);
+
+        let raw_tag_context =
+            tokio::fs::read_to_string(target_dir.join("public/blog/blog_map")).await?;
+        let tag_context = TagContext::new(&raw_tag_context);
 
         Ok(Self {
             target_dir,
             template,
             blog_context,
+            tag_context,
         })
     }
 
@@ -91,7 +104,12 @@ impl Env {
 
         let render = {
             let head = head.clone();
-            LocalServerRenderer::<StaticApp>::with_props(StaticAppProps { route, head, blog: self.blog_context.clone() })
+            LocalServerRenderer::<StaticApp>::with_props(StaticAppProps {
+                route,
+                head,
+                blog: self.blog_context.clone(),
+                tags: self.tag_context.clone(),
+            })
         };
 
         let mut body = String::new();
