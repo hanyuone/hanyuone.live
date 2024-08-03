@@ -4,6 +4,9 @@ use markdown::structs::{blog::BlogId, metadata::BlogMetadata};
 use serde::Deserialize;
 use yew::Html;
 
+// FIXME: split BlogContext and TagContext into separate provide-context components, see
+// https://github.com/BlakeRain/blakerain.com/blob/main/src/model.rs
+
 #[derive(Default)]
 pub struct HeadContext {
     pub content: Rc<RefCell<Html>>,

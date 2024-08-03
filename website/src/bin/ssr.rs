@@ -87,7 +87,7 @@ impl Env {
         let blog_context = BlogContext::new(&raw_blog_context);
 
         let raw_tag_context =
-            tokio::fs::read_to_string(target_dir.join("public/blog/blog_map")).await?;
+            tokio::fs::read_to_string(target_dir.join("public/tags.yaml")).await?;
         let tag_context = TagContext::new(&raw_tag_context);
 
         Ok(Self {
