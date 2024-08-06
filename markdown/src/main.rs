@@ -81,6 +81,11 @@ fn write_blog_files(target_dir: impl AsRef<Path>, files: Vec<BlogFile>) -> io::R
         // Write content to file
         let filename = target_dir.as_ref().join(file.id.to_string());
 
+        // Commenting this line stops the "double build" bug.
+        // However, Trunk only builds *twice* no matter how many MD files
+        // exist, and commenting the `blog_map` writing line still causes
+        // Trunk to build twice.
+        // Having only one MD file causes fs::write to only build once
         fs::write(filename, file.content)?;
     }
 
