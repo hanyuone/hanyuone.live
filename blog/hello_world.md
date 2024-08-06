@@ -8,7 +8,7 @@ tags:
 ---
 # Hello, World!
 
-Hi! My name is Hanyuan, and I made this website mainly as a vehicle for me
+Hi! My name is Hanyuan, and I made `hanyuone.live` mainly as a vehicle for me
 to write blogs - things I want to share with the world. This could include
 creative endeavours (mostly in terms of writing), self-promotions, or things
 I have general thoughts/opinions on. Some general things you can expect here are:

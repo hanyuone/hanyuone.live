@@ -96,14 +96,15 @@ where
 
         // We know that the footnote on the top of stack has one element in it so far,
         // in the format <p>{index}: </p>. Wipe it from the existing footnote element using pop()
-        let RenderNode::Element(mut index_element) = footnote_element.children.pop().unwrap() else {
+        let RenderNode::Element(mut index_element) = footnote_element.children.pop().unwrap()
+        else {
             unreachable!()
         };
 
         let RenderNode::Text(index_text) = index_element.children.pop().unwrap() else {
             unreachable!()
         };
-        
+
         // The text is now part of the <p> we're adding, as if it never existed in the
         // footnote in the first place
         added_element
@@ -254,6 +255,7 @@ where
         }
     }
 
+    // TODO: add codeblocks w/ syntax highlighting
     fn run_start(&mut self, tag: Tag<'a>) {
         match tag {
             // Text styles
@@ -353,18 +355,28 @@ where
 
     fn run_token(&mut self, token: Event<'a>) {
         match token {
+            // Text
             Event::Text(text) => {
                 let words = text.split(' ').count();
                 self.post_translate.words += words;
 
                 self.output(text.to_string())
             }
+            Event::Code(text) => {
+                let mut code = RenderElement::new(ElementTag::Code);
+                code.add_child(RenderNode::Text(text.to_string()));
+
+                self.output(code)
+            }
+            // Line breaks
             Event::SoftBreak => self.output("\n".to_string()),
             Event::HardBreak => {
                 self.output(RenderElement::new(ElementTag::Br));
             }
+            // Starting and ending more complex elements
             Event::Start(tag) => self.run_start(tag),
             Event::End(tag) => self.run_end(tag),
+            // Inline footnote references
             Event::FootnoteReference(name) => {
                 let mut sup = RenderElement::new(ElementTag::Sup);
                 let mut anchor = RenderElement::new(ElementTag::A);
@@ -376,7 +388,6 @@ where
                 sup.add_child(RenderNode::Element(anchor));
                 self.output(sup);
             }
-            // TODO: add codeblocks
             _ => todo!(),
         }
     }
