@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev:md": "cargo watch -w markdown/src -w blog -x \"run -p markdown\"",
-    "dev": "concurrently -c auto \"pnpm dev:md\" \"cd website && trunk serve\"",
+    "dev:site": "cd website && trunk serve --color always",
+    "dev": "concurrently -c auto \"pnpm dev:md\" \"pnpm dev:site\"",
     "build:md": "cargo run -p markdown",
     "build:wasm": "cd website && trunk build --release --features hydration",
     "build:ssg": "cargo run -p website --bin ssr --features static release",
