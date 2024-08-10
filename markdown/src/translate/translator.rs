@@ -200,7 +200,7 @@ where
                 Event::End(_) => {
                     nest_level -= 1;
 
-                    if nest_level == 0 {
+                    if nest_level <= 0 {
                         break;
                     }
                 }
@@ -372,6 +372,9 @@ where
             Event::SoftBreak => self.output("\n".to_string()),
             Event::HardBreak => {
                 self.output(RenderElement::new(ElementTag::Br));
+            }
+            Event::Rule => {
+                self.output(RenderElement::new(ElementTag::Hr));
             }
             // Starting and ending more complex elements
             Event::Start(tag) => self.run_start(tag),
