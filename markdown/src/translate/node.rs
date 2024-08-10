@@ -1,11 +1,12 @@
 use std::fmt::Display;
 
 use pulldown_cmark::BlockQuoteKind;
-use serde::{Deserialize, Serialize};
+use rkyv::{Archive, Deserialize, Serialize};
 
 use super::element::{ElementTag, RenderElement};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Archive, Serialize, Deserialize)]
+#[archive(check_bytes)]
 pub enum RenderIcon {
     Note,
     Tip,
@@ -14,7 +15,8 @@ pub enum RenderIcon {
     Caution,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Archive, Serialize, Deserialize)]
+#[archive(check_bytes)]
 pub enum CalloutKind {
     Note,
     Tip,
@@ -35,9 +37,16 @@ impl From<BlockQuoteKind> for CalloutKind {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Archive, Serialize, Deserialize)]
+#[archive(bound(serialize = "__S: rkyv::ser::ScratchSpace + rkyv::ser::Serializer"))]
+#[archive(check_bytes)]
+#[archive_attr(check_bytes(
+    bound = "__C: rkyv::validation::ArchiveContext, <__C as rkyv::Fallible>::Error: std::error::Error"
+))]
 pub struct RenderCallout {
     pub kind: CalloutKind,
+    #[omit_bounds]
+    #[archive_attr(omit_bounds)]
     pub children: Vec<RenderNode>,
 }
 
@@ -54,7 +63,8 @@ impl RenderCallout {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Archive, Serialize, Deserialize)]
+#[archive(check_bytes)]
 pub enum RenderNode {
     Text(String),
     Icon(RenderIcon),

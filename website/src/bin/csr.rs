@@ -12,7 +12,7 @@ async fn main() {
             .send()
             .await
             .unwrap()
-            .text()
+            .binary()
             .await
             .unwrap();
     let blog = BlogContext::new(&raw_blog_metadata);

@@ -38,8 +38,12 @@ impl PartialEq for BlogContext {
 }
 
 impl BlogContext {
-    pub fn new(bytes: &str) -> Self {
-        let content = ron::from_str::<HashMap<BlogId, BlogMetadata>>(bytes).unwrap();
+    pub fn new(bytes: &[u8]) -> Self {
+        let content = rkyv::from_bytes::<Vec<(BlogId, BlogMetadata)>>(bytes)
+            .unwrap()
+            .into_iter()
+            .collect::<HashMap<BlogId, BlogMetadata>>();
+
         Self { content }
     }
 

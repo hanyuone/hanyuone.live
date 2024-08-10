@@ -1,11 +1,12 @@
 use std::fmt::Display;
 
 use pulldown_cmark::HeadingLevel;
-use serde::{Deserialize, Serialize};
+use rkyv::{Archive, Deserialize, Serialize};
 
 use super::node::RenderNode;
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Archive, Serialize, Deserialize)]
+#[archive(check_bytes)]
 pub enum ElementTag {
     A,
     BlockQuote,
@@ -71,7 +72,8 @@ impl From<HeadingLevel> for ElementTag {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Archive, Serialize, Deserialize)]
+#[archive(check_bytes)]
 pub enum AttributeName {
     Alt,
     Class,
@@ -94,16 +96,24 @@ impl From<AttributeName> for &'static str {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Archive, Serialize, Deserialize)]
+#[archive(check_bytes)]
 pub struct Attribute {
     pub key: AttributeName,
     pub value: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Archive, Serialize, Deserialize)]
+#[archive(bound(serialize = "__S: rkyv::ser::ScratchSpace + rkyv::ser::Serializer"))]
+#[archive(check_bytes)]
+#[archive_attr(check_bytes(
+    bound = "__C: rkyv::validation::ArchiveContext, <__C as rkyv::Fallible>::Error: std::error::Error"
+))]
 pub struct RenderElement {
     pub tag: ElementTag,
     pub attributes: Vec<Attribute>,
+    #[omit_bounds]
+    #[archive_attr(omit_bounds)]
     pub children: Vec<RenderNode>,
 }
 

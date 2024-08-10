@@ -9,6 +9,6 @@ enum-iterator = "2.1.0"
 gray_matter = "0.2.6"
 macros = { path = "../macros" }
 pulldown-cmark = "0.11.0"
-ron = "0.8.1"
+rkyv = { version = "0.7.44", features = ["validation"] }
 serde = "1.0.200"
 serde_with = { version = "3.9.0", features = ["chrono_0_4"] }

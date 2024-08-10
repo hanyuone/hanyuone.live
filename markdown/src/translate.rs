@@ -4,12 +4,13 @@ pub mod node;
 pub mod translator;
 
 use pulldown_cmark::{Options, Parser};
+use rkyv::AlignedVec;
 use translator::{TranslateOutput, Translator};
 
 use crate::structs::metadata::PostTranslateData;
 
 pub struct TranslateOutputBytes {
-    pub bytes: String,
+    pub bytes: AlignedVec,
     pub post_translate: PostTranslateData,
 }
 
@@ -22,7 +23,7 @@ pub fn to_bytestring(raw: &str) -> TranslateOutputBytes {
     } = translator.run();
 
     TranslateOutputBytes {
-        bytes: ron::to_string(&nodes).expect("encoded nodes into bytestring"),
+        bytes: rkyv::to_bytes::<_, 16_384>(&nodes).expect("Bytes successfully archived"),
         post_translate,
     }
 }
