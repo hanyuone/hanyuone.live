@@ -10,7 +10,9 @@ tags:
 
 > [!note]
 > This is an SCP article translated from the original [SCP-CN-985](https://scp-wiki-cn.wikidot.com/scp-cn-985)
-> (in Chinese), with inspiration from [an existing translated version](https://scp-wiki.wikidot.com/scp-cn-985).
+> (in Chinese, by [EdwardC](https://www.wikidot.com/user:info/edwardc)), with inspiration
+> from [an existing translated version](https://scp-wiki.wikidot.com/scp-cn-985)
+> (by [tetsusquared](https://www.wikidot.com/user:info/tetsusquared)).
 
 ## SCP-CN-985
 
