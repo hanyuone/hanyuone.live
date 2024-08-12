@@ -5,6 +5,8 @@ use serde::{Deserialize, Serialize};
 
 use super::element::{ElementTag, RenderElement};
 
+// ICONS
+
 #[derive(Debug, Serialize, Deserialize)]
 pub enum RenderIcon {
     Note,
@@ -13,6 +15,8 @@ pub enum RenderIcon {
     Warning,
     Caution,
 }
+
+// CALLOUTS
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum CalloutKind {
@@ -54,6 +58,8 @@ impl RenderCallout {
     }
 }
 
+// OVERARCHING NODE DATA TYPE
+
 #[derive(Debug, Serialize, Deserialize)]
 pub enum RenderNode {
     Text(String),
@@ -86,6 +92,8 @@ impl From<RenderCallout> for RenderNode {
         RenderNode::Callout(value)
     }
 }
+
+// OVERARCHING TAG DATA TYPE
 
 #[derive(Debug, Clone)]
 pub enum RenderTag {
