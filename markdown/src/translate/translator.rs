@@ -304,7 +304,14 @@ where
                 ..
             } => self.generate_image(dest_url, title, id),
             // Lists
-            Tag::List(_) => self.enter(RenderElement::new(ElementTag::Ul)),
+            Tag::List(start) => match start {
+                Some(start) => {
+                    let mut ol = RenderElement::new(ElementTag::Ol);
+                    ol.add_attribute(AttributeName::Start, start.to_string());
+                    self.enter(ol)
+                }
+                None => self.enter(RenderElement::new(ElementTag::Ul)),
+            },
             Tag::Item => self.enter(RenderElement::new(ElementTag::Li)),
             // Footnotes
             Tag::FootnoteDefinition(name) => {
@@ -342,7 +349,13 @@ where
             // We already generated the image in `start` (it's self-contained), so do nothing
             TagEnd::Image => Ok(()),
             // Lists
-            TagEnd::List(_) => self.leave(RenderTag::Element(ElementTag::Ul)),
+            TagEnd::List(is_ordered) => {
+                if is_ordered {
+                    self.leave(RenderTag::Element(ElementTag::Ol))
+                } else {
+                    self.leave(RenderTag::Element(ElementTag::Ul))
+                }
+            }
             TagEnd::Item => self.leave(RenderTag::Element(ElementTag::Li)),
             TagEnd::FootnoteDefinition => self.leave(RenderTag::Element(ElementTag::Div)),
             _ => todo!(),
