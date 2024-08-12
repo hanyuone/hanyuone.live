@@ -24,6 +24,7 @@ pub enum ElementTag {
     Hr,
     Img,
     Li,
+    Ol,
     P,
     Strong,
     Sup,
@@ -50,6 +51,7 @@ impl Display for ElementTag {
             Self::Hr => "hr",
             Self::Img => "img",
             Self::Li => "li",
+            Self::Ol => "ol",
             Self::P => "p",
             Self::Strong => "strong",
             Self::Sup => "sup",
@@ -80,6 +82,7 @@ pub enum AttributeName {
     Href,
     Id,
     Src,
+    Start,
     Title,
 }
 
@@ -91,6 +94,7 @@ impl From<AttributeName> for &'static str {
             AttributeName::Href => "href",
             AttributeName::Id => "id",
             AttributeName::Src => "src",
+            AttributeName::Start => "start",
             AttributeName::Title => "title",
         }
     }
