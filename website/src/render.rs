@@ -89,11 +89,7 @@ impl Renderer {
     }
 
     fn render_node(&mut self, node: RenderNode) {
-        let should_unprose = match &node {
-            RenderNode::Callout(_) => true,
-            _ => false,
-        };
-
+        let should_unprose = matches!(&node, RenderNode::Callout(_));
         let render_html = Renderer::to_html(node);
 
         if should_unprose {
