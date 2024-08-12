@@ -31,6 +31,18 @@ module.exports = {
                     },
                 },
             },
+            typography: {
+                DEFAULT: {
+                    css: {
+                        "blockquote p:first-of-type::before": false,
+                        "blockquote p:first-of-type::after": false,
+                        blockquote: {
+                            fontWeight: false,
+                            fontStyle: false,
+                        }
+                    },
+                },
+            },
         },
     },
     variants: {},
