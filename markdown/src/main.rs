@@ -79,7 +79,7 @@ fn write_blog_files(target_dir: impl AsRef<Path>, files: Vec<BlogFile>) -> io::R
         blog_map.insert(file.id, file.metadata);
 
         // Write content to file
-        let filename = format!("{}.ron", file.id.to_string());
+        let filename = format!("{}.ron", file.id);
         let file_path = target_dir.as_ref().join(filename);
 
         // Commenting this line stops the "double build" bug.
