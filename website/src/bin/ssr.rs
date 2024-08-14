@@ -83,7 +83,7 @@ impl Env {
         let template = Template::load(target_dir.join("index.html")).await?;
 
         let raw_blog_context =
-            tokio::fs::read_to_string(target_dir.join("public/blog/blog_map")).await?;
+            tokio::fs::read_to_string(target_dir.join("public/blog/blog_map.ron")).await?;
         let blog_context = BlogContext::new(&raw_blog_context);
 
         let raw_tag_context =
