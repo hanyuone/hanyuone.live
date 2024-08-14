@@ -15,6 +15,11 @@ pub struct TranslateOutput {
     pub post_translate: PostTranslateData,
 }
 
+// TODO for footnotes:
+// 1. Render footnotes separately, always include at very bottom of file
+// 2. Return button at end of footnote
+// 3. Hover tooltip for footnote
+
 /// Helper struct used for converting Markdown events (generated via `pulldown_cmark`)
 /// into a simplified virtual DOM that can easily be converted to work with Yew.
 pub struct Translator<'a, I> {
@@ -316,7 +321,7 @@ where
             // Footnotes
             Tag::FootnoteDefinition(name) => {
                 let mut footnote = RenderElement::new(ElementTag::Div);
-                footnote.add_attribute(AttributeName::Id, name.to_string());
+                footnote.add_attribute(AttributeName::Id, format!("footnote_{}", name));
 
                 let index = self.get_footnote_index(name);
                 let mut p_index = RenderElement::new(ElementTag::P);
@@ -324,6 +329,7 @@ where
                 footnote.add_child(RenderNode::Element(p_index));
 
                 self.enter(footnote);
+                
                 // We want to make sure the footnote flag triggers on the first item we add
                 // *after* we enter the footnote
                 self.is_footnote = true;
@@ -396,7 +402,7 @@ where
             Event::FootnoteReference(name) => {
                 let mut sup = RenderElement::new(ElementTag::Sup);
                 let mut anchor = RenderElement::new(ElementTag::A);
-                anchor.add_attribute(AttributeName::Href, format!("#{name}"));
+                anchor.add_attribute(AttributeName::Href, format!("#footnote_{name}"));
 
                 let index = self.get_footnote_index(name);
                 anchor.add_child(RenderNode::Text(index.to_string()));
