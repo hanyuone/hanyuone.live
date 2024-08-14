@@ -22,7 +22,7 @@ tags:
 
 **Special Containment Procedures**: Based on SCP-CN-985's good behaviour and the advice of the Ethics Committee, SCP-CN-985 is currently contained in a 10m * 10m * 5m modified fish tank in Site-CN-18 with an automatic water change system. The tank is to contain aquatic plant life, coral and other decorations, as well as one sanitation device designed according to SCP-CN-985's specifications. 10kg of fresh fish is to be fed to SCP-CN-985 daily. The tank is to be cleaned every two weeks.
 
-Since containment, SCP-CN-985 has made the following requests[^a]:
+Since containment, SCP-CN-985 has made the following requests[^1]:
 - The installation of various facilities to mimic SCP-CN-985's previous living conditions (approved)
 - A personal computer (approved based on good behaviour, waterproofed)
 - Computer games (approved based on good behaviour)
@@ -126,4 +126,4 @@ Since then, SCP-CN-985 has behaved abnormally, requesting large amounts of unive
 
 *Continued observation for some time is recommended. In the future, I may request for the Foundation front organisation "Matthew Catherine University" to provide distance education to SCP-CN-985.* - Professor ███
 
-[^a]: This is not a comprehensive list, please see Document CN-985-5 for more details.
+[^1]: This is not a comprehensive list, please see Document CN-985-5 for more details.
