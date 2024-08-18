@@ -10,6 +10,92 @@ use super::{
     node::{RenderCallout, RenderNode, RenderTag},
 };
 
+struct Footnotes<'a> {
+    index: usize,
+    mapping: HashMap<CowStr<'a>, (usize, RenderElement)>,
+}
+
+impl<'a> Footnotes<'a> {
+    pub fn new() -> Self {
+        Self {
+            index: 1,
+            mapping: HashMap::new(),
+        }
+    }
+
+    pub fn insert(&mut self, name: CowStr<'a>, element: RenderElement) {
+        self.mapping.insert(name, (self.index, element));
+        self.index += 1;
+    }
+
+    pub fn get_index(&self, name: CowStr<'a>) -> Option<usize> {
+        self.mapping.get(&name).map(|tup| tup.0)
+    }
+
+    pub fn as_nodes(self) -> Vec<RenderNode> {
+        let mut sorted_footnotes = self.mapping
+            .into_iter()
+            .map(|(name, (index, element))| (index, name, element))
+            .collect::<Vec<_>>();
+
+        sorted_footnotes.sort_by_key(|(index, _, _)| *index);
+
+        sorted_footnotes.into_iter()
+            .map(|(index, name, mut element)| {
+                let mut footnote = RenderElement::new(ElementTag::Div);
+                footnote.add_attribute(AttributeName::Id, format!("footnote_{}", name));
+
+                let children = &mut element.children;
+
+                // Add <p>{index}: </p> at beginning of each footnote
+                let index_text = format!("{}: ", index);
+
+                // We know that the first child has to be a render element
+                let RenderNode::Element(first_element) = children.first_mut().unwrap() else {
+                    unreachable!()
+                };
+
+                if first_element.tag == ElementTag::P {
+                    first_element.children.insert(0, RenderNode::Text(index_text));
+                } else {
+                    let mut index_element = RenderElement::new(ElementTag::P);
+                    index_element.add_child(index_text.into());
+                    children.insert(0, index_element.into());
+                }
+
+                // Add return button at end of each footnote
+                let mut return_button = RenderElement::new(ElementTag::A);
+                return_button.add_attribute(AttributeName::Href, format!("anchor_{}", name));
+                return_button.add_child("↩️".to_string().into());
+
+                // We know that the last child has to be a render element
+                let RenderNode::Element(last_element) = children.last_mut().unwrap() else {
+                    unreachable!()
+                };
+
+                if last_element.tag == ElementTag::P {
+                    // Add space
+                    if let RenderNode::Text(space_adder) = last_element.children.last_mut().unwrap() {
+                        space_adder.insert(0, ' ');
+                    } else {
+                        last_element.add_child(" ".to_string().into());
+                    }
+
+                    last_element.add_child(return_button.into());
+                } else {
+                    let mut return_element = RenderElement::new(ElementTag::P);
+                    return_element.add_child(return_button.into());
+                    element.add_child(return_element.into());
+                }
+                
+                footnote.add_child(element.into());
+                footnote.into()
+            })
+            .collect::<Vec<_>>()
+
+    }
+}
+
 pub struct TranslateOutput {
     pub nodes: Vec<RenderNode>,
     pub post_translate: PostTranslateData,
@@ -26,7 +112,8 @@ pub struct Translator<'a, I> {
     tokens: I,
     output: Vec<RenderNode>,
     stack: Vec<RenderNode>,
-    footnotes: HashMap<CowStr<'a>, usize>,
+    footnotes: Footnotes<'a>,
+    _footnotes: HashMap<CowStr<'a>, usize>,
     is_footnote: bool,
     post_translate: PostTranslateData,
 }
@@ -42,7 +129,8 @@ where
             tokens,
             output: vec![],
             stack: vec![],
-            footnotes: HashMap::new(),
+            footnotes: Footnotes::new(),
+            _footnotes: HashMap::new(),
             is_footnote: false,
             post_translate: PostTranslateData { words: 0 },
         }
@@ -51,8 +139,8 @@ where
     //// HELPER FUNCTIONS
 
     fn get_footnote_index(&mut self, name: CowStr<'a>) -> usize {
-        let next = self.footnotes.len() + 1;
-        *self.footnotes.entry(name).or_insert(next)
+        let next = self._footnotes.len() + 1;
+        *self._footnotes.entry(name).or_insert(next)
     }
 
     //// TRANSLATION FUNCTIONS
