@@ -10,6 +10,104 @@ use super::{
     node::{RenderCallout, RenderNode, RenderTag},
 };
 
+// [x] Render footnotes separately, always include at very bottom of file
+// [x] Return button at end of footnote
+// [ ] Hover tooltip for footnote
+
+/// Helper class for storing footnotes, so we can *always* render them at the very end
+/// of a Markdown file, regardless of where they were defined.
+/// 
+/// We render footnotes in a similar way to Obsidian and GitHub.
+struct Footnotes<'a> {
+    count: usize,
+    indices: HashMap<CowStr<'a>, usize>,
+    mapping: HashMap<CowStr<'a>, RenderElement>,
+}
+
+impl<'a> Footnotes<'a> {
+    pub fn new() -> Self {
+        Self {
+            count: 1,
+            indices: HashMap::new(),
+            mapping: HashMap::new(),
+        }
+    }
+
+    pub fn add_index(&mut self, name: CowStr<'a>) {
+        self.indices.entry(name).or_insert(self.count);
+        self.count += 1;
+    }
+
+    pub fn insert(&mut self, name: CowStr<'a>, element: RenderElement) {
+        self.mapping.insert(name, element);
+    }
+
+    pub fn get_index(&self, name: CowStr<'a>) -> Option<usize> {
+        self.indices.get(&name).copied()
+    }
+
+    pub fn as_nodes(self) -> Vec<RenderNode> {
+        let cloned_indices = self.indices;
+        let mut sorted_footnotes = self.mapping
+            .into_iter()
+            .filter_map(|(name, element)| {
+                cloned_indices.get(&name).map(|index| (index, name, element))
+            })
+            .collect::<Vec<_>>();
+
+        sorted_footnotes.sort_by_key(|(index, _, _)| *index);
+
+        sorted_footnotes.into_iter()
+            .map(|(index, name, mut element)| {
+                let mut footnote = RenderElement::new(ElementTag::Div);
+                footnote.add_attribute(AttributeName::Id, format!("footnote_{name}"));
+
+                let children = &mut element.children;
+
+                // Add <p>{index}: </p> at beginning of each footnote
+                let index_text = format!("{index}: ");
+
+                // We know that the first child has to be a render element
+                let RenderNode::Element(first_element) = children.first_mut().unwrap() else {
+                    unreachable!()
+                };
+
+                if first_element.tag == ElementTag::P {
+                    first_element.children.insert(0, RenderNode::Text(index_text));
+                } else {
+                    let mut index_element = RenderElement::new(ElementTag::P);
+                    index_element.add_child(index_text.into());
+                    children.insert(0, index_element.into());
+                }
+
+                // Add return button at end of each footnote
+                let mut return_button = RenderElement::new(ElementTag::A);
+                return_button.add_attribute(AttributeName::Href, format!("#anchor_{name}"));
+                return_button.add_child("↩️".to_string().into());
+
+                // We know that the last child has to be a render element
+                let RenderNode::Element(last_element) = children.last_mut().unwrap() else {
+                    unreachable!()
+                };
+
+                if last_element.tag == ElementTag::P {
+                    // Add space
+                    last_element.add_child(" ".to_string().into());
+                    last_element.add_child(return_button.into());
+                } else {
+                    let mut return_element = RenderElement::new(ElementTag::P);
+                    return_element.add_child(return_button.into());
+                    element.add_child(return_element.into());
+                }
+                
+                footnote.add_child(element.into());
+                footnote.into()
+            })
+            .collect::<Vec<_>>()
+
+    }
+}
+
 pub struct TranslateOutput {
     pub nodes: Vec<RenderNode>,
     pub post_translate: PostTranslateData,
@@ -21,8 +119,8 @@ pub struct Translator<'a, I> {
     tokens: I,
     output: Vec<RenderNode>,
     stack: Vec<RenderNode>,
-    footnotes: HashMap<CowStr<'a>, usize>,
-    is_footnote: bool,
+    footnotes: Footnotes<'a>,
+    current_footnote: Option<CowStr<'a>>,
     post_translate: PostTranslateData,
 }
 
@@ -37,17 +135,10 @@ where
             tokens,
             output: vec![],
             stack: vec![],
-            footnotes: HashMap::new(),
-            is_footnote: false,
+            footnotes: Footnotes::new(),
+            current_footnote: None,
             post_translate: PostTranslateData { words: 0 },
         }
-    }
-
-    //// HELPER FUNCTIONS
-
-    fn get_footnote_index(&mut self, name: CowStr<'a>) -> usize {
-        let next = self.footnotes.len() + 1;
-        *self.footnotes.entry(name).or_insert(next)
     }
 
     //// TRANSLATION FUNCTIONS
@@ -69,62 +160,11 @@ where
         }
     }
 
-    /// Called whenever we encounter the *first* element after a footnote. This edgecase
-    /// needs to be checked because we don't want the index `<p>` have a line separator with
-    /// the footnote contents if the node we're adding is also a `<p>` element.
-    fn enter_footnote<N>(&mut self, node: N)
-    where
-        N: Into<RenderNode>,
-    {
-        // We know that we have a footnote on the top of stack
-        let RenderNode::Element(footnote_element) = self.stack.last_mut().unwrap() else {
-            unreachable!()
-        };
-
-        // We only want to do footnote manipulation if the element we're adding is another <p>
-        let node = node.into();
-
-        let RenderNode::Element(mut added_element) = node else {
-            footnote_element.add_child(node);
-            return;
-        };
-
-        if added_element.tag != ElementTag::P {
-            footnote_element.add_child(added_element.into());
-            return;
-        }
-
-        // We know that the footnote on the top of stack has one element in it so far,
-        // in the format <p>{index}: </p>. Wipe it from the existing footnote element using pop()
-        let RenderNode::Element(mut index_element) = footnote_element.children.pop().unwrap()
-        else {
-            unreachable!()
-        };
-
-        let RenderNode::Text(index_text) = index_element.children.pop().unwrap() else {
-            unreachable!()
-        };
-
-        // The text is now part of the <p> we're adding, as if it never existed in the
-        // footnote in the first place
-        added_element
-            .children
-            .insert(0, RenderNode::Text(index_text));
-
-        self.stack.push(added_element.into());
-    }
-
     /// Enters into the current container.
     fn enter<N>(&mut self, node: N)
     where
         N: Into<RenderNode>,
     {
-        if self.is_footnote {
-            self.enter_footnote(node);
-            self.is_footnote = false;
-            return;
-        }
-
         self.stack.push(node.into());
     }
 
@@ -186,6 +226,20 @@ where
         }
 
         Err(TranslateError::NoMatchError { tags })
+    }
+
+    fn leave_footnote(&mut self) -> Result<(), TranslateError> {
+        let Some(top) = self.stack.pop() else {
+            panic!("Stack underflow");
+        };
+
+        let RenderNode::Element(top_element) = top else {
+            unreachable!()
+        };
+
+        self.footnotes.insert(self.current_footnote.clone().expect("Should be inside a footnote right now"), top_element);
+        self.current_footnote = None;
+        Ok(())
     }
 
     /// Consumes the next HTML element in our Markdown text and returns it as
@@ -315,18 +369,8 @@ where
             Tag::Item => self.enter(RenderElement::new(ElementTag::Li)),
             // Footnotes
             Tag::FootnoteDefinition(name) => {
-                let mut footnote = RenderElement::new(ElementTag::Div);
-                footnote.add_attribute(AttributeName::Id, name.to_string());
-
-                let index = self.get_footnote_index(name);
-                let mut p_index = RenderElement::new(ElementTag::P);
-                p_index.add_child(RenderNode::Text(format!("{}: ", index)));
-                footnote.add_child(RenderNode::Element(p_index));
-
-                self.enter(footnote);
-                // We want to make sure the footnote flag triggers on the first item we add
-                // *after* we enter the footnote
-                self.is_footnote = true;
+                self.current_footnote = Some(name);
+                self.enter(RenderElement::new(ElementTag::Div))
             }
             _ => todo!(),
         }
@@ -357,7 +401,7 @@ where
                 }
             }
             TagEnd::Item => self.leave(RenderTag::Element(ElementTag::Li)),
-            TagEnd::FootnoteDefinition => self.leave(RenderTag::Element(ElementTag::Div)),
+            TagEnd::FootnoteDefinition => self.leave_footnote(),
             _ => todo!(),
         };
 
@@ -394,12 +438,16 @@ where
             Event::End(tag) => self.run_end(tag),
             // Inline footnote references
             Event::FootnoteReference(name) => {
-                let mut sup = RenderElement::new(ElementTag::Sup);
-                let mut anchor = RenderElement::new(ElementTag::A);
-                anchor.add_attribute(AttributeName::Href, format!("#{name}"));
+                self.footnotes.add_index(name.clone());
 
-                let index = self.get_footnote_index(name);
-                anchor.add_child(RenderNode::Text(index.to_string()));
+                let mut sup = RenderElement::new(ElementTag::Sup);
+                sup.add_attribute(AttributeName::Id, format!("anchor_{name}"));
+
+                let mut anchor = RenderElement::new(ElementTag::A);
+                anchor.add_attribute(AttributeName::Href, format!("#footnote_{name}"));
+
+                let index = self.footnotes.get_index(name).unwrap();
+                anchor.add_child(format!("{index}").into());
 
                 sup.add_child(RenderNode::Element(anchor));
                 self.output(sup);
@@ -413,8 +461,13 @@ where
             self.run_token(token);
         }
 
+        let mut nodes = self.output;
+
+        let footnote_nodes = self.footnotes.as_nodes();
+        nodes.extend(footnote_nodes);
+
         TranslateOutput {
-            nodes: self.output,
+            nodes,
             post_translate: self.post_translate,
         }
     }
