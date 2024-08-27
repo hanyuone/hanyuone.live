@@ -6,7 +6,7 @@ use yew_router::{
 
 use crate::{
     components::layout::Layout,
-    context::{BlogContext, HeadContext, TagContext},
+    context::{BlogContext, HeadContext},
     pages::Route,
 };
 
@@ -22,7 +22,6 @@ fn app_content() -> Html {
 #[derive(PartialEq, Properties)]
 pub struct AppProps {
     pub blog: BlogContext,
-    pub tags: TagContext,
 }
 
 #[function_component(App)]
@@ -30,11 +29,9 @@ pub fn app(props: &AppProps) -> Html {
     html! {
         <PhantomComponent<ContextProvider<HeadContext>>>
             <ContextProvider<BlogContext> context={props.blog.clone()}>
-                <ContextProvider<TagContext> context={props.tags.clone()}>
-                    <BrowserRouter>
-                        <AppContent />
-                    </BrowserRouter>
-                </ContextProvider<TagContext>>
+                <BrowserRouter>
+                    <AppContent />
+                </BrowserRouter>
             </ContextProvider<BlogContext>>
         </PhantomComponent<ContextProvider<HeadContext>>>
     }
@@ -45,7 +42,6 @@ pub struct StaticAppProps {
     pub route: Route,
     pub head: HeadContext,
     pub blog: BlogContext,
-    pub tags: TagContext,
 }
 
 impl StaticAppProps {
@@ -63,11 +59,9 @@ pub fn static_app(props: &StaticAppProps) -> Html {
     html! {
         <ContextProvider<HeadContext> context={props.head.clone()}>
             <ContextProvider<BlogContext> context={props.blog.clone()}>
-                <ContextProvider<TagContext> context={props.tags.clone()}>
-                    <Router history={history}>
-                        <AppContent />
-                    </Router>
-                </ContextProvider<TagContext>>
+                <Router history={history}>
+                    <AppContent />
+                </Router>
             </ContextProvider<BlogContext>>
         </ContextProvider<HeadContext>>
     }

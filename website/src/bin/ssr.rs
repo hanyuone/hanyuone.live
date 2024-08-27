@@ -6,7 +6,7 @@ use std::{
 use website::{
     app::{StaticApp, StaticAppProps},
     components::head::{HeadRender, HeadRenderProps},
-    context::{BlogContext, HeadContext, TagContext},
+    context::{BlogContext, HeadContext},
     pages::Route,
 };
 use yew::LocalServerRenderer;
@@ -74,7 +74,6 @@ struct Env {
     target_dir: PathBuf,
     template: Template,
     blog_context: BlogContext,
-    tag_context: TagContext,
 }
 
 impl Env {
@@ -86,15 +85,10 @@ impl Env {
             tokio::fs::read_to_string(target_dir.join("public/blog/blog_map.ron")).await?;
         let blog_context = BlogContext::new(&raw_blog_context);
 
-        let raw_tag_context =
-            tokio::fs::read_to_string(target_dir.join("public/tags.yaml")).await?;
-        let tag_context = TagContext::new(&raw_tag_context);
-
         Ok(Self {
             target_dir,
             template,
             blog_context,
-            tag_context,
         })
     }
 
@@ -108,7 +102,6 @@ impl Env {
                 route,
                 head,
                 blog: self.blog_context.clone(),
-                tags: self.tag_context.clone(),
             })
         };
 
