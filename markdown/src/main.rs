@@ -13,7 +13,7 @@ use std::{
     str::FromStr,
 };
 
-static BLOG_DIR: &str = "blog";
+static BLOG_DIR: &str = "public/blog";
 // Seems pretty hacky to build the MD files directly into the website folder
 static TARGET_DIR: &str = "website/public/blog";
 

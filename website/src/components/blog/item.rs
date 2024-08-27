@@ -1,10 +1,15 @@
-use markdown::structs::{blog::BlogId, metadata::BlogMetadata};
-use yew::{function_component, html, html_nested, use_context, Html, Properties};
+use std::str::FromStr;
+
+use markdown::structs::{
+    blog::BlogId,
+    metadata::BlogMetadata,
+    tag::{TagId, TagMetadata},
+};
+use yew::{function_component, html, html_nested, Html, Properties};
 use yew_router::components::Link;
 
 use crate::{
     components::blog::{tag::Tag, to_read_time},
-    context::TagContext,
     pages::Route,
 };
 
@@ -16,8 +21,6 @@ pub struct BlogItemProps {
 
 #[function_component(BlogItem)]
 pub fn blog_item(props: &BlogItemProps) -> Html {
-    let tag_context = use_context::<TagContext>().unwrap();
-
     let BlogMetadata {
         front_matter,
         post_translate,
@@ -35,10 +38,19 @@ pub fn blog_item(props: &BlogItemProps) -> Html {
                     {
                         front_matter.tags
                             .iter()
-                            .map(|tag_name| html_nested! {
-                                <Tag
-                                    name={tag_name.clone()}
-                                    colour={tag_context.get(tag_name).unwrap_or("green".to_string())} />
+                            .map(|tag_name| {
+                                let colour = TagId::from_str(tag_name)
+                                        .map(|tag_id| {
+                                            let TagMetadata { colour } = tag_id.into();
+                                            colour
+                                        })
+                                        .unwrap_or("green".to_string());
+
+                                html_nested! {
+                                    <Tag
+                                        name={tag_name.clone()}
+                                        colour={colour} />
+                                }
                             })
                             .collect::<Vec<_>>()
                     }
