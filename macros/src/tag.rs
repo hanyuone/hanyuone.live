@@ -90,6 +90,7 @@ pub fn generate_tag_enum(input: TagInput) -> TokenStream {
     };
 
     TokenStream::from(quote! {
+        #[derive(Clone, PartialEq, enum_iterator::Sequence)]
         pub enum TagId {
             #enum_items
         }

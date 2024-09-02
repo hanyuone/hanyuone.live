@@ -6,12 +6,12 @@ use yew_hooks::use_effect_once;
 use crate::{components::head::Head, context::BlogContext, render::Renderer};
 
 #[derive(PartialEq, Properties)]
-pub struct BlogProps {
+pub struct BlogPostProps {
     pub blog_id: BlogId,
 }
 
 #[function_component(Page)]
-pub fn page(props: &BlogProps) -> Html {
+pub fn page(props: &BlogPostProps) -> Html {
     let blog_context = use_context::<BlogContext>().unwrap();
     let content: UseStateHandle<String> = use_state(String::new);
 
