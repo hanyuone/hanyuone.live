@@ -1,3 +1,4 @@
+use enum_iterator;
 use macros::generate_tag_id;
 
 pub struct TagMetadata {
