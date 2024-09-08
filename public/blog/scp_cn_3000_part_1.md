@@ -39,7 +39,7 @@ May the Nodes never fall.
 
 **Object Class**: Thaumiel
 
-**Special Containment Procedures**: The current Node Matrix is to be maintained by the SCP Foundation Eastern Command, alongside the other fourteen node supervisors. The fifteenth node, situated in Bubble QM-LM, is to be responsible for the status of the Node Matrix and the supervision of the rate of semantic streams, as well as the broadcasting of **Node Public Key**s to the entire Eastern Domain. The other nodes are to continue their duties, maintaining semantic stream transmission within the Eastern Domain.
+**Special Containment Procedures**: The current Node Matrix is to be maintained by the SCP Foundation Eastern Command, alongside the other fourteen node supervisors. The fifteenth node, situated in Bubble QM-LM, is to be responsible for the status of the Node Matrix and the supervision of the rate of semantic streams, as well as the broadcasting of **Node Public Keys** to the entire Eastern Domain. The other nodes are to continue their duties, maintaining semantic stream transmission within the Eastern Domain.
 
 All research regarding immatter, aurite and semantic streams conducted during the construction of the Node Matrix has been archived. To encourage further research, with the permission of the Oversight Committee, qualified third-party research organisations can apply for access to technical research documents regarding the Node Matrix from the SCP Foundation Eastern Command. Each research organisation must periodically report their findings to the SCP Foundation Eastern Command.
 
