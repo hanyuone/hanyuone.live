@@ -14,6 +14,7 @@ use crate::util::to_title_case;
 struct YamlTag {
     name: String,
     colour: String,
+    description: String,
 }
 
 #[derive(Default)]
@@ -26,7 +27,8 @@ struct TagGenerator {
 
 impl TagGenerator {
     fn add_tag(&mut self, tag: YamlTag) {
-        let YamlTag { name, colour } = tag;
+        let YamlTag { name, colour, description } = tag;
+        let description = description.split("\n").collect::<Vec<_>>().join(" ");
 
         let enum_name = to_title_case(&name);
         let enum_ident = parse_str::<Ident>(&enum_name).expect("enum name");
@@ -45,7 +47,8 @@ impl TagGenerator {
 
         self.from_tag_id.append_all(quote! {
             TagId::#enum_ident => Self {
-                colour: #colour.to_string()
+                colour: #colour.to_string(),
+                description: #description.to_string(),
             },
         });
     }
