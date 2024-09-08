@@ -44,7 +44,7 @@ pub fn blog_card(props: &BlogCardProps) -> Html {
                                 .map(|tag_name| {
                                     let colour = TagId::from_str(tag_name)
                                         .map(|tag_id| {
-                                            let TagMetadata { colour } = tag_id.into();
+                                            let TagMetadata { colour, .. } = tag_id.into();
                                             colour
                                         })
                                         .unwrap_or("green".to_string());
