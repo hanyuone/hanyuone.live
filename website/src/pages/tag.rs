@@ -1,7 +1,13 @@
 use markdown::structs::tag::{TagId, TagMetadata};
 use yew::{function_component, html, html_nested, use_context, Html, Properties};
 
-use crate::{components::{blog::{card::BlogCard, item::BlogItem, tag::Tag}, head::Head}, context::BlogContext};
+use crate::{
+    components::{
+        blog::{card::BlogCard, item::BlogItem},
+        head::Head,
+    },
+    context::BlogContext,
+};
 
 #[derive(PartialEq, Properties)]
 pub struct TagPageProps {
@@ -16,12 +22,7 @@ pub fn page(props: &TagPageProps) -> Html {
 
     let mut tag_blogs = blogs
         .into_iter()
-        .filter(|(_, metadata)| {
-            metadata
-                .front_matter
-                .tags
-                .contains(&tag_id.to_string())
-        });
+        .filter(|(_, metadata)| metadata.front_matter.tags.contains(&tag_id.to_string()));
     let first_blog = tag_blogs.next();
 
     html! {
@@ -29,10 +30,13 @@ pub fn page(props: &TagPageProps) -> Html {
             <Head>
                 <title>{format!("{} | Hanyuan's Website", tag_id.to_string())}</title>
             </Head>
-            <div>
-                <Tag
-                    name={tag_id.to_string()}
-                    colour={tag_metadata.colour} />
+            <div class="flex flex-col">
+                <div class="flex">
+                    <div class={format!("grow-0 rounded-sm px-2 transition bg-{0}/50 hover:bg-{0}", tag_metadata.colour)}>
+                        <h2 class="font-bold text-2xl">{tag_id.to_string()}</h2>
+                    </div>
+                </div>
+                <div>{tag_metadata.description}</div>
             </div>
             {
                 if let Some((first_id, first_metadata)) = first_blog {
