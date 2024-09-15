@@ -1,12 +1,13 @@
 use markdown::structs::tag::{TagId, TagMetadata};
 use yew::{function_component, html, html_nested, use_context, Html, Properties};
+use yew_router::prelude::Link;
 
 use crate::{
     components::{
         blog::{card::BlogCard, item::BlogItem},
         head::Head,
     },
-    context::BlogContext,
+    context::BlogContext, pages::Route,
 };
 
 #[derive(PartialEq, Properties)]
@@ -31,11 +32,13 @@ pub fn page(props: &TagPageProps) -> Html {
                 <title>{format!("{} | Hanyuan's Website", tag_id.to_string())}</title>
             </Head>
             <div class="flex flex-col">
-                <div class="flex">
-                    <div class={format!("grow-0 rounded-sm px-2 transition bg-{0}/50 hover:bg-{0}", tag_metadata.colour)}>
-                        <h2 class="font-bold text-2xl">{tag_id.to_string()}</h2>
+                <Link<Route> to={Route::Tag { tag_id: tag_id.clone() }}>
+                    <div class="flex">
+                        <div class={format!("grow-0 rounded-sm px-2 transition bg-{0}/50 hover:bg-{0}", tag_metadata.colour)}>
+                            <h2 class="font-bold text-2xl">{tag_id.to_string()}</h2>
+                        </div>
                     </div>
-                </div>
+                </Link<Route>>
                 <div>{tag_metadata.description}</div>
             </div>
             {

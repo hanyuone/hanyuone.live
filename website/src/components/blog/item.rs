@@ -27,35 +27,35 @@ pub fn blog_item(props: &BlogItemProps) -> Html {
     } = &props.metadata;
 
     html! {
-        <Link<Route> to={Route::BlogPost { blog_id: props.id }}>
-            <div class="flex-col p-4 border-t-[1px] border-white hover:bg-gray">
-                <h3 class="font-bold text-xl">{&front_matter.title}</h3>
-                <div class="flex flex-row">
-                    <span class="text-gray-500">{&front_matter.publish_date.format("%d %b %Y").to_string()}</span>
-                    <span class="px-0.5 text-white">{" · "}</span>
-                    <span class="text-gray-500">{&to_read_time(post_translate.words)}</span>
-                    <span class="px-0.5 text-white">{" · "}</span>
-                    {
-                        front_matter.tags
-                            .iter()
-                            .map(|tag_name| {
-                                let colour = TagId::from_str(tag_name)
-                                        .map(|tag_id| {
-                                            let TagMetadata { colour, .. } = tag_id.into();
-                                            colour
-                                        })
-                                        .unwrap_or("green".to_string());
+        <div class="flex-col p-4 border-t-[1px] border-white hover:bg-gray">
+            <Link<Route> to={Route::BlogPost { blog_id: props.id }}>
+                <h3 class="font-bold text-xl hover:underline">{&front_matter.title}</h3>
+            </Link<Route>>
+            <div class="flex flex-row">
+                <span class="text-gray-500">{&front_matter.publish_date.format("%d %b %Y").to_string()}</span>
+                <span class="px-0.5 text-white">{" · "}</span>
+                <span class="text-gray-500">{&to_read_time(post_translate.words)}</span>
+                <span class="px-0.5 text-white">{" · "}</span>
+                {
+                    front_matter.tags
+                        .iter()
+                        .map(|tag_name| {
+                            let colour = TagId::from_str(tag_name)
+                                    .map(|tag_id| {
+                                        let TagMetadata { colour, .. } = tag_id.into();
+                                        colour
+                                    })
+                                    .unwrap_or("green".to_string());
 
-                                html_nested! {
-                                    <Tag
-                                        name={tag_name.clone()}
-                                        colour={colour} />
-                                }
-                            })
-                            .collect::<Vec<_>>()
-                    }
-                </div>
+                            html_nested! {
+                                <Tag
+                                    name={tag_name.clone()}
+                                    colour={colour} />
+                            }
+                        })
+                        .collect::<Vec<_>>()
+                }
             </div>
-        </Link<Route>>
+        </div>
     }
 }
