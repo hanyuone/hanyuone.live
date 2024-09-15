@@ -1,10 +1,13 @@
 # `hanyuone.live`
 
+> [!note]
 > A lot of the architecture of this app was taken from [this excellent blog post](https://blakerain.com/blog/ssg-and-hydration-with-yew)
 > and [the corresponding GitHub repo](https://github.com/BlakeRain/blakerain.com).
 > Without Blake's existing work I literally do not think I would be able to get
 > this far, and I've honestly learned a lot from reading through the repo, would
 > highly recommend if you're interested in Rust webdev :D
+
+![A screenshot of the homepage](homepage.png)
 
 My personal website (mostly containing blog posts) written in Rust. Currently WIP,
 but I am slowly working on it!
