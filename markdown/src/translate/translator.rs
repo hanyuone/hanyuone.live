@@ -16,7 +16,7 @@ use super::{
 
 /// Helper class for storing footnotes, so we can *always* render them at the very end
 /// of a Markdown file, regardless of where they were defined.
-/// 
+///
 /// We render footnotes in a similar way to Obsidian and GitHub.
 struct Footnotes<'a> {
     count: usize,
@@ -46,18 +46,22 @@ impl<'a> Footnotes<'a> {
         self.indices.get(&name).copied()
     }
 
-    pub fn as_nodes(self) -> Vec<RenderNode> {
+    pub fn to_nodes(self) -> Vec<RenderNode> {
         let cloned_indices = self.indices;
-        let mut sorted_footnotes = self.mapping
+        let mut sorted_footnotes = self
+            .mapping
             .into_iter()
             .filter_map(|(name, element)| {
-                cloned_indices.get(&name).map(|index| (index, name, element))
+                cloned_indices
+                    .get(&name)
+                    .map(|index| (index, name, element))
             })
             .collect::<Vec<_>>();
 
         sorted_footnotes.sort_by_key(|(index, _, _)| *index);
 
-        sorted_footnotes.into_iter()
+        sorted_footnotes
+            .into_iter()
             .map(|(index, name, mut element)| {
                 let mut footnote = RenderElement::new(ElementTag::Div);
                 footnote.add_attribute(AttributeName::Id, format!("footnote_{name}"));
@@ -73,7 +77,9 @@ impl<'a> Footnotes<'a> {
                 };
 
                 if first_element.tag == ElementTag::P {
-                    first_element.children.insert(0, RenderNode::Text(index_text));
+                    first_element
+                        .children
+                        .insert(0, RenderNode::Text(index_text));
                 } else {
                     let mut index_element = RenderElement::new(ElementTag::P);
                     index_element.add_child(index_text.into());
@@ -99,12 +105,11 @@ impl<'a> Footnotes<'a> {
                     return_element.add_child(return_button.into());
                     element.add_child(return_element.into());
                 }
-                
+
                 footnote.add_child(element.into());
                 footnote.into()
             })
             .collect::<Vec<_>>()
-
     }
 }
 
@@ -237,7 +242,12 @@ where
             unreachable!()
         };
 
-        self.footnotes.insert(self.current_footnote.clone().expect("Should be inside a footnote right now"), top_element);
+        self.footnotes.insert(
+            self.current_footnote
+                .clone()
+                .expect("Should be inside a footnote right now"),
+            top_element,
+        );
         self.current_footnote = None;
         Ok(())
     }
@@ -463,7 +473,7 @@ where
 
         let mut nodes = self.output;
 
-        let footnote_nodes = self.footnotes.as_nodes();
+        let footnote_nodes = self.footnotes.to_nodes();
         nodes.extend(footnote_nodes);
 
         TranslateOutput {

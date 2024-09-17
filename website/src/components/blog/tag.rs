@@ -15,7 +15,7 @@ pub fn tag(props: &TagProps) -> Html {
     html! {
         <Link<Route> to={Route::Tag { tag_id: props.name.parse::<TagId>().unwrap() }}>
             <div class={format!("rounded-sm mr-1 px-1 transition bg-{0}/50 hover:bg-{0}", props.colour)}>
-                {props.name.clone()} 
+                {props.name.clone()}
             </div>
         </Link<Route>>
     }

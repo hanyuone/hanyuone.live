@@ -61,21 +61,18 @@ impl Renderer {
                 children,
             }) => {
                 let mut tag = VTag::new(tag.to_string());
-    
+
                 for attribute in attributes {
                     tag.add_attribute(attribute.key.into(), attribute.value.clone());
                 }
-    
+
                 for child in children {
                     tag.add_child(Renderer::to_html(child));
                 }
-    
+
                 tag.into()
-            },
-            RenderNode::Callout(RenderCallout {
-                kind,
-                children,
-            }) => {
+            }
+            RenderNode::Callout(RenderCallout { kind, children }) => {
                 let props = kind.into();
                 let children = Renderer::new().run(children);
 
@@ -84,7 +81,7 @@ impl Renderer {
                         {children}
                     </Callout>
                 }
-            },
+            }
         }
     }
 

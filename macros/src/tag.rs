@@ -27,7 +27,11 @@ struct TagGenerator {
 
 impl TagGenerator {
     fn add_tag(&mut self, tag: YamlTag) {
-        let YamlTag { name, colour, description } = tag;
+        let YamlTag {
+            name,
+            colour,
+            description,
+        } = tag;
         let description = description.split("\n").collect::<Vec<_>>().join(" ");
 
         let enum_name = to_title_case(&name);
