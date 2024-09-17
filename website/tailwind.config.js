@@ -50,6 +50,6 @@ module.exports = {
         require('@tailwindcss/typography'),
     ],
     safelist: [
-        "bg-green", "bg-blue", "bg-purple"
-    ]
+        "hover:bg-purple",
+    ],
 };
