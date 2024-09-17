@@ -39,7 +39,7 @@ May the Nodes never fall.
 
 **Object Class**: Thaumiel
 
-**Special Containment Procedures**: The current Node Matrix is to be maintained by the SCP Foundation Eastern Command, alongside the other fourteen node supervisors. The fifteenth node, situated in Bubble QM-LM, is to be responsible for the status of the Node Matrix and the supervision of the rate of semantic streams, as well as the broadcasting of **Node Public Keys** to the entire Eastern Domain. The other nodes are to continue their duties, maintaining semantic stream transmission within the Eastern Domain.
+**Special Containment Procedures**: The current Node Matrix is to be maintained by the SCP Foundation Eastern Command, alongside the other fourteen node supervisors. The fifteenth node, situated in bubble QM-LM, is to be responsible for the status of the Node Matrix and the supervision of the rate of semantic streams, as well as the broadcasting of Node Public Keys to the entire Eastern Domain. The other nodes are to continue their duties, maintaining semantic stream transmission within the Eastern Domain.
 
 All research regarding immatter, aurite and semantic streams conducted during the construction of the Node Matrix has been archived. To encourage further research, with the permission of the Oversight Committee, qualified third-party research organisations can apply for access to technical research documents regarding the Node Matrix from the SCP Foundation Eastern Command. Each research organisation must periodically report their findings to the SCP Foundation Eastern Command.
 
@@ -50,7 +50,7 @@ Research and selection of new nodes in non-node bubbles is to be encouraged.
 The scientific link between immatter and aurite is currently unknown, thus the theory behind SCP-CN-3000 is unclear. Due to differences in the effect of immatter on individual bubbles, there do not exist any discernible patterns between the characteristic vectors required to establish nodes in different bubbles. Furthermore, the process to find such vectors usually violate mainstream scientific principles, leading to the categorisation of SCP-CN-3000 as anomalous. However, in practice, the use of aurite to discover the characteristic vectors required to construct new nodes has proven effective at scale in the fourteen nodes of the Eastern Domain. The core process is as follows:
 1. With the use of aurite extracted from immatter as a supplementary material, find one specific characteristic vector, such that when semantic streams travel through immatter at a certain angle (usually towards the target node) with that vector, the rate of dampening decrease to no more than 0.00001%.
 2. Through the guidance of aurite, a node candidate achieves the characteristic vector, and uses that vector (now the node's public key) to broadcast semantic streams, thus becoming a node.
-3. After accepting a **Node Public Key**, nearby semantic streams can travel through immatter in the opposite direction towards the source node.
+3. After accepting a Node Public Key, nearby semantic streams can travel through immatter in the opposite direction towards the source node.
 4. Multiple nodes connect to form the Node Matrix, allowing for the free transmission of semantic streams across the entire Domain.
 
 Because its fundamental principles are poorly understood, current Node Matrix processes remain dependent on node candidates in each bubble finding suitable characteristic vectors. The SCP Foundation Eastern Command thanks the current fourteen node supervisors for their efforts and sacrifices.
