@@ -1,4 +1,8 @@
-use markdown::structs::{blog::BlogId, metadata::BlogMetadata, tag::{TagId, TagMetadata}};
+use markdown::structs::{
+    blog::BlogId,
+    metadata::BlogMetadata,
+    tag::{TagId, TagMetadata},
+};
 use yew::{function_component, html, html_nested, Html, Properties};
 use yew_router::components::Link;
 
