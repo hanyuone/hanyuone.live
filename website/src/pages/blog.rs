@@ -12,14 +12,7 @@ use crate::{
 pub fn page() -> Html {
     let blog_context = use_context::<BlogContext>().unwrap();
 
-    let mut blogs = blog_context.content.into_iter().collect::<Vec<_>>();
-    blogs.sort_by(|(_, a), (_, b)| {
-        b.front_matter
-            .publish_date
-            .cmp(&a.front_matter.publish_date)
-    });
-
-    let mut blogs = blogs.into_iter();
+    let mut blogs = blog_context.get_sorted().into_iter();
     let first_blog = blogs.next();
 
     if let Some((first_id, first_metadata)) = first_blog {
@@ -29,16 +22,16 @@ pub fn page() -> Html {
                     <title>{"Blog | Hanyuan's Website"}</title>
                 </Head>
                 <BlogCard
-                    id={first_id}
-                    metadata={first_metadata} />
+                    id={*first_id}
+                    metadata={first_metadata.clone()} />
                 <div>
                     {
                         blogs
                             .map(|(id, metadata)| {
                                 html_nested! {
                                     <BlogItem
-                                        id={id}
-                                        metadata={metadata} />
+                                        id={*id}
+                                        metadata={metadata.clone()} />
                                 }
                             })
                             .collect::<Vec<_>>()
