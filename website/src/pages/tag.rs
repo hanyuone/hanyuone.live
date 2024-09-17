@@ -7,7 +7,8 @@ use crate::{
         blog::{card::BlogCard, item::BlogItem},
         head::Head,
     },
-    context::BlogContext, pages::Route,
+    context::BlogContext,
+    pages::Route,
 };
 
 #[derive(PartialEq, Properties)]
@@ -17,11 +18,12 @@ pub struct TagPageProps {
 
 #[function_component(Page)]
 pub fn page(props: &TagPageProps) -> Html {
-    let blogs = use_context::<BlogContext>().unwrap().content;
+    let blog_context = use_context::<BlogContext>().unwrap();
     let tag_id = props.tag_id.clone();
     let tag_metadata: TagMetadata = tag_id.clone().into();
 
-    let mut tag_blogs = blogs
+    let sorted_blogs = blog_context.get_sorted();
+    let mut tag_blogs = sorted_blogs
         .into_iter()
         .filter(|(_, metadata)| metadata.front_matter.tags.contains(&tag_id.to_string()));
     let first_blog = tag_blogs.next();
@@ -49,16 +51,16 @@ pub fn page(props: &TagPageProps) -> Html {
                                 <title>{"Blog | Hanyuan's Website"}</title>
                             </Head>
                             <BlogCard
-                                id={first_id}
-                                metadata={first_metadata} />
+                                id={*first_id}
+                                metadata={first_metadata.clone()} />
                             <div>
                                 {
                                     tag_blogs
                                         .map(|(id, metadata)| {
                                             html_nested! {
                                                 <BlogItem
-                                                    id={id}
-                                                    metadata={metadata} />
+                                                    id={*id}
+                                                    metadata={metadata.clone()} />
                                             }
                                         })
                                         .collect::<Vec<_>>()

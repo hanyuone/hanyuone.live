@@ -45,4 +45,15 @@ impl BlogContext {
     pub fn get(&self, id: &BlogId) -> Option<&BlogMetadata> {
         self.content.get(id)
     }
+
+    pub fn get_sorted(&self) -> Vec<(&BlogId, &BlogMetadata)> {
+        let mut blogs = self.content.iter().collect::<Vec<_>>();
+        blogs.sort_by(|(_, a), (_, b)| {
+            b.front_matter
+                .publish_date
+                .cmp(&a.front_matter.publish_date)
+        });
+
+        blogs
+    }
 }
