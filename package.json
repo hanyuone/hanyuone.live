@@ -8,7 +8,7 @@
     "dev:site": "cd website && trunk serve --color always",
     "dev": "concurrently -c auto \"pnpm dev:md\" \"pnpm dev:site\"",
     "build:md": "cargo run -p markdown",
-    "build:wasm": "cd website && trunk build --release --features hydration -- --debug",
+    "build:wasm": "cd website && trunk build --release --features hydration --cargo-flags \"--debug\"",
     "build:ssg": "cargo run -p website --bin ssr --features static release",
     "build": "pnpm build:md && pnpm build:wasm && pnpm build:ssg"
   },
