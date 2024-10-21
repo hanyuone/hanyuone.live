@@ -20,8 +20,8 @@ jobs:
           toolchain: stable
           targets: wasm32-unknown-unknown
       # Install Trunk and WASM for building webapp
-      - uses: jetli/trunk-action@v0.1.0
-      - uses: jetli/wasm-bindgen-action@v0.1.0
+      - uses: jetli/trunk-action@v0.5.0
+      - uses: jetli/wasm-bindgen-action@v0.2.0
       # Install Node and PNPM
       - uses: actions/setup-node@v4
         with:
