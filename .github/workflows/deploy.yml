@@ -32,7 +32,7 @@ jobs:
           version: 9
           run_install: false
       # Checkout repo
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       # =================== INSTALL ===================
       # Cache Rust build files
       - uses: Swatinem/rust-cache@v2
