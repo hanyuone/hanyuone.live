@@ -13,9 +13,12 @@ tags:
 > written and illustrated by [DouglasLiu](https://www.wikidot.com/user:info/douglasliu)
 > and [DrStse](https://www.wikidot.com/user:info/drstse).
 
-**Bubble ID**: N/A
-**Sender**: Envoy of Alpha Centauri civilisation
+***
 
+![](https://scpsandboxcn.wikidot.com/local--files/douglasliu-2/cn3k-char-alien.jpg)
+
+**Bubble ID**: N/A\
+**Sender**: Envoy of Alpha Centauri civilisation\
 **Characteristic Vector**: N/A
 
 To the distant "Genesis" star system,
@@ -38,8 +41,8 @@ We wish you the best.
 
 ***
 
-**Bubble ID**: A3-KT
-**Sender**: Broadcaster Xiangming Xiao
+**Bubble ID**: A3-KT\
+**Sender**: Broadcaster Xiangming Xiao\
 **Characteristic Vector**: [NT3AUBNN7D2EU424IU9E]
 
 We believe that the message we received today is a semantic stream from Bubble A3-KA, with a dampening rate of 98.24%. From there we were able to make out the following passage:
@@ -52,8 +55,8 @@ We will monitor the surrounding immatter for the next 3 standard months, and sen
 
 ***
 
-**Bubble** ID: 5D-19
-**Sender**: Broadcaster Yiqiu Tian
+**Bubble** ID: 5D-19\
+**Sender**: Broadcaster Yiqiu Tian\
 **Characteristic Vector**: [Z0TD9G7965KFUO5XCWZ9]
 
 Attention, all bubble residents! Attention, all bubble residents! We are detecting turbulence caused by a high concentration of immatter in the bubble's immediate surroundings, please keep a distance of at least 400m from the bubble's edge. The SCP Foundation Eastern Command local station has sent a reaction team to the area to help with evacuation, all residents at the Bubble's edge, please follow instructions and evacuate in an orderly manner!
@@ -62,8 +65,8 @@ New estimates indicate a high likelihood of continuous immatter turbulence in th
 
 ***
 
-**Bubble ID**: AW-9M
-**Sender**: Broadcaster Zhen Zhang
+**Bubble ID**: AW-9M\
+**Sender**: Broadcaster Zhen Zhang\
 **Characteristic Vector**: [VSJSFQ7298D8OT81CU7H]
 
 According to the latest predictions on immatter status, the concentration of immatter immediately surrounding the bubble will reduce to 1100И/m⁴ in the coming week, and there will be 2-3 acceptable transmission windows for semantic streams. Current transmission preparations are as follows:
@@ -86,8 +89,8 @@ Until next time.
 > Of course, the most important thing in this broadcast is the discovery of the unknown metal from immatter, which we now refer to as: aurite.
 
 ***
-**Bubble ID**: IN-SC
-**Sender**: Unknown
+**Bubble ID**: IN-SC\
+**Sender**: Unknown\
 **Characteristic Vector**: N/A
 
 *\<Recording starts\>*
