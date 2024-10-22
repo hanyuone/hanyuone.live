@@ -9,7 +9,7 @@ tags:
 ---
 
 > [!note]
-> This is **part 1** of a translation of [SCP-CN-3000](https://scp-wiki-cn.wikidot.com/scp-cn-985),
+> This is **part 1** of a translation of [SCP-CN-3000](https://scp-wiki-cn.wikidot.com/scp-cn-3000),
 > written and illustrated by [DouglasLiu](https://www.wikidot.com/user:info/douglasliu)
 > and [DrStse](https://www.wikidot.com/user:info/drstse).
 
