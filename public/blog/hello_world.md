@@ -1,7 +1,7 @@
 ---
 title: Hello, World!
 description: A brief intro into the blog, what I plan on posting.
-image: public/blog_media/hello_world/title.png
+image: /public/blog_media/hello_world/title.png
 publish_date: 2024-07-25 00:00
 tags:
 - meta
