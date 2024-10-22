@@ -1,6 +1,11 @@
+trunk-version = "0.20.3"
+
 [build]
 target = "index.html"
 dist = "../dist"
+
+[tools]
+wasm_bindgen = "0.2.93"
 
 [[hooks]]
 stage = "build"
