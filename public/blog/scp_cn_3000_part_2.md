@@ -87,6 +87,7 @@ Until next time.
 > Of course, the most important thing in this broadcast is the discovery of the unknown metal from immatter, which we now refer to as: aurite.
 
 ***
+
 **Bubble ID**: IN-SC\
 **Sender**: Unknown\
 **Characteristic Vector**: N/A
