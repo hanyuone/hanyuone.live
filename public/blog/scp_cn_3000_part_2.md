@@ -7,6 +7,7 @@ tags:
 - translation
 - scp
 ---
+
 > [!note]
 > This is **part 2** of a translation of [SCP-CN-3000](https://scp-wiki-cn.wikidot.com/scp-cn-3000),
 > written and illustrated by [DouglasLiu](https://www.wikidot.com/user:info/douglasliu)
