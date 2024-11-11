@@ -49,7 +49,7 @@ We believe that the message we received today is a semantic stream from Bubble A
 
 We can roughly deduce that Bubble A3-KA requires a restocking of base metals, but because of the dampening we cannot verify the amount needed or its urgency. Regardless, we have enough supply of base metals, and can take on the risk of dampening mid-transport. We should assume that our compatriots require urgent assistance, and send our aid accordingly.
 
-We will monitor the surrounding immatter for the next 3 standard months, and send 50 tons of each type of base metal through semantic stream to Bubble A3-KA. Even if we might be worrying for nothing, we hope that everything is well in A3-KA, and that they can overcome this hardship.
+We will monitor the surrounding immatter for the next 3 standard months, and send 50 tons of each type of base metal through semantic stream to Bubble A3-KA. Even if we might be worrying for nothing, we wish bubble A3-KA all the best, and hope that they can overcome this hardship.
 
 ***
 
