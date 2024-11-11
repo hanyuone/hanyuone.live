@@ -1,7 +1,7 @@
 ---
 title: SCP-CN-3000, Part 2
 description: After two months, we begin the chat logs.
-image: public/blog_media/scp_cn_3000/part_2_cover.jpg
+image: /public/blog_media/scp_cn_3000/part_2_cover.jpg
 publish_date: 2024-10-21 20:33
 tags:
 - translation

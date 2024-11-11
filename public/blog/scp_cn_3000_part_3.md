@@ -1,7 +1,7 @@
 ---
 title: SCP-CN-3000, Part 3
 description: The node supervisors now come into the scene.
-image: public/blog_media/scp_cn_3000/part_3_cover.jpg
+image: /public/blog_media/scp_cn_3000/part_3_cover.jpg
 publish_date: 2024-11-11 16:55
 tags:
 - translation
