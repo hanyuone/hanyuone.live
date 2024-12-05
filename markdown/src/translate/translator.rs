@@ -1,4 +1,3 @@
-use crate::translate::footnotes::Footnotes;
 use pulldown_cmark::{BlockQuoteKind, CowStr, Event, Tag, TagEnd};
 
 use crate::structs::metadata::PostTranslateData;
@@ -6,6 +5,7 @@ use crate::structs::metadata::PostTranslateData;
 use super::{
     element::{AttributeName, ElementTag, RenderElement},
     error::TranslateError,
+    footnotes::Footnotes,
     node::{RenderCallout, RenderNode, RenderTag},
 };
 
