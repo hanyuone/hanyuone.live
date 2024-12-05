@@ -43,6 +43,54 @@ impl<'a> Footnotes<'a> {
         self.indices.get(&name).copied()
     }
 
+    fn to_node((index, name, mut element): (&usize, CowStr<'a>, RenderElement)) -> RenderNode {
+        let mut footnote = RenderElement::new(ElementTag::Div);
+        footnote.add_attribute(AttributeName::Id, format!("footnote_{name}"));
+
+        let children = &mut element.children;
+
+        // Add <p>{index}: </p> at beginning of each footnote
+        let index_text = format!("{index}: ");
+
+        // We know that the first child has to be a render element
+        let RenderNode::Element(first_element) = children.first_mut().unwrap() else {
+            unreachable!()
+        };
+
+        if first_element.tag == ElementTag::P {
+            first_element
+                .children
+                .insert(0, RenderNode::Text(index_text));
+        } else {
+            let mut index_element = RenderElement::new(ElementTag::P);
+            index_element.add_child(index_text.into());
+            children.insert(0, index_element.into());
+        }
+
+        // Add return button at end of each footnote
+        let mut return_button = RenderElement::new(ElementTag::A);
+        return_button.add_attribute(AttributeName::Href, format!("#anchor_{name}"));
+        return_button.add_child("↩️".to_string().into());
+
+        // We know that the last child has to be a render element
+        let RenderNode::Element(last_element) = children.last_mut().unwrap() else {
+            unreachable!()
+        };
+
+        if last_element.tag == ElementTag::P {
+            // Add space
+            last_element.add_child(" ".to_string().into());
+            last_element.add_child(return_button.into());
+        } else {
+            let mut return_element = RenderElement::new(ElementTag::P);
+            return_element.add_child(return_button.into());
+            element.add_child(return_element.into());
+        }
+
+        footnote.add_child(element.into());
+        footnote.into()
+    }
+
     pub fn to_nodes(self) -> Vec<RenderNode> {
         let cloned_indices = self.indices;
         let mut sorted_footnotes = self
@@ -59,53 +107,7 @@ impl<'a> Footnotes<'a> {
 
         sorted_footnotes
             .into_iter()
-            .map(|(index, name, mut element)| {
-                let mut footnote = RenderElement::new(ElementTag::Div);
-                footnote.add_attribute(AttributeName::Id, format!("footnote_{name}"));
-
-                let children = &mut element.children;
-
-                // Add <p>{index}: </p> at beginning of each footnote
-                let index_text = format!("{index}: ");
-
-                // We know that the first child has to be a render element
-                let RenderNode::Element(first_element) = children.first_mut().unwrap() else {
-                    unreachable!()
-                };
-
-                if first_element.tag == ElementTag::P {
-                    first_element
-                        .children
-                        .insert(0, RenderNode::Text(index_text));
-                } else {
-                    let mut index_element = RenderElement::new(ElementTag::P);
-                    index_element.add_child(index_text.into());
-                    children.insert(0, index_element.into());
-                }
-
-                // Add return button at end of each footnote
-                let mut return_button = RenderElement::new(ElementTag::A);
-                return_button.add_attribute(AttributeName::Href, format!("#anchor_{name}"));
-                return_button.add_child("↩️".to_string().into());
-
-                // We know that the last child has to be a render element
-                let RenderNode::Element(last_element) = children.last_mut().unwrap() else {
-                    unreachable!()
-                };
-
-                if last_element.tag == ElementTag::P {
-                    // Add space
-                    last_element.add_child(" ".to_string().into());
-                    last_element.add_child(return_button.into());
-                } else {
-                    let mut return_element = RenderElement::new(ElementTag::P);
-                    return_element.add_child(return_button.into());
-                    element.add_child(return_element.into());
-                }
-
-                footnote.add_child(element.into());
-                footnote.into()
-            })
+            .map(Footnotes::to_node)
             .collect::<Vec<_>>()
     }
 }
