@@ -28,6 +28,12 @@ pub enum ElementTag {
     P,
     Strong,
     Sup,
+    Table,
+    Tbody,
+    Td,
+    Th,
+    Thead,
+    Tr,
     Ul,
 }
 
@@ -55,6 +61,12 @@ impl Display for ElementTag {
             Self::P => "p",
             Self::Strong => "strong",
             Self::Sup => "sup",
+            Self::Table => "table",
+            Self::Tbody => "tbody",
+            Self::Td => "td",
+            Self::Th => "th",
+            Self::Thead => "thead",
+            Self::Tr => "tr",
             Self::Ul => "ul",
         };
 
@@ -77,6 +89,7 @@ impl From<HeadingLevel> for ElementTag {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum AttributeName {
+    Align,
     Alt,
     Class,
     Href,
@@ -89,6 +102,7 @@ pub enum AttributeName {
 impl From<AttributeName> for &'static str {
     fn from(value: AttributeName) -> Self {
         match value {
+            AttributeName::Align => "align",
             AttributeName::Alt => "alt",
             AttributeName::Class => "class",
             AttributeName::Href => "href",

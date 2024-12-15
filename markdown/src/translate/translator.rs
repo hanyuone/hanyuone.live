@@ -3,9 +3,9 @@ use pulldown_cmark::{BlockQuoteKind, CowStr, Event, Tag, TagEnd};
 use crate::structs::metadata::PostTranslateData;
 
 use super::{
+    complex::{footnotes::Footnotes, table::Table},
     element::{AttributeName, ElementTag, RenderElement},
     error::TranslateError,
-    footnotes::Footnotes,
     node::{RenderCallout, RenderNode, RenderTag},
 };
 
@@ -22,6 +22,9 @@ pub struct Translator<'a, I> {
     stack: Vec<RenderNode>,
     footnotes: Footnotes<'a>,
     current_footnote: Option<CowStr<'a>>,
+    table: Option<Table>,
+    in_cell: bool,
+    cell_output: Vec<RenderNode>,
     post_translate: PostTranslateData,
 }
 
@@ -33,11 +36,18 @@ where
     /// by `pulldown_cmark`.
     pub fn new(tokens: I) -> Self {
         Self {
+            // Basic functionality
             tokens,
             output: vec![],
             stack: vec![],
+            // Footnote variables
             footnotes: Footnotes::new(),
             current_footnote: None,
+            // Table variables
+            table: None,
+            in_cell: false,
+            cell_output: vec![],
+            // After translation
             post_translate: PostTranslateData { words: 0 },
         }
     }
@@ -56,6 +66,8 @@ where
                 RenderNode::Callout(callout) => callout.add_child(node.into()),
                 _ => unreachable!("Only containers should be put onto stack"),
             }
+        } else if self.in_cell {
+            self.cell_output.push(node.into());
         } else {
             self.output.push(node.into());
         }
@@ -109,6 +121,7 @@ where
 
         self.check_top(&top, tag)?;
         self.output(top);
+
         Ok(())
     }
 
@@ -218,11 +231,12 @@ where
     // TODO: add codeblocks w/ syntax highlighting
     fn run_start(&mut self, tag: Tag<'a>) {
         match tag {
-            // Text styles
+            // === Text styles ===
             Tag::Paragraph => self.enter(RenderElement::new(ElementTag::P)),
             Tag::Emphasis => self.enter(RenderElement::new(ElementTag::Em)),
             Tag::Strong => self.enter(RenderElement::new(ElementTag::Strong)),
-            // Headings
+
+            // === Headings ===
             Tag::Heading {
                 level, id, classes, ..
             } => {
@@ -239,7 +253,8 @@ where
 
                 self.enter(element)
             }
-            // Blockquotes and callouts
+
+            // === Blockquotes and callouts ===
             Tag::BlockQuote(kind) => match kind {
                 Some(kind) => self.generate_callout(kind),
                 None => {
@@ -248,7 +263,8 @@ where
                     self.enter(blockquote);
                 }
             },
-            // Links and images
+
+            // === Links and images ===
             Tag::Link {
                 dest_url, title, ..
             } => {
@@ -263,7 +279,8 @@ where
                 id,
                 ..
             } => self.generate_image(dest_url, title, id),
-            // Lists
+
+            // === Lists ===
             Tag::List(start) => match start {
                 Some(start) => {
                     let mut ol = RenderElement::new(ElementTag::Ol);
@@ -273,32 +290,47 @@ where
                 None => self.enter(RenderElement::new(ElementTag::Ul)),
             },
             Tag::Item => self.enter(RenderElement::new(ElementTag::Li)),
-            // Footnotes
+
+            // === Tables ===
+            Tag::Table(alignment) => self.table = Some(Table::new(alignment)),
+            Tag::TableHead => self.table.as_mut().unwrap().is_head = true,
+            Tag::TableRow => {
+                self.table.as_mut().unwrap().is_head = false;
+                self.table.as_mut().unwrap().create_row();
+            }
+            Tag::TableCell => self.in_cell = true,
+
+            // === Footnotes ===
             Tag::FootnoteDefinition(name) => {
                 self.current_footnote = Some(name);
                 self.enter(RenderElement::new(ElementTag::Div))
             }
+
             _ => todo!(),
         }
     }
 
     fn run_end(&mut self, tag: TagEnd) {
         let result = match tag {
-            // Text and decorations
+            // === Text and decorations ===
             TagEnd::Paragraph => self.leave(RenderTag::Element(ElementTag::P)),
             TagEnd::Emphasis => self.leave(RenderTag::Element(ElementTag::Em)),
             TagEnd::Strong => self.leave(RenderTag::Element(ElementTag::Strong)),
             TagEnd::Heading(level) => self.leave(RenderTag::Element(level.into())),
-            // Blockquotes are always rendered as divs
+
+            // === Blockquotes ===
+            // Always rendered as divs
             TagEnd::BlockQuote => self.leave_any(vec![
                 RenderTag::Element(ElementTag::BlockQuote),
                 RenderTag::Callout,
             ]),
-            // Links and images
+
+            // === Links and images ===
             TagEnd::Link => self.leave(RenderTag::Element(ElementTag::A)),
             // We already generated the image in `start` (it's self-contained), so do nothing
             TagEnd::Image => Ok(()),
-            // Lists
+
+            // === Lists ===
             TagEnd::List(is_ordered) => {
                 if is_ordered {
                     self.leave(RenderTag::Element(ElementTag::Ol))
@@ -307,7 +339,27 @@ where
                 }
             }
             TagEnd::Item => self.leave(RenderTag::Element(ElementTag::Li)),
+
+            // === Tables ===
+            TagEnd::Table => {
+                let table_node = std::mem::replace(&mut self.table, None).unwrap().to_node();
+                self.output(table_node);
+
+                Ok(())
+            }
+            TagEnd::TableHead => Ok(()),
+            TagEnd::TableRow => Ok(()),
+            TagEnd::TableCell => {
+                let cell = std::mem::replace(&mut self.cell_output, vec![]);
+                self.table.as_mut().unwrap().add_cell(cell);
+                self.in_cell = false;
+
+                Ok(())
+            }
+
+            // === Footnotes ===
             TagEnd::FootnoteDefinition => self.leave_footnote(),
+
             _ => todo!(),
         };
 

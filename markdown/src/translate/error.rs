@@ -29,7 +29,7 @@ impl Display for TranslateError {
                     .collect::<Vec<_>>()
                     .join(", ");
 
-                format!("none of the tags {} matched", tags_str)
+                format!("None of the tags {} matched", tags_str)
             }
         };
 
