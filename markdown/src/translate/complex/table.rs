@@ -1,4 +1,7 @@
-use std::{collections::HashMap, ops::Add};
+use std::{
+    collections::HashMap,
+    ops::{Add, AddAssign},
+};
 
 use pulldown_cmark::Alignment;
 
@@ -55,6 +58,12 @@ impl Add<CellDimensions> for CellDimensions {
 
     fn add(self, rhs: CellDimensions) -> Self::Output {
         Self(self.0 + rhs.0, self.1 + rhs.1)
+    }
+}
+
+impl AddAssign<CellDimensions> for CellDimensions {
+    fn add_assign(&mut self, rhs: CellDimensions) {
+        *self = *self + rhs;
     }
 }
 
@@ -130,7 +139,10 @@ impl Chunk {
         match target_cell {
             Cell::Content(_) => {
                 self.merged_sizes
-                    .insert(target_position, CellDimensions(1, 1) + dimension_base);
+                    .entry(target_position)
+                    .and_modify(|e| *e += dimension_base)
+                    .or_insert(CellDimensions(1, 1) + dimension_base);
+
                 self.add_cell(Cell::Pointer(target_position));
             }
             Cell::Pointer(cell_position) => {
@@ -150,6 +162,7 @@ impl Chunk {
                             // where one left-merge "juts out". This should result in a merge error.
                             Err(TranslateError::TableMergeError)
                         } else {
+                            println!("Here");
                             Ok(*existing_size)
                         }
                     }
