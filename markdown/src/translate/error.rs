@@ -4,7 +4,6 @@ use super::{element::ElementTag, node::RenderTag};
 
 #[derive(Debug, Clone)]
 pub enum TranslateError {
-    CalloutError,
     ElementError {
         expected: ElementTag,
         result: Option<ElementTag>,
@@ -12,17 +11,18 @@ pub enum TranslateError {
     NoMatchError {
         tags: Vec<RenderTag>,
     },
+    CalloutError,
+    TableMergeError,
 }
 
 impl Display for TranslateError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let error_str = match self {
-            TranslateError::CalloutError => "Expected callout".to_string(),
-            TranslateError::ElementError { expected, result } => match result {
+            Self::ElementError { expected, result } => match result {
                 Some(result) => format!("Expected <{}>, got <{}>", expected, result),
                 None => format!("Expected <{}>", expected),
             },
-            TranslateError::NoMatchError { tags } => {
+            Self::NoMatchError { tags } => {
                 let tags_str = tags
                     .iter()
                     .map(|tag| tag.to_string())
@@ -30,7 +30,9 @@ impl Display for TranslateError {
                     .join(", ");
 
                 format!("None of the tags {} matched", tags_str)
-            }
+            },
+            Self::CalloutError => "Expected callout".to_string(),
+            Self::TableMergeError => "Invalid merge command".to_string(),
         };
 
         write!(f, "Markdown translation error: {}", error_str)

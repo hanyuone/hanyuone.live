@@ -293,11 +293,13 @@ where
 
             // === Tables ===
             Tag::Table(alignment) => self.table = Some(Table::new(alignment)),
-            Tag::TableHead => self.table.as_mut().unwrap().is_head = true,
-            Tag::TableRow => {
-                self.table.as_mut().unwrap().is_head = false;
-                self.table.as_mut().unwrap().create_row();
+            Tag::TableHead => {
+                self.table.as_mut().unwrap().is_head = true;
+                self.table.as_mut().unwrap().add_row();
             }
+            Tag::TableRow => {
+                self.table.as_mut().unwrap().add_row()
+            },
             Tag::TableCell => self.in_cell = true,
 
             // === Footnotes ===
@@ -347,11 +349,14 @@ where
 
                 Ok(())
             }
-            TagEnd::TableHead => Ok(()),
+            TagEnd::TableHead => {
+                self.table.as_mut().unwrap().is_head = false;
+                Ok(())
+            }
             TagEnd::TableRow => Ok(()),
             TagEnd::TableCell => {
                 let cell = std::mem::replace(&mut self.cell_output, vec![]);
-                self.table.as_mut().unwrap().add_cell(cell);
+                self.table.as_mut().unwrap().add_contents(cell);
                 self.in_cell = false;
 
                 Ok(())
