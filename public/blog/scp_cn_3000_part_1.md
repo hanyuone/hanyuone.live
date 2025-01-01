@@ -162,4 +162,4 @@ Because its fundamental principles are poorly understood, current Node Matrix pr
 | ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-15.jpg) | **Node 15 Supervisor**: Pasang Dolma |
 | ^ | **Bubble ID**: QM-LM |
 | ^ | **Node Codename**: BROADCAST |
-| ^ | **Node Public Key**: N/A
+| ^ | **Node Public Key**: N/A |
