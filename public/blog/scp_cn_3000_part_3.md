@@ -44,11 +44,11 @@ This is not just quantitative research into the forms that aurite can take. What
 Maybe we could combine these figures together and call it a "characteristic vector".
 ***
 
-![](https://scpsandboxcn.wikidot.com/local--files/douglasliu-2/cn3k-char-2.jpg)
-
-**Bubble ID**: H5-BM\
-**Sender**: Rustsmith Chengqi Kong\
-**Characteristic Vector**: [BZ2A83S5F55EOGK281GX]
+| Picture | Information |
+| ------- | :---------- |
+| ![](https://scpsandboxcn.wikidot.com/local--files/douglasliu-2/cn3k-char-2.jpg) | **Bubble ID**: H5-BM |
+| ^ | **Sender**: Rustsmith Chengqi Kong |
+| ^ | **Characteristic Vector**: [BZ2A83S5F55EOGK281GX] |
 
 I am but a humble smith, I haven't been involved with the Foundation's research into the anomalous, but I know that this metal is extraordinary - to me it's the perfect metal, the perfect material. I've never seen a piece of metal that's so malleable when I put it in my hand - almost like wet clay... no, that's not quite it, it's also able to hold its shape after sculpting and hammering. I feel like it's sentient, it's got a soul - it becomes hard or soft almost in response to me wishing it to be so.
 
@@ -62,11 +62,11 @@ The only problem is there's little... far too little... of this metal, and I ran
 
 ***
 
-![](https://scpsandboxcn.wikidot.com/local--files/douglasliu-2/cn3k-char-1.jpg)
-
-**Bubble ID**: CR-KV\
-**Sender**: Guest Research Director Lan Xia\
-**Characteristic Vector**: [P4WHR5I1JFKK9M060R5I]
+| Picture | Information |
+| ------- | :---------- |
+| ![](https://scpsandboxcn.wikidot.com/local--files/douglasliu-2/cn3k-char-1.jpg) | **Bubble ID**: CR-KV |
+| ^ | **Sender**: Guest Research Director Lan Xia |
+| ^ | **Characteristic Vector**: [P4WHR5I1JFKK9M060R5I] |
 
 I successfully reached bubble CR-KV. The researchers at CR-KH were very professional, they controlled the timing on the transmission window well, I was able to travel through immatter without any injuries. I am grateful to them, they spent so much time and energy on sending someone as sickly as me to where I want to go. I do not think I need to trouble them any more in the foreseeable future. I wish them all the best.
 
@@ -77,11 +77,11 @@ I had a tour of their hadron collider today - it is large, massive. The environm
 Another problem is that, no matter where I go, I feel like someone is always following me, observing my condition. And whenever I have to use sensors with radiation, they become very nervous... all of them are kind people at heart, I know they are looking out for me, but I do not think there is any use in doing so. Cystic fibrosis has not been cured in the last 1,000 years, I doubt there are going to be any leaps in the medical space here.
 ***
 
-![](https://scpsandboxcn.wikidot.com/local--files/douglasliu-2/cn3k-char-10.jpg)
-
-**Bubble ID**: X0-BA\
-**Sender**: Commander Gurgentuya\
-**Characteristic Vector**: [1Y7UEE1VU3EMSUHM22E4]
+| Picture | Information |
+| ------- | :---------- |
+| ![](https://scpsandboxcn.wikidot.com/local--files/douglasliu-2/cn3k-char-10.jpg) | **Bubble ID**: X0-BA |
+| ^ | **Sender**: Commander Gurgentuya |
+| ^ | **Characteristic Vector**: [1Y7UEE1VU3EMSUHM22E4] |
 
 It's safe to say that our bubble, X0-BA, is the most "brilliant" out there, literally speaking. The elders here always say that on the day immatter arrived, they saw the sun high above shatter into ten orbs, which swirled around with the immatter that blocked out the sky before crashing down into vast forest on the bubble's west.
 
@@ -90,11 +90,11 @@ Logically, the story makes no sense - the sun is extremely far away from immatte
 Regardless of what they really are, the ten "suns" pose a lot of problems. The western forest is now sealed off, with ample resources that we can't extract. Furthermore, we have reason to believe that the strange, heatless light they emit heavily interferes with semantic stream broadcasts coming from other bubbles. We're already experiencing heavy dampening from all the immatter, having these ten extra suns is just adding insult to injury.
 ***
 
-![](https://scpsandboxcn.wikidot.com/local--files/douglasliu-2/cn3k-char-3.jpg)
-
-**Bubble**: DV-S8\
-**Broadcaster**: Sorrowed Songstress Yongmo Shu\
-**Characteristic Vector**: [UD1ROC1HAO4G0DBXPDO4]
+| Picture | Information |
+| ------- | :---------- |
+| ![](https://scpsandboxcn.wikidot.com/local--files/douglasliu-2/cn3k-char-3.jpg) | **Bubble**: DV-S8 |
+| ^ | **Broadcaster**: Sorrowed Songstress Yongmo Shu |
+| ^ | **Characteristic Vector**: [UD1ROC1HAO4G0DBXPDO4] |
 
 I have just received the broadcast from bubble DV-SA, where three newborn babies passed due to complications with immatter. This is absolutely heart-wrenching news. And just now, right here in this bubble, there are two more babies in intensive care due to immatter interference. Tiny pieces of immatter, lodged in their brains which cannot yet comprehend the beauty of this world, cause them to wail without pause every night. I am no doctor, I'm not capable of making their pain go away, but I sincerely hope that every citizen in our bubble can join me in prayer, to pray that these two newborn souls can overcome this obstacle.
 
@@ -106,11 +106,11 @@ So, those two kids aren't given a death sentence by being born with immatter. Th
 
 ***
 
-![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-4.jpg)
-
-**Bubble**: 1K-ZZ\
-**Broadcaster**: Brewmaster Sanlei He\
-**Characteristic Vector**: [XECH2D07E6RDFJIA3NDV]
+| Picture | Information |
+| ------- | :---------- |
+| ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-4.jpg) | **Bubble**: 1K-ZZ |
+| ^ | **Broadcaster**: Brewmaster Sanlei He |
+| ^ | **Characteristic Vector**: [XECH2D07E6RDFJIA3NDV] |
 
 To all the drunkards in 1K-ZZ, this is a special broadcast, as of today I'm stopping all business in the bubble. I've got two reasons - number one, I haven't received any insightful, honest-to-god opinions on my brews, all I hear are noises masquerading themselves as thoughts, bland as a cup of water. Don't blame it on things like immatter, or dampening, we're all in the same bubble, I can hear you loud and clear! If I offer something that I've invested my precious time into to you lot, that'll be satisfied with anything as long as it burns the throat, then sorry, I can't keep this going on much longer!
 
@@ -139,11 +139,11 @@ I've been a broadcaster for 3 or 4 years now, but I've never been to the locked 
 Personally, I find that hard to believe.
 ***
 
-![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-13.jpg)
-
-**Bubble**: TM-A4\
-**Broadcaster**: Pilot Igor Kaminev\
-**Characteristic Vector**: [GCOCRH0LL155M9G9V0JJ]
+| Picture | Information |
+| ------- | :---------- |
+| ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-13.jpg) | **Bubble**: TM-A4 |
+| ^ | **Broadcaster**: Pilot Igor Kaminev |
+| ^ | **Characteristic Vector**: [GCOCRH0LL155M9G9V0JJ] |
 
 [DAMPENING] the fifty-seventh broadcast from Igor Kaminev. The AIC system on board in the last [DAMPENING] experienced calculation malfunctions, and could not avoid a piece of immatter that was directly in its course. But I'm very fortunate, I didn't experience any dampening, instead [DAMPENING] at a bubble in low Earth orbit. Immatter has cut off all [DAMPENING] I may "die in the darkness" as stated in oath, but as of right now I'm alive, I'm breathing, and I will continue broadcasting [DAMPENING] every instruction by the Foundation Eastern Command.
 
