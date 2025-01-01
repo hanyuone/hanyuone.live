@@ -297,9 +297,7 @@ where
                 self.table.as_mut().unwrap().is_head = true;
                 self.table.as_mut().unwrap().add_row();
             }
-            Tag::TableRow => {
-                self.table.as_mut().unwrap().add_row()
-            },
+            Tag::TableRow => self.table.as_mut().unwrap().add_row(),
             Tag::TableCell => self.in_cell = true,
 
             // === Footnotes ===
@@ -356,10 +354,14 @@ where
             TagEnd::TableRow => Ok(()),
             TagEnd::TableCell => {
                 let cell = std::mem::replace(&mut self.cell_output, vec![]);
-                self.table.as_mut().unwrap().add_contents(cell);
-                self.in_cell = false;
-
-                Ok(())
+                let add_command = self.table.as_mut().unwrap().add_contents(cell);
+                
+                if let Err(err) = add_command {
+                    Err(err)
+                } else {
+                    self.in_cell = false;
+                    Ok(())
+                }
             }
 
             // === Footnotes ===
