@@ -346,7 +346,7 @@ where
 
             // === Tables ===
             TagEnd::Table => {
-                let table_node = std::mem::replace(&mut self.table, None).unwrap().to_node();
+                let table_node = self.table.take().unwrap().to_node();
                 self.output(table_node);
 
                 Ok(())
@@ -357,9 +357,9 @@ where
             }
             TagEnd::TableRow => Ok(()),
             TagEnd::TableCell => {
-                let cell = std::mem::replace(&mut self.cell_output, vec![]);
+                let cell = std::mem::take(&mut self.cell_output);
                 let add_command = self.table.as_mut().unwrap().add_contents(cell);
-                
+
                 if let Err(err) = add_command {
                     Err(err)
                 } else {

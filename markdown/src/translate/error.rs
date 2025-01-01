@@ -30,7 +30,7 @@ impl Display for TranslateError {
                     .join(", ");
 
                 format!("None of the tags {} matched", tags_str)
-            },
+            }
             Self::CalloutError => "Expected callout".to_string(),
             Self::TableMergeError => "Invalid merge command".to_string(),
         };

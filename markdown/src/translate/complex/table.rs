@@ -23,7 +23,7 @@ impl MergeDirection {
     /// Detects whether a `&Vec<RenderNode>` (what the raw contents of a table is represented as)
     /// represents a cell that should be merged in a certain direction. If it's just
     /// a normal cell, then return a `None`.
-    fn from(content: &Vec<RenderNode>) -> Option<MergeDirection> {
+    fn from(content: &[RenderNode]) -> Option<MergeDirection> {
         if content.len() != 1 {
             return None;
         }
@@ -169,7 +169,7 @@ impl Chunk {
                 self.add_cell(Cell::Pointer(target_position));
             }
             Cell::Pointer(origin) => {
-                let origin = origin.clone();
+                let origin = *origin;
                 let existing_size = self.merged_sizes.get(&origin).unwrap();
 
                 let new_dimensions = match merge_direction {
@@ -230,13 +230,14 @@ impl Chunk {
             Alignment::Right => Some("right"),
         };
 
-        align_str
-            .and_then(|value| Some(element.add_attribute(AttributeName::Align, value.to_string())));
+        if let Some(value) = align_str {
+            element.add_attribute(AttributeName::Align, value.to_string());
+        }
     }
 
     /// Converts the chunk into a `RenderNode`. Can either be a `Thead` (with `Th` children)
     /// or a `Tbody` (with `Td` children), depending on `self.is_head`.
-    fn to_node(self, alignment: &Vec<Alignment>) -> RenderNode {
+    fn into_node(self, alignment: &[Alignment]) -> RenderNode {
         let mut outer = RenderElement::new(if self.is_head {
             ElementTag::Thead
         } else {
@@ -326,11 +327,11 @@ impl Table {
     pub fn to_node(self) -> RenderNode {
         let mut table_element = RenderElement::new(ElementTag::Table);
 
-        let table_head = self.head.to_node(&self.alignment);
-        table_element.add_child(table_head.into());
+        let table_head = self.head.into_node(&self.alignment);
+        table_element.add_child(table_head);
 
-        let table_body = self.body.to_node(&self.alignment);
-        table_element.add_child(table_body.into());
+        let table_body = self.body.into_node(&self.alignment);
+        table_element.add_child(table_body);
 
         table_element.into()
     }
