@@ -6,7 +6,7 @@ use std::collections::HashMap;
 
 use pulldown_cmark::CowStr;
 
-use super::{
+use crate::translate::{
     element::{AttributeName, ElementTag, RenderElement},
     node::RenderNode,
 };

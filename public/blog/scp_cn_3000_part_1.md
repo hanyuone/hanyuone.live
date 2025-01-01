@@ -59,92 +59,107 @@ Because its fundamental principles are poorly understood, current Node Matrix pr
 
 ### Addendum I - Node Matrix Personnel List
 
-> ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-1.jpg) 
-> **Node 1 Supervisor**: Lan Xia\
-> **Bubble ID**: CR-KV\
-> **Node Codename**: GLOW\
-> **Node Public Key**: [539FCYRPHGB9VQG1SUI7SHMW0RX8K9]
+| Picture | Information |
+| ------- | :---------- |
+| ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-1.jpg) | **Node 1 Supervisor**: Lan Xia |
+| ^ | **Bubble ID**: CR-KV |
+| ^ | **Node Codename**: GLOW |
+| ^ | **Node Public Key**: [539FCYRPHGB9VQG1SUI7SHMW0RX8K9] |
 
-> ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-2.jpg)
-> **Node 2 Supervisor**: Chengqi Kong\
-> **Bubble ID**: H5-BM\
-> **Node Codename**: SPIKE\
-> **Node Public Key**: [AZLSXDLVV3D2JYEUN3MOLS6T8SARV5]
+| Picture | Information |
+| ------- | :---------- |
+| ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-2.jpg) | **Node 2 Supervisor**: Chengqi Kong |
+| ^ | **Bubble ID**: H5-BM |
+| ^ | **Node Codename**: SPIKE |
+| ^ | **Node Public Key**: [AZLSXDLVV3D2JYEUN3MOLS6T8SARV5] |
 
-> ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-3.jpg)
-> **Node 3 Supervisor**: Yongmo Shu\
-> **Bubble ID**: DV-S8\
-> **Node Codename**: ANTHEM\
-> **Node Public Key**: [FY1XWPSIY20G02SSY18GM0QF79SCWY]
+| Picture | Information |
+| ------- | :---------- |
+| ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-3.jpg) | **Node 3 Supervisor**: Yongmo Shu |
+| ^ | **Bubble ID**: DV-S8 |
+| ^ | **Node Codename**: ANTHEM |
+| ^ | **Node Public Key**: [FY1XWPSIY20G02SSY18GM0QF79SCWY] |
 
-> ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-4.jpg)
-> **Node 4 Supervisor**: Sanlei He\
-> **Bubble ID**: 1K-ZZ\
-> **Node Codename**: ETHANOL\
-> **Node Public Key**: [J3CYQGQL8N58JZFX2IILGHDA9YBY2M]
+| Picture | Information |
+| ------- | :---------- |
+| ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-4.jpg) | **Node 4 Supervisor**: Sanlei He |
+| ^ | **Bubble ID**: 1K-ZZ |
+| ^ | **Node Codename**: ETHANOL |
+| ^ | **Node Public Key**: [J3CYQGQL8N58JZFX2IILGHDA9YBY2M] |
 
-> ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-5-2.jpg)
-> **Node 5 Supervisor**: Hengxin Shi\
-> **Bubble ID**: IL-G2\
-> **Node Codename**: HEARTLESS\
-> **Node Public Key**: [Y948GWELRDMAZD7VPFQ3SS8JUTPI61]
+| Picture | Information |
+| ------- | :---------- |
+| ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-5-2.jpg) | **Node 5 Supervisor**: Hengxin Shi |
+| ^ | **Bubble ID**: IL-G2 |
+| ^ | **Node Codename**: HEARTLESS |
+| ^ | **Node Public Key**: [Y948GWELRDMAZD7VPFQ3SS8JUTPI61] |
 
-> ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-6.jpg)
-> **Node 6 Supervisor**: Miao Gao\
-> **Bubble ID**: AQ-9S\
-> **Node Codename**: REFLECTION\
-> **Node Public Key**: [RUGNSY927ZYG98V19H17KD1NVER7OE]
+| Picture | Information |
+| ------- | :---------- |
+| ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-6.jpg) | **Node 6 Supervisor**: Miao Gao |
+| ^ | **Bubble ID**: AQ-9S |
+| ^ | **Node Codename**: REFLECTION |
+| ^ | **Node Public Key**: [RUGNSY927ZYG98V19H17KD1NVER7OE] |
 
-> ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-7.jpg)
-> **Node 7 Supervisor**: Anne Ji\
-> **Bubble ID**: VL-13\
-> **Node Codename**: EARTH\
-> **Node Public Key**: [FEKNT8SVUZSRSYSZ2G23ASTOVSRTHX]
+| Picture | Information |
+| ------- | :---------- |
+| ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-7.jpg) | **Node 7 Supervisor**: Anne Ji |
+| ^ | **Bubble ID**: VL-13 |
+| ^ | **Node Codename**: EARTH |
+| ^ | **Node Public Key**: [FEKNT8SVUZSRSYSZ2G23ASTOVSRTHX] |
 
-> ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-8.jpg)
-> **Node 8 Supervisor**: Fen Zang\
-> **Bubble ID**: C0-BK\
-> **Node Codename**: FIREWALL\
-> **Node Public Key**: [D2SKD226JCLOAPEG7VQQP80M84XXZ4]
+| Picture | Information |
+| ------- | :---------- |
+| ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-8.jpg) | **Node 8 Supervisor**: Fen Zang |
+| ^ | **Bubble ID**: C0-BK |
+| ^ | **Node Codename**: FIREWALL |
+| ^ | **Node Public Key**: [D2SKD226JCLOAPEG7VQQP80M84XXZ4] |
 
-> ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-9.jpg)
-> **Node 9 Supervisor**: Yiyu Dan\
-> **Bubble ID**: RW-55\
-> **Node Codename**: RESONANCE\
-> **Node Public Key**: [ZNME1AGODP37ZBB6LDNQRZB06NDNJ9]
+| Picture | Information |
+| ------- | :---------- |
+| ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-9.jpg) | **Node 9 Supervisor**: Yiyu Dan |
+| ^ | **Bubble ID**: RW-55 |
+| ^ | **Node Codename**: RESONANCE |
+| ^ | **Node Public Key**: [ZNME1AGODP37ZBB6LDNQRZB06NDNJ9] |
 
-> ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-10.jpg)
-> **Node 10 Supervisor**: Gurgentuya\
-> **Bubble ID**: X0-BA\
-> **Node Codename**: SUNHUNT\
-> **Node Public Key**: [CHN2VTBCEUJX7ZY97KR75G13KT0UEZ]
+| Picture | Information |
+| ------- | :---------- |
+| ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-10.jpg) | **Node 10 Supervisor**: Gurgentuya |
+| ^ | **Bubble ID**: X0-BA |
+| ^ | **Node Codename**: SUNHUNT |
+| ^ | **Node Public Key**: [CHN2VTBCEUJX7ZY97KR75G13KT0UEZ] |
 
-> ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-11.jpg)
-> **Node 11 Supervisor**: Zhang Wan\
-> **Bubble ID**: OI-IO\
-> **Node Codename**: RECURSION\
-> **Node Public Key**: [AAA4A0W71K709H76E56ZY52AONWC8W]
+| Picture | Information |
+| ------- | :---------- |
+| ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-11.jpg) | **Node 11 Supervisor**: Zhang Wan |
+| ^ | **Bubble ID**: OI-IO |
+| ^ | **Node Codename**: RECURSION |
+| ^ | **Node Public Key**: [AAA4A0W71K709H76E56ZY52AONWC8W] |
 
-> ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-12.jpg)
-> **Node 12 Supervisor**: Xiang\
-> **Bubble ID**: N0-FS\
-> **Node Codename**: NEVERLAND\
-> **Node Public Key**: [AEMZB344C9T8S6G002APPUVC6RJ551]
+| Picture | Information |
+| ------- | :---------- |
+| ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-12.jpg) | **Node 12 Supervisor**: Xiang |
+| ^ | **Bubble ID**: N0-FS |
+| ^ | **Node Codename**: NEVERLAND |
+| ^ | **Node Public Key**: [AEMZB344C9T8S6G002APPUVC6RJ551] |
 
-> ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-13.jpg)
-> **Node 13 Supervisor**: Igor Kaminev\
-> **Bubble ID**: TM-A4\
-> **Node Codename**: CHRONOS\
-> **Node Public Key**: [55LHUQHNXCXINCJPGDVL9KES5NAOLH]
+| Picture | Information |
+| ------- | :---------- |
+| ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-13.jpg) | **Node 13 Supervisor**: Igor Kaminev |
+| ^ | **Bubble ID**: TM-A4 |
+| ^ | **Node Codename**: CHRONOS |
+| ^ | **Node Public Key**: [55LHUQHNXCXINCJPGDVL9KES5NAOLH] |
 
-> ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-14.jpg)
-> **Node 14 Supervisor**: Zeyan Ke\
-> **Bubble ID**: TK-3N\
-> **Node Codename**: FILTER\
-> **Node Public Key**: [L26WWGIJUVVBPCWENO2O1KT7F6TQWP]
+| Picture | Information |
+| ------- | :---------- |
+| ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-14.jpg) | **Node 14 Supervisor**: Zeyan Ke |
+| ^ | **Bubble ID**: TK-3N |
+| ^ | **Node Codename**: FILTER |
+| ^ | **Node Public Key**: [L26WWGIJUVVBPCWENO2O1KT7F6TQWP] |
 
-> ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-15.jpg)
-> **Node 15 Supervisor**: Pasang Dolma\
-> **Bubble ID**: QM-LM\
-> **Node Codename**: BROADCAST\
-> **Node Public Key**: N/A
+| Picture | Information |
+| ------- | :---------- |
+| ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-15.jpg) | **Node 15 Supervisor**: Pasang Dolma |
+| ^ | **Bubble ID**: QM-LM |
+| ^ | **Node Codename**: BROADCAST |
+| ^ | **Node Public Key**: N/A |
