@@ -40,6 +40,8 @@ impl MergeDirection {
 }
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq, Hash)]
+/// Basic struct that represents xy-coordinates. Needs to be an `isize`
+/// because we want to add positions with *negative* values together.
 struct CellPosition(isize, isize);
 
 impl Add<CellPosition> for CellPosition {
@@ -51,6 +53,8 @@ impl Add<CellPosition> for CellPosition {
 }
 
 #[derive(Clone, Copy)]
+/// Basic struct that represents the *dimensions* of a cell, used for
+/// cell merging.
 struct CellDimensions(usize, usize);
 
 impl Add<CellDimensions> for CellDimensions {
@@ -68,6 +72,10 @@ impl AddAssign<CellDimensions> for CellDimensions {
 }
 
 #[derive(Debug)]
+/// Cells in our `Chunk` helper struct can be two types - either
+/// they contain our actual content, or they're "placeholders" that
+/// tell the `RenderNode` generation function that this cell is
+/// supposed to be merged. This struct represents both states.
 enum Cell {
     Content(Vec<RenderNode>),
     Pointer(CellPosition),
@@ -76,6 +84,7 @@ enum Cell {
 struct Chunk {
     is_head: bool,
     cells: Vec<Vec<Cell>>,
+    /// Hashmap of all cells with dimensions larger than 1x1.
     merged_sizes: HashMap<CellPosition, CellDimensions>,
 }
 
@@ -90,6 +99,8 @@ impl Chunk {
 
     // Chunk helper functions
 
+    /// Returns the current position of the cell we're adding.
+    /// Call when we're fetching cells from the parser.
     fn current_position(&self) -> CellPosition {
         CellPosition(
             self.cells.len() as isize - 1,
@@ -97,6 +108,7 @@ impl Chunk {
         )
     }
 
+    /// Gets the contents of a cell at a certain position.
     fn get(&self, position: CellPosition) -> &Cell {
         let row = &self.cells[position.0 as usize];
         &row[position.1 as usize]
@@ -104,14 +116,25 @@ impl Chunk {
 
     // Adding rows/cells to chunk
 
+    /// Creates a new, empty row in our chunk.
     fn add_row(&mut self) {
         self.cells.push(vec![]);
     }
 
+    /// Given a "wrapped" cell, adds it to the last row.
     fn add_cell(&mut self, cell: Cell) {
         self.cells.last_mut().unwrap().push(cell);
     }
 
+    /// Given the contents of a table cell as a `Vec<RenderNode>` (which could
+    /// include the special cells "<", "^", indicating merging), figure out
+    /// whether we have a regular cell or a cell to be merged and add it to the
+    /// chunk.
+    ///
+    /// # Errors
+    ///
+    /// This function will return an error if we have merging that results in
+    /// non-rectangular cells.
     fn add_contents(&mut self, content: Vec<RenderNode>) -> Result<(), TranslateError> {
         let merge_direction = MergeDirection::from(&content);
 
@@ -145,15 +168,15 @@ impl Chunk {
 
                 self.add_cell(Cell::Pointer(target_position));
             }
-            Cell::Pointer(cell_position) => {
-                let cell_position = cell_position.clone();
-                let existing_size = self.merged_sizes.get(&cell_position).unwrap();
+            Cell::Pointer(origin) => {
+                let origin = origin.clone();
+                let existing_size = self.merged_sizes.get(&origin).unwrap();
 
                 let new_dimensions = match merge_direction {
                     MergeDirection::Left => {
                         if existing_size.0 == 1 {
                             Ok(*existing_size + dimension_base)
-                        } else if current_position.1 > cell_position.1 + existing_size.1 as isize {
+                        } else if current_position.1 > origin.1 + existing_size.1 as isize {
                             // We want to avoid the following grid layout:
                             // ```
                             // x <
@@ -167,8 +190,17 @@ impl Chunk {
                         }
                     }
                     MergeDirection::Top => {
-                        if current_position.1 == cell_position.1 {
+                        if current_position.1 == origin.1 {
                             Ok(*existing_size + dimension_base)
+                        } else if current_position.0 > origin.0 + existing_size.0 as isize {
+                            // Similar to above, we want to avoid the following layout:
+                            // ```
+                            // x <
+                            // ^ <
+                            // . ^
+                            // ```
+                            // where one top-merge "juts out".
+                            Err(TranslateError::TableMergeError)
                         } else {
                             Ok(*existing_size)
                         }
@@ -176,10 +208,10 @@ impl Chunk {
                 }?;
 
                 self.merged_sizes
-                    .entry(cell_position)
+                    .entry(origin)
                     .and_modify(|e| *e = new_dimensions);
 
-                self.add_cell(Cell::Pointer(cell_position));
+                self.add_cell(Cell::Pointer(origin));
             }
         }
 
@@ -188,6 +220,8 @@ impl Chunk {
 
     // Generating output of chunk
 
+    /// Given the way a table cell should be aligned, add HTML properties
+    /// to `element` to display that properly in HTML.
     fn add_alignment(element: &mut RenderElement, alignment: Alignment) {
         let align_str = match alignment {
             Alignment::None => None,
@@ -200,6 +234,8 @@ impl Chunk {
             .and_then(|value| Some(element.add_attribute(AttributeName::Align, value.to_string())));
     }
 
+    /// Converts the chunk into a `RenderNode`. Can either be a `Thead` (with `Th` children)
+    /// or a `Tbody` (with `Td` children), depending on `self.is_head`.
     fn to_node(self, alignment: &Vec<Alignment>) -> RenderNode {
         let mut outer = RenderElement::new(if self.is_head {
             ElementTag::Thead
@@ -227,6 +263,8 @@ impl Chunk {
                     table_cell.add_child(node);
                 }
 
+                // Check whether our cell is larger than 1x1, in which case
+                // add `rowspan` and `colspan` attributes
                 let dimensions = self
                     .merged_sizes
                     .get(&CellPosition(row_index as isize, col_index as isize));
@@ -246,6 +284,8 @@ impl Chunk {
     }
 }
 
+/// Simple wrapper around two `Chunk`s, one representing the head
+/// and one the body.
 pub struct Table {
     pub is_head: bool,
     alignment: Vec<Alignment>,

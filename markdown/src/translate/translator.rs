@@ -17,14 +17,18 @@ pub struct TranslateOutput {
 /// Helper struct used for converting Markdown events (generated via `pulldown_cmark`)
 /// into a simplified virtual DOM that can easily be converted to work with Yew.
 pub struct Translator<'a, I> {
+    // Basic variables
     tokens: I,
     output: Vec<RenderNode>,
     stack: Vec<RenderNode>,
+    // Footnote variables
     footnotes: Footnotes<'a>,
     current_footnote: Option<CowStr<'a>>,
+    // Table variables
     table: Option<Table>,
     in_cell: bool,
     cell_output: Vec<RenderNode>,
+    // After translation
     post_translate: PostTranslateData,
 }
 
