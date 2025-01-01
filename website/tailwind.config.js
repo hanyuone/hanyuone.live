@@ -39,7 +39,11 @@ module.exports = {
                         blockquote: {
                             fontWeight: false,
                             fontStyle: false,
-                        }
+                        },
+                        "thead th:first-child": false,
+                        "thead th:last-child": false,
+                        "tbody td:first-child, tfoot td:first-child": false,
+                        "tbody td:last-child, tfoot td:last-child": false,
                     },
                 },
             },
