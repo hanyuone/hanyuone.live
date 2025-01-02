@@ -14,8 +14,8 @@ tags:
 > and [DrStse](https://www.wikidot.com/user:info/drstse).
 
 | Picture | Information |
-| ------- | :---------- |
-| ![](https://scpsandboxcn.wikidot.com/local--files/douglasliu-2/cn3k-char-alien.jpg) |  **Bubble ID**: N/A |
+| :-----: | :---------- |
+| <img src="https://scpsandboxcn.wikidot.com/local--files/douglasliu-2/cn3k-char-alien.jpg" width="100" /> |  **Bubble ID**: N/A |
 | ^ | **Sender**: Envoy of Alpha Centauri civilisation |
 | ^ | **Characteristic Vector**: N/A |
 
