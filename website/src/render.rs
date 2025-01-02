@@ -52,6 +52,7 @@ impl Renderer {
     fn to_html(node: RenderNode) -> Html {
         match node {
             RenderNode::Text(text) => VText::new(text.clone()).into(),
+            RenderNode::Html(html) => Html::from_html_unchecked(html.0.into()),
             RenderNode::Icon(icon) => html! {
                 <Icon icon_id={to_icon_id(icon)} />
             },
