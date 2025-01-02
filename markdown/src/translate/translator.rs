@@ -396,6 +396,7 @@ where
         match token {
             // === Raw HTML ===
             Event::Html(html) => self.output(RenderHtml(html.to_string())),
+            Event::InlineHtml(html) => self.output(RenderHtml(html.to_string())),
 
             // === Text ===
             Event::Text(text) => {
