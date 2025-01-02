@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.0 (2025-01-02)
+
+Add support for **raw HTML** in the MD parser.
+
 ## v0.2.0 (2025-01-01)
 
 Implement **tables** in the MD parser. This includes:

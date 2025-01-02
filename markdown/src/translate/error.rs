@@ -12,6 +12,7 @@ pub enum TranslateError {
         tags: Vec<RenderTag>,
     },
     CalloutError,
+    RawHtmlError,
     TableMergeError,
 }
 
@@ -32,6 +33,7 @@ impl Display for TranslateError {
                 format!("None of the tags {} matched", tags_str)
             }
             Self::CalloutError => "Expected callout".to_string(),
+            Self::RawHtmlError => "Expected raw HTML".to_string(),
             Self::TableMergeError => "Invalid merge command".to_string(),
         };
 
