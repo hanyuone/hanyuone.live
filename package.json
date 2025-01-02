@@ -1,7 +1,7 @@
 {
   "name": "hanyuone.live",
-  "version": "0.2.0",
-  "description": "",
+  "version": "0.3.0",
+  "description": "A personal website written in Rust.",
   "main": "index.js",
   "scripts": {
     "dev:md": "cargo watch -w markdown/src -w public -x \"run -p markdown\"",
@@ -13,7 +13,7 @@
     "build": "pnpm build:md && pnpm build:wasm && pnpm build:ssg"
   },
   "keywords": [],
-  "author": "",
+  "author": "hanyuone",
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^8.2.2"

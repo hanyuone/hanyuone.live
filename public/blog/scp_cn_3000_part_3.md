@@ -45,8 +45,8 @@ Maybe we could combine these figures together and call it a "characteristic vect
 ***
 
 | Picture | Information |
-| ------- | :---------- |
-| ![](https://scpsandboxcn.wikidot.com/local--files/douglasliu-2/cn3k-char-2.jpg) | **Bubble ID**: H5-BM |
+| :-----: | :---------- |
+| <img src="https://scpsandboxcn.wikidot.com/local--files/douglasliu-2/cn3k-char-2.jpg" width="100" /> | **Bubble ID**: H5-BM |
 | ^ | **Sender**: Rustsmith Chengqi Kong |
 | ^ | **Characteristic Vector**: [BZ2A83S5F55EOGK281GX] |
 
@@ -63,8 +63,8 @@ The only problem is there's little... far too little... of this metal, and I ran
 ***
 
 | Picture | Information |
-| ------- | :---------- |
-| ![](https://scpsandboxcn.wikidot.com/local--files/douglasliu-2/cn3k-char-1.jpg) | **Bubble ID**: CR-KV |
+| :-----: | :---------- |
+| <img src="https://scpsandboxcn.wikidot.com/local--files/douglasliu-2/cn3k-char-1.jpg" width="100" /> | **Bubble ID**: CR-KV |
 | ^ | **Sender**: Guest Research Director Lan Xia |
 | ^ | **Characteristic Vector**: [P4WHR5I1JFKK9M060R5I] |
 
@@ -78,8 +78,8 @@ Another problem is that, no matter where I go, I feel like someone is always fol
 ***
 
 | Picture | Information |
-| ------- | :---------- |
-| ![](https://scpsandboxcn.wikidot.com/local--files/douglasliu-2/cn3k-char-10.jpg) | **Bubble ID**: X0-BA |
+| :-----: | :---------- |
+| <img src="https://scpsandboxcn.wikidot.com/local--files/douglasliu-2/cn3k-char-10.jpg" width="100" /> | **Bubble ID**: X0-BA |
 | ^ | **Sender**: Commander Gurgentuya |
 | ^ | **Characteristic Vector**: [1Y7UEE1VU3EMSUHM22E4] |
 
@@ -91,8 +91,8 @@ Regardless of what they really are, the ten "suns" pose a lot of problems. The w
 ***
 
 | Picture | Information |
-| ------- | :---------- |
-| ![](https://scpsandboxcn.wikidot.com/local--files/douglasliu-2/cn3k-char-3.jpg) | **Bubble**: DV-S8 |
+| :-----: | :---------- |
+| <img src="https://scpsandboxcn.wikidot.com/local--files/douglasliu-2/cn3k-char-3.jpg" width="100" /> | **Bubble**: DV-S8 |
 | ^ | **Broadcaster**: Sorrowed Songstress Yongmo Shu |
 | ^ | **Characteristic Vector**: [UD1ROC1HAO4G0DBXPDO4] |
 
@@ -107,8 +107,8 @@ So, those two kids aren't given a death sentence by being born with immatter. Th
 ***
 
 | Picture | Information |
-| ------- | :---------- |
-| ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-4.jpg) | **Bubble**: 1K-ZZ |
+| :-----: | :---------- |
+| <img src="https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-4.jpg" width="100" /> | **Bubble**: 1K-ZZ |
 | ^ | **Broadcaster**: Brewmaster Sanlei He |
 | ^ | **Characteristic Vector**: [XECH2D07E6RDFJIA3NDV] |
 
@@ -140,8 +140,8 @@ Personally, I find that hard to believe.
 ***
 
 | Picture | Information |
-| ------- | :---------- |
-| ![](https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-13.jpg) | **Bubble**: TM-A4 |
+| :-----: | :---------- |
+| <img src="https://scpsandboxcn.wdfiles.com/local--files/douglasliu-2/cn3k-char-13.jpg" width="100" /> | **Bubble**: TM-A4 |
 | ^ | **Broadcaster**: Pilot Igor Kaminev |
 | ^ | **Characteristic Vector**: [GCOCRH0LL155M9G9V0JJ] |
 

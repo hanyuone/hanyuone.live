@@ -5,6 +5,11 @@ use serde::{Deserialize, Serialize};
 
 use super::element::{ElementTag, RenderElement};
 
+// HTML
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct RenderHtml(pub String);
+
 // ICONS
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -63,6 +68,7 @@ impl RenderCallout {
 #[derive(Debug, Serialize, Deserialize)]
 pub enum RenderNode {
     Text(String),
+    Html(RenderHtml),
     Icon(RenderIcon),
     Element(RenderElement),
     // Separate member because we want them to appear outside of <article>
@@ -72,6 +78,12 @@ pub enum RenderNode {
 impl From<String> for RenderNode {
     fn from(value: String) -> Self {
         RenderNode::Text(value)
+    }
+}
+
+impl From<RenderHtml> for RenderNode {
+    fn from(value: RenderHtml) -> Self {
+        RenderNode::Html(value)
     }
 }
 
@@ -99,6 +111,7 @@ impl From<RenderCallout> for RenderNode {
 pub enum RenderTag {
     Element(ElementTag),
     Callout,
+    Html,
 }
 
 impl Display for RenderTag {
@@ -106,6 +119,7 @@ impl Display for RenderTag {
         let formatted = match self {
             RenderTag::Element(tag) => &tag.to_string(),
             RenderTag::Callout => "callout",
+            RenderTag::Html => "html",
         };
 
         write!(f, "{}", formatted)

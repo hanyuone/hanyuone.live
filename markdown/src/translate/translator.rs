@@ -6,7 +6,7 @@ use super::{
     complex::{footnotes::Footnotes, table::Table},
     element::{AttributeName, ElementTag, RenderElement},
     error::TranslateError,
-    node::{RenderCallout, RenderNode, RenderTag},
+    node::{RenderCallout, RenderHtml, RenderNode, RenderTag},
 };
 
 pub struct TranslateOutput {
@@ -109,6 +109,13 @@ where
             RenderTag::Callout => {
                 let RenderNode::Callout(_) = top else {
                     return Err(TranslateError::CalloutError);
+                };
+
+                Ok(())
+            }
+            RenderTag::Html => {
+                let RenderNode::Html(_) = top else {
+                    return Err(TranslateError::RawHtmlError);
                 };
 
                 Ok(())
@@ -235,6 +242,9 @@ where
     // TODO: add codeblocks w/ syntax highlighting
     fn run_start(&mut self, tag: Tag<'a>) {
         match tag {
+            // === Raw HTML ===
+            Tag::HtmlBlock => {}
+
             // === Text styles ===
             Tag::Paragraph => self.enter(RenderElement::new(ElementTag::P)),
             Tag::Emphasis => self.enter(RenderElement::new(ElementTag::Em)),
@@ -316,6 +326,9 @@ where
 
     fn run_end(&mut self, tag: TagEnd) {
         let result = match tag {
+            // === Raw HTML ===
+            TagEnd::HtmlBlock => Ok(()),
+
             // === Text and decorations ===
             TagEnd::Paragraph => self.leave(RenderTag::Element(ElementTag::P)),
             TagEnd::Emphasis => self.leave(RenderTag::Element(ElementTag::Em)),
@@ -381,7 +394,11 @@ where
 
     fn run_token(&mut self, token: Event<'a>) {
         match token {
-            // Text
+            // === Raw HTML ===
+            Event::Html(html) => self.output(RenderHtml(html.to_string())),
+            Event::InlineHtml(html) => self.output(RenderHtml(html.to_string())),
+
+            // === Text ===
             Event::Text(text) => {
                 let words = text.split(' ').count();
                 self.post_translate.words += words;
@@ -394,7 +411,8 @@ where
 
                 self.output(code)
             }
-            // Line breaks
+
+            // === Line breaks ===
             Event::SoftBreak => self.output("\n".to_string()),
             Event::HardBreak => {
                 self.output(RenderElement::new(ElementTag::Br));
@@ -402,10 +420,12 @@ where
             Event::Rule => {
                 self.output(RenderElement::new(ElementTag::Hr));
             }
-            // Starting and ending more complex elements
+
+            // === Complex elements ===
             Event::Start(tag) => self.run_start(tag),
             Event::End(tag) => self.run_end(tag),
-            // Inline footnote references
+
+            // === Footnotes ===
             Event::FootnoteReference(name) => {
                 self.footnotes.add_index(name.clone());
 
@@ -421,6 +441,7 @@ where
                 sup.add_child(RenderNode::Element(anchor));
                 self.output(sup);
             }
+
             _ => todo!(),
         }
     }
