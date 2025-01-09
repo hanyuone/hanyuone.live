@@ -4,9 +4,10 @@ use crate::structs::metadata::PostTranslateData;
 
 use super::{
     complex::{footnotes::Footnotes, table::Table},
+    container::callout::Callout,
     element::{AttributeName, ElementTag, RenderElement},
     error::TranslateError,
-    node::{RenderCallout, RenderHtml, RenderNode, RenderTag},
+    node::{RenderHtml, RenderNode, RenderTag},
 };
 
 pub struct TranslateOutput {
@@ -200,7 +201,7 @@ where
     }
 
     fn generate_callout(&mut self, kind: BlockQuoteKind) {
-        let callout = RenderCallout::new(kind.into());
+        let callout = Callout::new(kind.into());
         self.enter(callout);
     }
 
