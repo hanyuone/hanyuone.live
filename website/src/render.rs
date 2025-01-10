@@ -1,6 +1,7 @@
 use markdown::translate::{
+    container,
     element::RenderElement,
-    node::{RenderCallout, RenderIcon, RenderNode},
+    node::{RenderIcon, RenderNode},
 };
 use yew::{
     html,
@@ -73,7 +74,7 @@ impl Renderer {
 
                 tag.into()
             }
-            RenderNode::Callout(RenderCallout { kind, children }) => {
+            RenderNode::Callout(container::callout::Callout { kind, children }) => {
                 let props = kind.into();
                 let children = Renderer::new().run(children);
 
