@@ -3,8 +3,8 @@ use pulldown_cmark::{BlockQuoteKind, CowStr, Event, Tag, TagEnd};
 use crate::structs::metadata::PostTranslateData;
 
 use super::{
-    complex::{footnotes::Footnotes, table::Table},
-    container::{callout::Callout, Container, ContainerTag},
+    complex::footnotes::Footnotes,
+    container::{callout::Callout, table::Table, Container, ContainerTag},
     element::{AttributeName, ElementTag, RenderElement},
     error::TranslateError,
     node::{RenderHtml, RenderNode},
@@ -25,10 +25,6 @@ pub struct Translator<'a, I> {
     // Footnote variables
     footnotes: Footnotes<'a>,
     current_footnote: Option<CowStr<'a>>,
-    // Table variables
-    table: Option<Table>,
-    in_cell: bool,
-    cell_output: Vec<RenderNode>,
     // After translation
     post_translate: PostTranslateData,
 }
@@ -48,10 +44,6 @@ where
             // Footnote variables
             footnotes: Footnotes::new(),
             current_footnote: None,
-            // Table variables
-            table: None,
-            in_cell: false,
-            cell_output: vec![],
             // After translation
             post_translate: PostTranslateData { words: 0 },
         }
@@ -67,8 +59,6 @@ where
     {
         if let Some(top) = self.stack.last_mut() {
             top.add_child(node.into());
-        } else if self.in_cell {
-            self.cell_output.push(node.into());
         } else {
             self.output.push(node.into());
         }
@@ -108,6 +98,13 @@ where
             ContainerTag::Callout => {
                 let Container::Callout(_) = top else {
                     return Err(TranslateError::CalloutError);
+                };
+
+                Ok(())
+            }
+            ContainerTag::Table => {
+                let Container::Table(_) = top else {
+                    return Err(TranslateError::TableMergeError);
                 };
 
                 Ok(())
@@ -233,6 +230,18 @@ where
         }
     }
 
+    fn get_top_table(&mut self) -> Result<&mut Table, TranslateError> {
+        let table = self.stack.last_mut();
+
+        let Some(Container::Table(table)) = table else {
+            return Err(TranslateError::NoMatchError {
+                tags: vec![ContainerTag::Table],
+            });
+        };
+
+        Ok(table)
+    }
+
     //// TRANSLATOR LOOP
 
     // TODO: add codeblocks w/ syntax highlighting
@@ -302,13 +311,17 @@ where
             Tag::Item => self.enter(RenderElement::new(ElementTag::Li)),
 
             // === Tables ===
-            Tag::Table(alignment) => self.table = Some(Table::new(alignment)),
+            Tag::Table(alignment) => self.enter(Table::new(alignment)),
             Tag::TableHead => {
-                self.table.as_mut().unwrap().is_head = true;
-                self.table.as_mut().unwrap().add_row();
+                let table = self.get_top_table().unwrap();
+                table.is_head = true;
+                table.add_row();
             }
-            Tag::TableRow => self.table.as_mut().unwrap().add_row(),
-            Tag::TableCell => self.in_cell = true,
+            Tag::TableRow => {
+                let table = self.get_top_table().unwrap();
+                table.add_row();
+            }
+            Tag::TableCell => {}
 
             // === Footnotes ===
             Tag::FootnoteDefinition(name) => {
@@ -354,27 +367,16 @@ where
             TagEnd::Item => self.leave(ContainerTag::Element(ElementTag::Li)),
 
             // === Tables ===
-            TagEnd::Table => {
-                let table_node = self.table.take().unwrap().to_node();
-                self.output(table_node);
-
-                Ok(())
-            }
+            TagEnd::Table => self.leave(ContainerTag::Table),
             TagEnd::TableHead => {
-                self.table.as_mut().unwrap().is_head = false;
+                let table = self.get_top_table().unwrap();
+                table.is_head = false;
                 Ok(())
             }
             TagEnd::TableRow => Ok(()),
             TagEnd::TableCell => {
-                let cell = std::mem::take(&mut self.cell_output);
-                let add_command = self.table.as_mut().unwrap().add_contents(cell);
-
-                if let Err(err) = add_command {
-                    Err(err)
-                } else {
-                    self.in_cell = false;
-                    Ok(())
-                }
+                let table = self.get_top_table().unwrap();
+                table.add_contents()
             }
 
             // === Footnotes ===

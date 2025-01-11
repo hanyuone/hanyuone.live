@@ -1,14 +1,20 @@
 use std::fmt::Display;
 
 use callout::Callout;
+use table::Table;
 
-use super::{element::{ElementTag, RenderElement}, node::RenderNode};
+use super::{
+    element::{ElementTag, RenderElement},
+    node::RenderNode,
+};
 
 pub mod callout;
+pub mod table;
 
 pub enum Container {
     Element(RenderElement),
     Callout(Callout),
+    Table(Table),
 }
 
 impl Container {
@@ -16,6 +22,7 @@ impl Container {
         match self {
             Container::Element(element) => element.add_child(child),
             Container::Callout(callout) => callout.add_child(child),
+            Container::Table(table) => table.add_child(child),
         }
     }
 }
@@ -25,6 +32,7 @@ impl From<Container> for RenderNode {
         match value {
             Container::Element(element) => element.into(),
             Container::Callout(callout) => callout.into(),
+            Container::Table(table) => table.into(),
         }
     }
 }
@@ -35,6 +43,7 @@ impl From<Container> for RenderNode {
 pub enum ContainerTag {
     Element(ElementTag),
     Callout,
+    Table,
 }
 
 impl Display for ContainerTag {
@@ -42,6 +51,7 @@ impl Display for ContainerTag {
         let formatted = match self {
             ContainerTag::Element(tag) => &tag.to_string(),
             ContainerTag::Callout => "callout",
+            ContainerTag::Table => "table",
         };
 
         write!(f, "{}", formatted)
