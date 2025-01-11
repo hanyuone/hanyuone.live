@@ -4,10 +4,10 @@ use crate::structs::metadata::PostTranslateData;
 
 use super::{
     complex::{footnotes::Footnotes, table::Table},
-    container::callout::Callout,
+    container::{callout::Callout, Container, ContainerTag},
     element::{AttributeName, ElementTag, RenderElement},
     error::TranslateError,
-    node::{RenderHtml, RenderNode, RenderTag},
+    node::{RenderHtml, RenderNode},
 };
 
 pub struct TranslateOutput {
@@ -21,7 +21,7 @@ pub struct Translator<'a, I> {
     // Basic variables
     tokens: I,
     output: Vec<RenderNode>,
-    stack: Vec<RenderNode>,
+    stack: Vec<Container>,
     // Footnote variables
     footnotes: Footnotes<'a>,
     current_footnote: Option<CowStr<'a>>,
@@ -57,7 +57,7 @@ where
         }
     }
 
-    //// TRANSLATION FUNCTIONS
+    //// OUTPUT FUNCTIONS
 
     /// Adds a new node either into the topmost container, or directly
     /// into the output.
@@ -66,11 +66,7 @@ where
         N: Into<RenderNode>,
     {
         if let Some(top) = self.stack.last_mut() {
-            match top {
-                RenderNode::Element(element) => element.add_child(node.into()),
-                RenderNode::Callout(callout) => callout.add_child(node.into()),
-                _ => unreachable!("Only containers should be put onto stack"),
-            }
+            top.add_child(node.into());
         } else if self.in_cell {
             self.cell_output.push(node.into());
         } else {
@@ -78,19 +74,21 @@ where
         }
     }
 
+    //// STACK FUNCTIONS
+
     /// Enters into the current container.
-    fn enter<N>(&mut self, node: N)
+    fn enter<C>(&mut self, container: C)
     where
-        N: Into<RenderNode>,
+        C: Into<Container>,
     {
-        self.stack.push(node.into());
+        self.stack.push(container.into());
     }
 
-    fn check_top(&self, top: &RenderNode, tag: RenderTag) -> Result<(), TranslateError> {
+    fn check_top(&self, top: &Container, tag: ContainerTag) -> Result<(), TranslateError> {
         match tag {
             // Match element with element
-            RenderTag::Element(etag) => {
-                let RenderNode::Element(element) = top else {
+            ContainerTag::Element(etag) => {
+                let Container::Element(element) = top else {
                     return Err(TranslateError::ElementError {
                         expected: etag,
                         result: None,
@@ -107,16 +105,9 @@ where
                 Ok(())
             }
             // Match callout with callout
-            RenderTag::Callout => {
-                let RenderNode::Callout(_) = top else {
+            ContainerTag::Callout => {
+                let Container::Callout(_) = top else {
                     return Err(TranslateError::CalloutError);
-                };
-
-                Ok(())
-            }
-            RenderTag::Html => {
-                let RenderNode::Html(_) = top else {
-                    return Err(TranslateError::RawHtmlError);
                 };
 
                 Ok(())
@@ -126,7 +117,7 @@ where
 
     /// Leaves the container, checking that there's nothing wrong
     /// with our entering/leaving process.
-    fn leave(&mut self, tag: RenderTag) -> Result<(), TranslateError> {
+    fn leave(&mut self, tag: ContainerTag) -> Result<(), TranslateError> {
         let Some(top) = self.stack.pop() else {
             panic!("Stack underflow");
         };
@@ -137,7 +128,7 @@ where
         Ok(())
     }
 
-    fn leave_any(&mut self, tags: Vec<RenderTag>) -> Result<(), TranslateError> {
+    fn leave_any(&mut self, tags: Vec<ContainerTag>) -> Result<(), TranslateError> {
         let Some(top) = self.stack.pop() else {
             panic!("Stack underflow");
         };
@@ -159,7 +150,7 @@ where
             panic!("Stack underflow");
         };
 
-        let RenderNode::Element(top_element) = top else {
+        let Container::Element(top_element) = top else {
             unreachable!()
         };
 
@@ -172,6 +163,8 @@ where
         self.current_footnote = None;
         Ok(())
     }
+
+    //// HELPER FUNCTIONS
 
     /// Consumes the next HTML element in our Markdown text and returns it as
     /// a single-lined string.
@@ -224,7 +217,7 @@ where
         element.add_child(RenderNode::Element(figcaption));
 
         // Cannot place <figure /> in <p>, so we must get rid of it on the stack and put it back later
-        let p = if let Some(RenderNode::Element(RenderElement {
+        let p = if let Some(Container::Element(RenderElement {
             tag: ElementTag::P, ..
         })) = self.stack.last()
         {
@@ -239,6 +232,8 @@ where
             self.enter(p);
         }
     }
+
+    //// TRANSLATOR LOOP
 
     // TODO: add codeblocks w/ syntax highlighting
     fn run_start(&mut self, tag: Tag<'a>) {
@@ -331,32 +326,32 @@ where
             TagEnd::HtmlBlock => Ok(()),
 
             // === Text and decorations ===
-            TagEnd::Paragraph => self.leave(RenderTag::Element(ElementTag::P)),
-            TagEnd::Emphasis => self.leave(RenderTag::Element(ElementTag::Em)),
-            TagEnd::Strong => self.leave(RenderTag::Element(ElementTag::Strong)),
-            TagEnd::Heading(level) => self.leave(RenderTag::Element(level.into())),
+            TagEnd::Paragraph => self.leave(ContainerTag::Element(ElementTag::P)),
+            TagEnd::Emphasis => self.leave(ContainerTag::Element(ElementTag::Em)),
+            TagEnd::Strong => self.leave(ContainerTag::Element(ElementTag::Strong)),
+            TagEnd::Heading(level) => self.leave(ContainerTag::Element(level.into())),
 
             // === Blockquotes ===
             // Always rendered as divs
             TagEnd::BlockQuote => self.leave_any(vec![
-                RenderTag::Element(ElementTag::BlockQuote),
-                RenderTag::Callout,
+                ContainerTag::Element(ElementTag::BlockQuote),
+                ContainerTag::Callout,
             ]),
 
             // === Links and images ===
-            TagEnd::Link => self.leave(RenderTag::Element(ElementTag::A)),
+            TagEnd::Link => self.leave(ContainerTag::Element(ElementTag::A)),
             // We already generated the image in `start` (it's self-contained), so do nothing
             TagEnd::Image => Ok(()),
 
             // === Lists ===
             TagEnd::List(is_ordered) => {
                 if is_ordered {
-                    self.leave(RenderTag::Element(ElementTag::Ol))
+                    self.leave(ContainerTag::Element(ElementTag::Ol))
                 } else {
-                    self.leave(RenderTag::Element(ElementTag::Ul))
+                    self.leave(ContainerTag::Element(ElementTag::Ul))
                 }
             }
-            TagEnd::Item => self.leave(RenderTag::Element(ElementTag::Li)),
+            TagEnd::Item => self.leave(ContainerTag::Element(ElementTag::Li)),
 
             // === Tables ===
             TagEnd::Table => {

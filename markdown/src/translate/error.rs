@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use super::{element::ElementTag, node::RenderTag};
+use super::{container::ContainerTag, element::ElementTag};
 
 #[derive(Debug, Clone)]
 pub enum TranslateError {
@@ -9,7 +9,7 @@ pub enum TranslateError {
         result: Option<ElementTag>,
     },
     NoMatchError {
-        tags: Vec<RenderTag>,
+        tags: Vec<ContainerTag>,
     },
     CalloutError,
     RawHtmlError,

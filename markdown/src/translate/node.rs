@@ -1,11 +1,6 @@
-use std::fmt::Display;
-
 use serde::{Deserialize, Serialize};
 
-use super::{
-    container::callout::Callout,
-    element::{ElementTag, RenderElement},
-};
+use super::{container::callout::Callout, element::RenderElement};
 
 // HTML
 
@@ -50,38 +45,5 @@ impl From<RenderHtml> for RenderNode {
 impl From<RenderIcon> for RenderNode {
     fn from(value: RenderIcon) -> Self {
         RenderNode::Icon(value)
-    }
-}
-
-impl From<RenderElement> for RenderNode {
-    fn from(value: RenderElement) -> Self {
-        RenderNode::Element(value)
-    }
-}
-
-impl From<Callout> for RenderNode {
-    fn from(value: Callout) -> Self {
-        RenderNode::Callout(value)
-    }
-}
-
-// OVERARCHING TAG DATA TYPE
-
-#[derive(Debug, Clone)]
-pub enum RenderTag {
-    Element(ElementTag),
-    Callout,
-    Html,
-}
-
-impl Display for RenderTag {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let formatted = match self {
-            RenderTag::Element(tag) => &tag.to_string(),
-            RenderTag::Callout => "callout",
-            RenderTag::Html => "html",
-        };
-
-        write!(f, "{}", formatted)
     }
 }

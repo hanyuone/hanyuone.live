@@ -3,6 +3,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::translate::node::RenderNode;
 
+use super::Container;
+
 #[derive(Debug, Serialize, Deserialize)]
 pub enum CalloutKind {
     Note,
@@ -40,5 +42,17 @@ impl Callout {
 
     pub fn add_child(&mut self, child: RenderNode) {
         self.children.push(child)
+    }
+}
+
+impl From<Callout> for RenderNode {
+    fn from(value: Callout) -> Self {
+        RenderNode::Callout(value)
+    }
+}
+
+impl From<Callout> for Container {
+    fn from(value: Callout) -> Self {
+        Container::Callout(value)
     }
 }
