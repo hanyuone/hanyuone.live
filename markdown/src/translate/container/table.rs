@@ -25,7 +25,7 @@ impl MergeDirection {
     /// Detects whether a `&Vec<RenderNode>` (what the raw contents of a table is represented as)
     /// represents a cell that should be merged in a certain direction. If it's just
     /// a normal cell, then return a `None`.
-    fn from(content: &[RenderNode]) -> Option<MergeDirection> {
+    fn extract_from_nodes(content: &[RenderNode]) -> Option<MergeDirection> {
         if content.len() != 1 {
             return None;
         }
@@ -138,47 +138,47 @@ impl Chunk {
     /// This function will return an error if we have merging that results in
     /// non-rectangular cells.
     fn add_contents(&mut self, content: Vec<RenderNode>) -> Result<(), TranslateError> {
-        let merge_direction = MergeDirection::from(&content);
+        let merge_dir = MergeDirection::extract_from_nodes(&content);
 
-        if merge_direction.is_none() {
+        if merge_dir.is_none() {
             self.add_cell(Cell::Content(content));
             return Ok(());
         }
 
-        let merge_direction = merge_direction.unwrap();
-        let current_position = self.current_position();
+        let merge_dir = merge_dir.unwrap();
+        let curr_pos = self.current_position();
 
-        let target_position = current_position
-            + match merge_direction {
+        let target_pos = curr_pos
+            + match merge_dir {
                 MergeDirection::Left => CellPosition(0, -1),
                 MergeDirection::Top => CellPosition(-1, 0),
             };
 
-        let dimension_base = match merge_direction {
+        let dimension_base = match merge_dir {
             MergeDirection::Left => CellDimensions(0, 1),
             MergeDirection::Top => CellDimensions(1, 0),
         };
 
-        let target_cell = self.get(target_position);
+        let target_cell = self.get(target_pos);
 
         match target_cell {
             Cell::Content(_) => {
                 self.merged_sizes
-                    .entry(target_position)
+                    .entry(target_pos)
                     .and_modify(|e| *e += dimension_base)
                     .or_insert(CellDimensions(1, 1) + dimension_base);
 
-                self.add_cell(Cell::Pointer(target_position));
+                self.add_cell(Cell::Pointer(target_pos));
             }
             Cell::Pointer(origin) => {
                 let origin = *origin;
                 let existing_size = self.merged_sizes.get(&origin).unwrap();
 
-                let new_dimensions = match merge_direction {
+                let new_dimensions = match merge_dir {
                     MergeDirection::Left => {
                         if existing_size.0 == 1 {
                             Ok(*existing_size + dimension_base)
-                        } else if current_position.1 > origin.1 + existing_size.1 as isize {
+                        } else if curr_pos.1 > origin.1 + existing_size.1 as isize {
                             // We want to avoid the following grid layout:
                             // ```
                             // x <
@@ -192,9 +192,9 @@ impl Chunk {
                         }
                     }
                     MergeDirection::Top => {
-                        if current_position.1 == origin.1 {
+                        if curr_pos.1 == origin.1 {
                             Ok(*existing_size + dimension_base)
-                        } else if current_position.0 > origin.0 + existing_size.0 as isize {
+                        } else if curr_pos.0 > origin.0 + existing_size.0 as isize {
                             // Similar to above, we want to avoid the following layout:
                             // ```
                             // x <
@@ -322,9 +322,7 @@ impl Table {
         self.cell.push(child);
     }
 
-    // TODO: refactor to add one cell at a time, with "shifting" to next cell
-    // occurring at end of `TableCell`
-    pub fn add_contents(&mut self) -> Result<(), TranslateError> {
+    pub fn create_cell(&mut self) -> Result<(), TranslateError> {
         let contents = std::mem::take(&mut self.cell);
 
         if self.is_head {
@@ -332,7 +330,7 @@ impl Table {
         } else {
             self.body.add_contents(contents)?;
         }
-        
+
         Ok(())
     }
 
