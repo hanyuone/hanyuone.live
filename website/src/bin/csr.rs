@@ -7,7 +7,6 @@ use website::{
 
 #[wasm_bindgen(main)]
 async fn main() {
-    // FIXME: prevent double-building on MD rerender
     let raw_blog_metadata = Request::get("/public/blog/blog_map.ron")
         .send()
         .await

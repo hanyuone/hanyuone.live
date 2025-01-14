@@ -3,9 +3,6 @@ use std::{cell::RefCell, collections::HashMap, rc::Rc};
 use markdown::structs::{blog::BlogId, metadata::BlogMetadata};
 use yew::Html;
 
-// FIXME: split BlogContext and TagContext into separate provide-context components, see
-// https://github.com/BlakeRain/blakerain.com/blob/main/src/model.rs
-
 #[derive(Default)]
 pub struct HeadContext {
     pub content: Rc<RefCell<Html>>,
