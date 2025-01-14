@@ -1,4 +1,4 @@
-use markdown::translate::node::CalloutKind;
+use markdown::translate::container::callout::CalloutKind;
 use yew::{classes, function_component, html, props, Children, Html, Properties};
 use yew_icons::{Icon, IconId};
 

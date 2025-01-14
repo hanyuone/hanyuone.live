@@ -11,6 +11,8 @@ use crate::translate::{
     node::RenderNode,
 };
 
+use super::Container;
+
 /// The direction we want to merge the current cell towards.
 enum MergeDirection {
     // Corresponds to "<"
@@ -292,6 +294,7 @@ pub struct Table {
     alignment: Vec<Alignment>,
     head: Chunk,
     body: Chunk,
+    cell: Vec<RenderNode>,
 }
 
 impl Table {
@@ -301,6 +304,7 @@ impl Table {
             alignment,
             head: Chunk::new(true),
             body: Chunk::new(false),
+            cell: vec![],
         }
     }
 
@@ -314,13 +318,21 @@ impl Table {
         }
     }
 
-    pub fn add_contents(&mut self, contents: Vec<RenderNode>) -> Result<(), TranslateError> {
+    pub fn add_child(&mut self, child: RenderNode) {
+        self.cell.push(child);
+    }
+
+    // TODO: refactor to add one cell at a time, with "shifting" to next cell
+    // occurring at end of `TableCell`
+    pub fn add_contents(&mut self) -> Result<(), TranslateError> {
+        let contents = std::mem::take(&mut self.cell);
+
         if self.is_head {
             self.head.add_contents(contents)?;
         } else {
             self.body.add_contents(contents)?;
         }
-
+        
         Ok(())
     }
 
@@ -334,5 +346,17 @@ impl Table {
         table_element.add_child(table_body);
 
         table_element.into()
+    }
+}
+
+impl From<Table> for RenderNode {
+    fn from(value: Table) -> Self {
+        value.to_node()
+    }
+}
+
+impl From<Table> for Container {
+    fn from(value: Table) -> Self {
+        Container::Table(value)
     }
 }
