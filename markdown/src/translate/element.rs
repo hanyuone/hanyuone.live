@@ -3,7 +3,7 @@ use std::fmt::Display;
 use pulldown_cmark::HeadingLevel;
 use serde::{Deserialize, Serialize};
 
-use super::node::RenderNode;
+use super::{container::Container, node::RenderNode};
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq)]
 pub enum ElementTag {
@@ -146,5 +146,17 @@ impl RenderElement {
 
     pub fn add_child(&mut self, child: RenderNode) {
         self.children.push(child)
+    }
+}
+
+impl From<RenderElement> for RenderNode {
+    fn from(value: RenderElement) -> Self {
+        RenderNode::Element(value)
+    }
+}
+
+impl From<RenderElement> for Container {
+    fn from(value: RenderElement) -> Self {
+        Container::Element(value)
     }
 }

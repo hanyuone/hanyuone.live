@@ -3,10 +3,11 @@ use pulldown_cmark::{BlockQuoteKind, CowStr, Event, Tag, TagEnd};
 use crate::structs::metadata::PostTranslateData;
 
 use super::{
-    complex::{footnotes::Footnotes, table::Table},
+    complex::footnotes::Footnotes,
+    container::{callout::Callout, table::Table, Container, ContainerTag},
     element::{AttributeName, ElementTag, RenderElement},
     error::TranslateError,
-    node::{RenderCallout, RenderHtml, RenderNode, RenderTag},
+    node::{RenderHtml, RenderNode},
 };
 
 pub struct TranslateOutput {
@@ -20,14 +21,10 @@ pub struct Translator<'a, I> {
     // Basic variables
     tokens: I,
     output: Vec<RenderNode>,
-    stack: Vec<RenderNode>,
+    stack: Vec<Container>,
     // Footnote variables
     footnotes: Footnotes<'a>,
     current_footnote: Option<CowStr<'a>>,
-    // Table variables
-    table: Option<Table>,
-    in_cell: bool,
-    cell_output: Vec<RenderNode>,
     // After translation
     post_translate: PostTranslateData,
 }
@@ -47,16 +44,12 @@ where
             // Footnote variables
             footnotes: Footnotes::new(),
             current_footnote: None,
-            // Table variables
-            table: None,
-            in_cell: false,
-            cell_output: vec![],
             // After translation
             post_translate: PostTranslateData { words: 0 },
         }
     }
 
-    //// TRANSLATION FUNCTIONS
+    //// OUTPUT FUNCTIONS
 
     /// Adds a new node either into the topmost container, or directly
     /// into the output.
@@ -65,31 +58,27 @@ where
         N: Into<RenderNode>,
     {
         if let Some(top) = self.stack.last_mut() {
-            match top {
-                RenderNode::Element(element) => element.add_child(node.into()),
-                RenderNode::Callout(callout) => callout.add_child(node.into()),
-                _ => unreachable!("Only containers should be put onto stack"),
-            }
-        } else if self.in_cell {
-            self.cell_output.push(node.into());
+            top.add_child(node.into());
         } else {
             self.output.push(node.into());
         }
     }
 
+    //// STACK FUNCTIONS
+
     /// Enters into the current container.
-    fn enter<N>(&mut self, node: N)
+    fn enter<C>(&mut self, container: C)
     where
-        N: Into<RenderNode>,
+        C: Into<Container>,
     {
-        self.stack.push(node.into());
+        self.stack.push(container.into());
     }
 
-    fn check_top(&self, top: &RenderNode, tag: RenderTag) -> Result<(), TranslateError> {
+    fn check_top(&self, top: &Container, tag: ContainerTag) -> Result<(), TranslateError> {
         match tag {
             // Match element with element
-            RenderTag::Element(etag) => {
-                let RenderNode::Element(element) = top else {
+            ContainerTag::Element(etag) => {
+                let Container::Element(element) = top else {
                     return Err(TranslateError::ElementError {
                         expected: etag,
                         result: None,
@@ -106,16 +95,16 @@ where
                 Ok(())
             }
             // Match callout with callout
-            RenderTag::Callout => {
-                let RenderNode::Callout(_) = top else {
+            ContainerTag::Callout => {
+                let Container::Callout(_) = top else {
                     return Err(TranslateError::CalloutError);
                 };
 
                 Ok(())
             }
-            RenderTag::Html => {
-                let RenderNode::Html(_) = top else {
-                    return Err(TranslateError::RawHtmlError);
+            ContainerTag::Table => {
+                let Container::Table(_) = top else {
+                    return Err(TranslateError::TableMergeError);
                 };
 
                 Ok(())
@@ -125,7 +114,7 @@ where
 
     /// Leaves the container, checking that there's nothing wrong
     /// with our entering/leaving process.
-    fn leave(&mut self, tag: RenderTag) -> Result<(), TranslateError> {
+    fn leave(&mut self, tag: ContainerTag) -> Result<(), TranslateError> {
         let Some(top) = self.stack.pop() else {
             panic!("Stack underflow");
         };
@@ -136,7 +125,7 @@ where
         Ok(())
     }
 
-    fn leave_any(&mut self, tags: Vec<RenderTag>) -> Result<(), TranslateError> {
+    fn leave_any(&mut self, tags: Vec<ContainerTag>) -> Result<(), TranslateError> {
         let Some(top) = self.stack.pop() else {
             panic!("Stack underflow");
         };
@@ -158,7 +147,7 @@ where
             panic!("Stack underflow");
         };
 
-        let RenderNode::Element(top_element) = top else {
+        let Container::Element(top_element) = top else {
             unreachable!()
         };
 
@@ -171,6 +160,8 @@ where
         self.current_footnote = None;
         Ok(())
     }
+
+    //// HELPER FUNCTIONS
 
     /// Consumes the next HTML element in our Markdown text and returns it as
     /// a single-lined string.
@@ -200,7 +191,7 @@ where
     }
 
     fn generate_callout(&mut self, kind: BlockQuoteKind) {
-        let callout = RenderCallout::new(kind.into());
+        let callout = Callout::new(kind.into());
         self.enter(callout);
     }
 
@@ -223,7 +214,7 @@ where
         element.add_child(RenderNode::Element(figcaption));
 
         // Cannot place <figure /> in <p>, so we must get rid of it on the stack and put it back later
-        let p = if let Some(RenderNode::Element(RenderElement {
+        let p = if let Some(Container::Element(RenderElement {
             tag: ElementTag::P, ..
         })) = self.stack.last()
         {
@@ -238,6 +229,20 @@ where
             self.enter(p);
         }
     }
+
+    fn get_top_table(&mut self) -> Result<&mut Table, TranslateError> {
+        let table = self.stack.last_mut();
+
+        let Some(Container::Table(table)) = table else {
+            return Err(TranslateError::NoMatchError {
+                tags: vec![ContainerTag::Table],
+            });
+        };
+
+        Ok(table)
+    }
+
+    //// TRANSLATOR LOOP
 
     // TODO: add codeblocks w/ syntax highlighting
     fn run_start(&mut self, tag: Tag<'a>) {
@@ -306,13 +311,17 @@ where
             Tag::Item => self.enter(RenderElement::new(ElementTag::Li)),
 
             // === Tables ===
-            Tag::Table(alignment) => self.table = Some(Table::new(alignment)),
+            Tag::Table(alignment) => self.enter(Table::new(alignment)),
             Tag::TableHead => {
-                self.table.as_mut().unwrap().is_head = true;
-                self.table.as_mut().unwrap().add_row();
+                let table = self.get_top_table().unwrap();
+                table.is_head = true;
+                table.add_row();
             }
-            Tag::TableRow => self.table.as_mut().unwrap().add_row(),
-            Tag::TableCell => self.in_cell = true,
+            Tag::TableRow => {
+                let table = self.get_top_table().unwrap();
+                table.add_row();
+            }
+            Tag::TableCell => {}
 
             // === Footnotes ===
             Tag::FootnoteDefinition(name) => {
@@ -330,55 +339,44 @@ where
             TagEnd::HtmlBlock => Ok(()),
 
             // === Text and decorations ===
-            TagEnd::Paragraph => self.leave(RenderTag::Element(ElementTag::P)),
-            TagEnd::Emphasis => self.leave(RenderTag::Element(ElementTag::Em)),
-            TagEnd::Strong => self.leave(RenderTag::Element(ElementTag::Strong)),
-            TagEnd::Heading(level) => self.leave(RenderTag::Element(level.into())),
+            TagEnd::Paragraph => self.leave(ContainerTag::Element(ElementTag::P)),
+            TagEnd::Emphasis => self.leave(ContainerTag::Element(ElementTag::Em)),
+            TagEnd::Strong => self.leave(ContainerTag::Element(ElementTag::Strong)),
+            TagEnd::Heading(level) => self.leave(ContainerTag::Element(level.into())),
 
             // === Blockquotes ===
             // Always rendered as divs
             TagEnd::BlockQuote => self.leave_any(vec![
-                RenderTag::Element(ElementTag::BlockQuote),
-                RenderTag::Callout,
+                ContainerTag::Element(ElementTag::BlockQuote),
+                ContainerTag::Callout,
             ]),
 
             // === Links and images ===
-            TagEnd::Link => self.leave(RenderTag::Element(ElementTag::A)),
+            TagEnd::Link => self.leave(ContainerTag::Element(ElementTag::A)),
             // We already generated the image in `start` (it's self-contained), so do nothing
             TagEnd::Image => Ok(()),
 
             // === Lists ===
             TagEnd::List(is_ordered) => {
                 if is_ordered {
-                    self.leave(RenderTag::Element(ElementTag::Ol))
+                    self.leave(ContainerTag::Element(ElementTag::Ol))
                 } else {
-                    self.leave(RenderTag::Element(ElementTag::Ul))
+                    self.leave(ContainerTag::Element(ElementTag::Ul))
                 }
             }
-            TagEnd::Item => self.leave(RenderTag::Element(ElementTag::Li)),
+            TagEnd::Item => self.leave(ContainerTag::Element(ElementTag::Li)),
 
             // === Tables ===
-            TagEnd::Table => {
-                let table_node = self.table.take().unwrap().to_node();
-                self.output(table_node);
-
-                Ok(())
-            }
+            TagEnd::Table => self.leave(ContainerTag::Table),
             TagEnd::TableHead => {
-                self.table.as_mut().unwrap().is_head = false;
+                let table = self.get_top_table().unwrap();
+                table.is_head = false;
                 Ok(())
             }
             TagEnd::TableRow => Ok(()),
             TagEnd::TableCell => {
-                let cell = std::mem::take(&mut self.cell_output);
-                let add_command = self.table.as_mut().unwrap().add_contents(cell);
-
-                if let Err(err) = add_command {
-                    Err(err)
-                } else {
-                    self.in_cell = false;
-                    Ok(())
-                }
+                let table = self.get_top_table().unwrap();
+                table.add_contents()
             }
 
             // === Footnotes ===

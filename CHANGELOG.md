@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.3.1 (2025-01-11)
+
+Refactor the MD parser, internally adding a `Container` enum that encapsulates behaviour of
+more complex MD elements which can have children.
+
 ## v0.3.0 (2025-01-02)
 
 Add support for **raw HTML** in the MD parser.
