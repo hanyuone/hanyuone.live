@@ -376,7 +376,7 @@ where
             TagEnd::TableRow => Ok(()),
             TagEnd::TableCell => {
                 let table = self.get_top_table().unwrap();
-                table.add_contents()
+                table.create_cell()
             }
 
             // === Footnotes ===
