@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use super::{container::callout::Callout, element::RenderElement};
+use super::{complex::code_block::CodeBlock, container::callout::Callout, element::RenderElement};
 
 // HTML
 
@@ -22,10 +22,12 @@ pub enum RenderIcon {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum RenderNode {
+    Element(RenderElement),
+    // Unique node types, but within <article>
     Text(String),
     Html(RenderHtml),
     Icon(RenderIcon),
-    Element(RenderElement),
+    CodeBlock(CodeBlock),
     // Separate member because we want them to appear outside of <article>
     Callout(Callout),
 }

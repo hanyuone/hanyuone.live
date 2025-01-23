@@ -1,4 +1,7 @@
+use std::sync::LazyLock;
+
 use pulldown_cmark::{BlockQuoteKind, CowStr, Event, Tag, TagEnd};
+use syntect::parsing::SyntaxSet;
 
 use crate::structs::metadata::PostTranslateData;
 
@@ -9,6 +12,8 @@ use super::{
     error::TranslateError,
     node::{RenderHtml, RenderNode},
 };
+
+static SYNTAX_SET: LazyLock<SyntaxSet> = LazyLock::new(|| SyntaxSet::load_defaults_newlines());
 
 pub struct TranslateOutput {
     pub nodes: Vec<RenderNode>,
@@ -271,6 +276,19 @@ where
                 }
 
                 self.enter(element)
+            }
+
+            // === Code blocks
+            Tag::CodeBlock(kind) => {
+                let language = match kind {
+                    pulldown_cmark::CodeBlockKind::Indented => None,
+                    pulldown_cmark::CodeBlockKind::Fenced(language) => {
+                        let syntax = SYNTAX_SET.find_syntax_by_name(&language);
+                        syntax.map(|syntax| syntax.name.clone())
+                    }
+                };
+
+                
             }
 
             // === Blockquotes and callouts ===
