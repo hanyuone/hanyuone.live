@@ -1,6 +1,8 @@
 use serde::{Deserialize, Serialize};
 
-use crate::translate::{error::TranslateError, node::RenderNode};
+use crate::translate::node::RenderNode;
+
+use super::Container;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CodeBlock {
@@ -16,12 +18,23 @@ impl CodeBlock {
         }
     }
 
-    pub fn add_child(&mut self, child: RenderNode) -> Result<(), TranslateError> {
+    pub fn add_child(&mut self, child: RenderNode) {
         let RenderNode::Text(contents) = child else {
-            return Err(TranslateError::RawHtmlError);
+            unreachable!();
         };
 
         self.contents = contents;
-        Ok(())
+    }
+}
+
+impl From<CodeBlock> for Container {
+    fn from(value: CodeBlock) -> Self {
+        todo!()
+    }
+}
+
+impl From<CodeBlock> for RenderNode {
+    fn from(value: CodeBlock) -> Self {
+        todo!()
     }
 }
