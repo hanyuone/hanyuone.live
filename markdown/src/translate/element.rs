@@ -3,7 +3,7 @@ use std::fmt::Display;
 use pulldown_cmark::HeadingLevel;
 use serde::{Deserialize, Serialize};
 
-use super::node::RenderNode;
+use super::{container::Container, node::RenderNode};
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq)]
 pub enum ElementTag {
@@ -28,6 +28,12 @@ pub enum ElementTag {
     P,
     Strong,
     Sup,
+    Table,
+    Tbody,
+    Td,
+    Th,
+    Thead,
+    Tr,
     Ul,
 }
 
@@ -55,6 +61,12 @@ impl Display for ElementTag {
             Self::P => "p",
             Self::Strong => "strong",
             Self::Sup => "sup",
+            Self::Table => "table",
+            Self::Tbody => "tbody",
+            Self::Td => "td",
+            Self::Th => "th",
+            Self::Thead => "thead",
+            Self::Tr => "tr",
             Self::Ul => "ul",
         };
 
@@ -77,10 +89,13 @@ impl From<HeadingLevel> for ElementTag {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum AttributeName {
+    Align,
     Alt,
     Class,
+    Colspan,
     Href,
     Id,
+    Rowspan,
     Src,
     Start,
     Title,
@@ -89,10 +104,13 @@ pub enum AttributeName {
 impl From<AttributeName> for &'static str {
     fn from(value: AttributeName) -> Self {
         match value {
+            AttributeName::Align => "align",
             AttributeName::Alt => "alt",
             AttributeName::Class => "class",
+            AttributeName::Colspan => "colspan",
             AttributeName::Href => "href",
             AttributeName::Id => "id",
+            AttributeName::Rowspan => "rowspan",
             AttributeName::Src => "src",
             AttributeName::Start => "start",
             AttributeName::Title => "title",
@@ -128,5 +146,17 @@ impl RenderElement {
 
     pub fn add_child(&mut self, child: RenderNode) {
         self.children.push(child)
+    }
+}
+
+impl From<RenderElement> for RenderNode {
+    fn from(value: RenderElement) -> Self {
+        RenderNode::Element(value)
+    }
+}
+
+impl From<RenderElement> for Container {
+    fn from(value: RenderElement) -> Self {
+        Container::Element(value)
     }
 }

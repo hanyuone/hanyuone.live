@@ -6,7 +6,7 @@ use std::collections::HashMap;
 
 use pulldown_cmark::CowStr;
 
-use super::{
+use crate::translate::{
     element::{AttributeName, ElementTag, RenderElement},
     node::RenderNode,
 };
@@ -43,7 +43,9 @@ impl<'a> Footnotes<'a> {
         self.indices.get(&name).copied()
     }
 
-    fn to_node((index, name, mut element): (&usize, CowStr<'a>, RenderElement)) -> RenderNode {
+    fn footnote_to_node(
+        (index, name, mut element): (&usize, CowStr<'a>, RenderElement),
+    ) -> RenderNode {
         let mut footnote = RenderElement::new(ElementTag::Div);
         footnote.add_attribute(AttributeName::Id, format!("footnote_{name}"));
 
@@ -107,7 +109,7 @@ impl<'a> Footnotes<'a> {
 
         sorted_footnotes
             .into_iter()
-            .map(Footnotes::to_node)
+            .map(Footnotes::footnote_to_node)
             .collect::<Vec<_>>()
     }
 }

@@ -1,6 +1,7 @@
 use markdown::translate::{
+    container,
     element::RenderElement,
-    node::{RenderCallout, RenderIcon, RenderNode},
+    node::{RenderIcon, RenderNode},
 };
 use yew::{
     html,
@@ -52,6 +53,7 @@ impl Renderer {
     fn to_html(node: RenderNode) -> Html {
         match node {
             RenderNode::Text(text) => VText::new(text.clone()).into(),
+            RenderNode::Html(html) => Html::from_html_unchecked(html.0.into()),
             RenderNode::Icon(icon) => html! {
                 <Icon icon_id={to_icon_id(icon)} />
             },
@@ -72,7 +74,7 @@ impl Renderer {
 
                 tag.into()
             }
-            RenderNode::Callout(RenderCallout { kind, children }) => {
+            RenderNode::Callout(container::callout::Callout { kind, children }) => {
                 let props = kind.into();
                 let children = Renderer::new().run(children);
 
