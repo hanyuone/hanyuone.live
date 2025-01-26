@@ -230,16 +230,22 @@ where
         }
     }
 
-    fn get_top_table(&mut self) -> Result<&mut Table, TranslateError> {
+    /// Fetches the table which is at the top of the stack. Should only be called
+    /// when the translator interacts with a `Table` token of any kind, when the
+    /// top element of the stack is guaranteed to be a table.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the top element is not a table, which should never happen in the
+    /// correct conditions.
+    fn get_top_table(&mut self) -> &mut Table {
         let table = self.stack.last_mut();
 
         let Some(Container::Table(table)) = table else {
-            return Err(TranslateError::NoMatchError {
-                tags: vec![ContainerTag::Table],
-            });
+            panic!("Top item in translator stack is not a table");
         };
 
-        Ok(table)
+        table
     }
 
     //// TRANSLATOR LOOP
@@ -313,12 +319,12 @@ where
             // === Tables ===
             Tag::Table(alignment) => self.enter(Table::new(alignment)),
             Tag::TableHead => {
-                let table = self.get_top_table().unwrap();
+                let table = self.get_top_table();
                 table.is_head = true;
                 table.add_row();
             }
             Tag::TableRow => {
-                let table = self.get_top_table().unwrap();
+                let table = self.get_top_table();
                 table.add_row();
             }
             Tag::TableCell => {}
@@ -369,13 +375,13 @@ where
             // === Tables ===
             TagEnd::Table => self.leave(ContainerTag::Table),
             TagEnd::TableHead => {
-                let table = self.get_top_table().unwrap();
+                let table = self.get_top_table();
                 table.is_head = false;
                 Ok(())
             }
             TagEnd::TableRow => Ok(()),
             TagEnd::TableCell => {
-                let table = self.get_top_table().unwrap();
+                let table = self.get_top_table();
                 table.create_cell()
             }
 

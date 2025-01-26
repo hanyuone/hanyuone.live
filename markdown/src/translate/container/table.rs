@@ -333,23 +333,19 @@ impl Table {
 
         Ok(())
     }
-
-    pub fn to_node(self) -> RenderNode {
-        let mut table_element = RenderElement::new(ElementTag::Table);
-
-        let table_head = self.head.into_node(&self.alignment);
-        table_element.add_child(table_head);
-
-        let table_body = self.body.into_node(&self.alignment);
-        table_element.add_child(table_body);
-
-        table_element.into()
-    }
 }
 
 impl From<Table> for RenderNode {
     fn from(value: Table) -> Self {
-        value.to_node()
+        let mut table_element = RenderElement::new(ElementTag::Table);
+
+        let table_head = value.head.into_node(&value.alignment);
+        table_element.add_child(table_head);
+
+        let table_body = value.body.into_node(&value.alignment);
+        table_element.add_child(table_body);
+
+        table_element.into()
     }
 }
 
