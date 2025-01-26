@@ -112,8 +112,17 @@ where
         }
     }
 
-    /// Leaves the container, checking that there's nothing wrong
-    /// with our entering/leaving process.
+    /// "Leaves" the container - i.e. declares that the container has no
+    /// more child elements and moves it to `self.output`.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the stack is empty.
+    ///
+    /// # Errors
+    ///
+    /// This function will return an error if the tag provided doesn't match
+    /// with the container on top of the stack.
     fn leave(&mut self, tag: ContainerTag) -> Result<(), TranslateError> {
         let Some(top) = self.stack.pop() else {
             panic!("Stack underflow");
@@ -125,6 +134,16 @@ where
         Ok(())
     }
 
+    /// "Leaves" the container satisfying any of `tags`.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the stack is empty.
+    ///
+    /// # Errors
+    ///
+    /// This function will return an error if none of the tags provided match
+    /// the container on top of the stack.
     fn leave_any(&mut self, tags: Vec<ContainerTag>) -> Result<(), TranslateError> {
         let Some(top) = self.stack.pop() else {
             panic!("Stack underflow");
@@ -142,12 +161,21 @@ where
         Err(TranslateError::NoMatchError { tags })
     }
 
-    fn leave_footnote(&mut self) -> Result<(), TranslateError> {
+    /// Leaves the current footnote, adding it to `self.footnotes` for
+    /// post-traversal processing.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the stack is empty.
+    fn leave_footnote(&mut self) {
         let Some(top) = self.stack.pop() else {
             panic!("Stack underflow");
         };
 
         let Container::Element(top_element) = top else {
+            // By the way `pulldown_cmark` processes footnotes,
+            // the top container *has* to be a `RenderElement` that
+            // contains all the relevant information.
             unreachable!()
         };
 
@@ -158,7 +186,6 @@ where
             top_element,
         );
         self.current_footnote = None;
-        Ok(())
     }
 
     //// HELPER FUNCTIONS
@@ -339,64 +366,61 @@ where
         }
     }
 
-    fn run_end(&mut self, tag: TagEnd) {
-        let result = match tag {
+    fn run_end(&mut self, tag: TagEnd) -> Result<(), TranslateError> {
+        match tag {
             // === Raw HTML ===
-            TagEnd::HtmlBlock => Ok(()),
+            TagEnd::HtmlBlock => {}
 
             // === Text and decorations ===
-            TagEnd::Paragraph => self.leave(ContainerTag::Element(ElementTag::P)),
-            TagEnd::Emphasis => self.leave(ContainerTag::Element(ElementTag::Em)),
-            TagEnd::Strong => self.leave(ContainerTag::Element(ElementTag::Strong)),
-            TagEnd::Heading(level) => self.leave(ContainerTag::Element(level.into())),
+            TagEnd::Paragraph => self.leave(ContainerTag::Element(ElementTag::P))?,
+            TagEnd::Emphasis => self.leave(ContainerTag::Element(ElementTag::Em))?,
+            TagEnd::Strong => self.leave(ContainerTag::Element(ElementTag::Strong))?,
+            TagEnd::Heading(level) => self.leave(ContainerTag::Element(level.into()))?,
 
             // === Blockquotes ===
             // Always rendered as divs
             TagEnd::BlockQuote => self.leave_any(vec![
                 ContainerTag::Element(ElementTag::BlockQuote),
                 ContainerTag::Callout,
-            ]),
+            ])?,
 
             // === Links and images ===
-            TagEnd::Link => self.leave(ContainerTag::Element(ElementTag::A)),
+            TagEnd::Link => self.leave(ContainerTag::Element(ElementTag::A))?,
             // We already generated the image in `start` (it's self-contained), so do nothing
-            TagEnd::Image => Ok(()),
+            TagEnd::Image => {}
 
             // === Lists ===
             TagEnd::List(is_ordered) => {
                 if is_ordered {
-                    self.leave(ContainerTag::Element(ElementTag::Ol))
+                    self.leave(ContainerTag::Element(ElementTag::Ol))?
                 } else {
-                    self.leave(ContainerTag::Element(ElementTag::Ul))
+                    self.leave(ContainerTag::Element(ElementTag::Ul))?
                 }
             }
-            TagEnd::Item => self.leave(ContainerTag::Element(ElementTag::Li)),
+            TagEnd::Item => self.leave(ContainerTag::Element(ElementTag::Li))?,
 
             // === Tables ===
-            TagEnd::Table => self.leave(ContainerTag::Table),
+            TagEnd::Table => self.leave(ContainerTag::Table)?,
             TagEnd::TableHead => {
                 let table = self.get_top_table();
                 table.is_head = false;
-                Ok(())
             }
-            TagEnd::TableRow => Ok(()),
+            TagEnd::TableRow => {}
             TagEnd::TableCell => {
                 let table = self.get_top_table();
-                table.create_cell()
+                table.create_cell()?
             }
 
             // === Footnotes ===
             TagEnd::FootnoteDefinition => self.leave_footnote(),
 
             _ => todo!(),
-        };
-
-        if let Err(e) = result {
-            panic!("{}", e);
         }
+
+        Ok(())
     }
 
-    fn run_token(&mut self, token: Event<'a>) {
+    fn run_token(&mut self, token: Event<'a>) -> Result<(), TranslateError> {
         match token {
             // === Raw HTML ===
             Event::Html(html) => self.output(RenderHtml(html.to_string())),
@@ -427,7 +451,7 @@ where
 
             // === Complex elements ===
             Event::Start(tag) => self.run_start(tag),
-            Event::End(tag) => self.run_end(tag),
+            Event::End(tag) => self.run_end(tag)?,
 
             // === Footnotes ===
             Event::FootnoteReference(name) => {
@@ -448,11 +472,13 @@ where
 
             _ => todo!(),
         }
+
+        Ok(())
     }
 
-    pub fn run(mut self) -> TranslateOutput {
+    pub fn run(mut self) -> Result<TranslateOutput, TranslateError> {
         while let Some(token) = self.tokens.next() {
-            self.run_token(token);
+            self.run_token(token)?;
         }
 
         let mut nodes = self.output;
@@ -460,9 +486,9 @@ where
         let footnote_nodes = self.footnotes.to_nodes();
         nodes.extend(footnote_nodes);
 
-        TranslateOutput {
+        Ok(TranslateOutput {
             nodes,
             post_translate: self.post_translate,
-        }
+        })
     }
 }

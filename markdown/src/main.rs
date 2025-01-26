@@ -44,7 +44,10 @@ fn create_blog_files(content_dir: &str) -> io::Result<Vec<BlogFile>> {
         let TranslateOutputBytes {
             bytes,
             post_translate,
-        } = to_bytestring(&content);
+        } = match to_bytestring(&content) {
+            Ok(output) => output,
+            Err(err) => panic!("{}", err),
+        };
 
         let filename = entry
             .path()
