@@ -101,8 +101,14 @@ impl Chunk {
 
     // Chunk helper functions
 
+    
     /// Returns the current position of the cell we're adding.
     /// Call when we're fetching cells from the parser.
+    ///
+    /// # Panics
+    ///
+    /// Panics if `self.cells` is empty, i.e. there are no rows, which
+    /// should not be possible.
     fn current_position(&self) -> CellPosition {
         CellPosition(
             self.cells.len() as isize - 1,
@@ -123,7 +129,12 @@ impl Chunk {
         self.cells.push(vec![]);
     }
 
-    /// Given a "wrapped" cell, adds it to the last row.
+    /// Given a "wrapped" cell, adds it to the last row. Only called after
+    /// a row is initialised through `Chunk::add_row`.
+    ///
+    /// # Panics
+    ///
+    /// Panics if `self.cells` is empty (which should not be possible).
     fn add_cell(&mut self, cell: Cell) {
         self.cells.last_mut().unwrap().push(cell);
     }
@@ -138,14 +149,14 @@ impl Chunk {
     /// This function will return an error if we have merging that results in
     /// non-rectangular cells.
     fn add_contents(&mut self, content: Vec<RenderNode>) -> Result<(), TranslateError> {
-        let merge_dir = MergeDirection::extract_from_nodes(&content);
+        let merge_dir = match MergeDirection::extract_from_nodes(&content) {
+            Some(merge_dir) => merge_dir,
+            None => {
+                self.add_cell(Cell::Content(content));
+                return Ok(());
+            }
+        };
 
-        if merge_dir.is_none() {
-            self.add_cell(Cell::Content(content));
-            return Ok(());
-        }
-
-        let merge_dir = merge_dir.unwrap();
         let curr_pos = self.current_position();
 
         let target_pos = curr_pos
@@ -172,6 +183,9 @@ impl Chunk {
             }
             Cell::Pointer(origin) => {
                 let origin = *origin;
+                // Guaranteed to exist in `self.merged_sizes` since the pointer
+                // at the target cell *must* point towards the top-left cell in the
+                // block, which is added through the `Cell::Content` match arm
                 let existing_size = self.merged_sizes.get(&origin).unwrap();
 
                 let new_dimensions = match merge_dir {
@@ -333,23 +347,19 @@ impl Table {
 
         Ok(())
     }
-
-    pub fn to_node(self) -> RenderNode {
-        let mut table_element = RenderElement::new(ElementTag::Table);
-
-        let table_head = self.head.into_node(&self.alignment);
-        table_element.add_child(table_head);
-
-        let table_body = self.body.into_node(&self.alignment);
-        table_element.add_child(table_body);
-
-        table_element.into()
-    }
 }
 
 impl From<Table> for RenderNode {
     fn from(value: Table) -> Self {
-        value.to_node()
+        let mut table_element = RenderElement::new(ElementTag::Table);
+
+        let table_head = value.head.into_node(&value.alignment);
+        table_element.add_child(table_head);
+
+        let table_body = value.body.into_node(&value.alignment);
+        table_element.add_child(table_body);
+
+        table_element.into()
     }
 }
 

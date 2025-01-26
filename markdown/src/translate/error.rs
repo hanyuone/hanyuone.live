@@ -12,6 +12,9 @@ pub enum TranslateError {
         tags: Vec<ContainerTag>,
     },
     CalloutError,
+    FootnoteError {
+        name: String,
+    },
     TableMergeError,
 }
 
@@ -32,6 +35,7 @@ impl Display for TranslateError {
                 format!("None of the tags {} matched", tags_str)
             }
             Self::CalloutError => "Expected callout".to_string(),
+            Self::FootnoteError { name } => format!("Footnote \"{}\" does not exist", name),
             Self::TableMergeError => "Invalid merge command".to_string(),
         };
 
