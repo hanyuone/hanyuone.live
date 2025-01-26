@@ -151,12 +151,12 @@ impl RenderElement {
 
 impl From<RenderElement> for RenderNode {
     fn from(value: RenderElement) -> Self {
-        RenderNode::Element(value)
+        Self::Element(value)
     }
 }
 
 impl From<RenderElement> for Container {
     fn from(value: RenderElement) -> Self {
-        Container::Element(value)
+        Self::Element(value)
     }
 }

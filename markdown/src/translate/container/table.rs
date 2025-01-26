@@ -365,6 +365,6 @@ impl From<Table> for RenderNode {
 
 impl From<Table> for Container {
     fn from(value: Table) -> Self {
-        Container::Table(value)
+        Self::Table(value)
     }
 }
