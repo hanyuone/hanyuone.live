@@ -53,10 +53,11 @@ impl From<Container> for RenderNode {
 
 // OVERARCHING TAG DATA TYPE
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum ContainerTag {
     Element(ElementTag),
     Callout,
+    CodeBlock,
     Table,
 }
 
@@ -65,9 +66,21 @@ impl Display for ContainerTag {
         let formatted = match self {
             ContainerTag::Element(tag) => &tag.to_string(),
             ContainerTag::Callout => "callout",
+            ContainerTag::CodeBlock => "code-block",
             ContainerTag::Table => "table",
         };
 
         write!(f, "{}", formatted)
+    }
+}
+
+impl From<&Container> for ContainerTag {
+    fn from(value: &Container) -> Self {
+        match value {
+            Container::Element(element) => Self::Element(element.tag),
+            Container::Callout(_) => Self::Callout,
+            Container::CodeBlock(_) => Self::CodeBlock,
+            Container::Table(_) => Self::Table,
+        }
     }
 }

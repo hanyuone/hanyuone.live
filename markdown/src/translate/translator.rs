@@ -80,41 +80,15 @@ where
     }
 
     fn check_top(&self, top: &Container, tag: ContainerTag) -> Result<(), TranslateError> {
-        match tag {
-            // Match element with element
-            ContainerTag::Element(etag) => {
-                let Container::Element(element) = top else {
-                    return Err(TranslateError::ElementError {
-                        expected: etag,
-                        result: None,
-                    });
-                };
+        let top_tag: ContainerTag = top.into();
 
-                if element.tag != etag {
-                    return Err(TranslateError::ElementError {
-                        expected: etag,
-                        result: Some(element.tag),
+        if top_tag != tag {
+            return Err(TranslateError::NoMatchError {
+                expected: tag, result: top_tag
                     });
                 }
 
                 Ok(())
-            }
-            // Match callout with callout
-            ContainerTag::Callout => {
-                let Container::Callout(_) = top else {
-                    return Err(TranslateError::CalloutError);
-                };
-
-                Ok(())
-            }
-            ContainerTag::Table => {
-                let Container::Table(_) = top else {
-                    return Err(TranslateError::TableMergeError);
-                };
-
-                Ok(())
-            }
-        }
     }
 
     /// "Leaves" the container - i.e. declares that the container has no
@@ -134,7 +108,9 @@ where
         };
 
         self.check_top(&top, tag)?;
-        self.output(top);
+
+        let node: RenderNode = top.into();
+        self.output(node);
 
         Ok(())
     }
@@ -158,12 +134,14 @@ where
             let result = self.check_top(&top, tag);
 
             if let Ok(()) = result {
-                self.output(top);
+                let node: RenderNode = top.into();
+                self.output(node);
                 return Ok(());
             }
         }
 
-        Err(TranslateError::NoMatchError { tags })
+        let top_tag: ContainerTag = (&top).into();
+        Err(TranslateError::NoMatchAnyError { expected: tags, result: top_tag })
     }
 
     /// Leaves the current footnote, adding it to `self.footnotes` for
