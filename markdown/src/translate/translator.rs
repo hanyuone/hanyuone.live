@@ -463,7 +463,15 @@ where
                 let mut anchor = RenderElement::new(ElementTag::A);
                 anchor.add_attribute(AttributeName::Href, format!("#footnote_{name}"));
 
-                let index = self.footnotes.get_index(name).unwrap();
+                let index = match self.footnotes.get_index(name.clone()) {
+                    Some(index) => index,
+                    None => {
+                        return Err(TranslateError::FootnoteError {
+                            name: name.to_string(),
+                        })
+                    }
+                };
+
                 anchor.add_child(format!("{index}").into());
 
                 sup.add_child(RenderNode::Element(anchor));
