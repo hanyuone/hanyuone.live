@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.0 (2025-01-31)
+
+Add support for **inline code** and **code blocks** (including **syntax highlighting**).
+
 ## v0.3.1 (2025-01-11)
 
 Refactor the MD parser, internally adding a `Container` enum that encapsulates behaviour of
