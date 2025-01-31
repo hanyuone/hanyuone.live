@@ -13,6 +13,7 @@ pub enum TranslateError {
         result: ContainerTag,
     },
     CalloutError,
+    CodeHighlightError,
     FootnoteError {
         name: String,
     },
@@ -37,6 +38,7 @@ impl Display for TranslateError {
             Self::CalloutError => "Expected callout".to_string(),
             Self::FootnoteError { name } => format!("Footnote \"{}\" does not exist", name),
             Self::TableMergeError => "Invalid merge command".to_string(),
+            Self::CodeHighlightError => "Code block not highlighted properly".to_string(),
         };
 
         write!(f, "Markdown translation error: {}", error_str)

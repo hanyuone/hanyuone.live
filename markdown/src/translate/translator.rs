@@ -1,19 +1,15 @@
-use std::sync::LazyLock;
-
-use pulldown_cmark::{BlockQuoteKind, CowStr, Event, Tag, TagEnd};
-use syntect::parsing::SyntaxSet;
+use pulldown_cmark::{BlockQuoteKind, CodeBlockKind, CowStr, Event, Tag, TagEnd};
 
 use crate::structs::metadata::PostTranslateData;
 
 use super::{
     complex::footnotes::Footnotes,
-    container::{callout::Callout, table::Table, Container, ContainerTag},
+    container::{callout::Callout, code_block::CodeBlock, table::Table, Container, ContainerTag},
     element::{AttributeName, ElementTag, RenderElement},
     error::TranslateError,
+    highlight::SYNTAX_SET,
     node::{RenderHtml, RenderNode},
 };
-
-static SYNTAX_SET: LazyLock<SyntaxSet> = LazyLock::new(|| SyntaxSet::load_defaults_newlines());
 
 pub struct TranslateOutput {
     pub nodes: Vec<RenderNode>,
@@ -26,7 +22,7 @@ pub struct Translator<'a, I> {
     // Basic variables
     tokens: I,
     output: Vec<RenderNode>,
-    stack: Vec<Container>,
+    stack: Vec<Container<'a>>,
     // Footnote variables
     footnotes: Footnotes<'a>,
     current_footnote: Option<CowStr<'a>>,
@@ -74,7 +70,7 @@ where
     /// Enters into the current container.
     fn enter<C>(&mut self, container: C)
     where
-        C: Into<Container>,
+        C: Into<Container<'a>>,
     {
         self.stack.push(container.into());
     }
@@ -84,11 +80,12 @@ where
 
         if top_tag != tag {
             return Err(TranslateError::NoMatchError {
-                expected: tag, result: top_tag
-                    });
-                }
+                expected: tag,
+                result: top_tag,
+            });
+        }
 
-                Ok(())
+        Ok(())
     }
 
     /// "Leaves" the container - i.e. declares that the container has no
@@ -109,7 +106,7 @@ where
 
         self.check_top(&top, tag)?;
 
-        let node: RenderNode = top.into();
+        let node: RenderNode = top.try_into()?;
         self.output(node);
 
         Ok(())
@@ -134,14 +131,17 @@ where
             let result = self.check_top(&top, tag);
 
             if let Ok(()) = result {
-                let node: RenderNode = top.into();
+                let node: RenderNode = top.try_into()?;
                 self.output(node);
                 return Ok(());
             }
         }
 
         let top_tag: ContainerTag = (&top).into();
-        Err(TranslateError::NoMatchAnyError { expected: tags, result: top_tag })
+        Err(TranslateError::NoMatchAnyError {
+            expected: tags,
+            result: top_tag,
+        })
     }
 
     /// Leaves the current footnote, adding it to `self.footnotes` for
@@ -292,14 +292,13 @@ where
             // === Code blocks
             Tag::CodeBlock(kind) => {
                 let language = match kind {
-                    pulldown_cmark::CodeBlockKind::Indented => None,
-                    pulldown_cmark::CodeBlockKind::Fenced(language) => {
-                        let syntax = SYNTAX_SET.find_syntax_by_name(&language);
-                        syntax.map(|syntax| syntax.name.clone())
+                    CodeBlockKind::Indented => None,
+                    CodeBlockKind::Fenced(language) => {
+                        SYNTAX_SET.find_syntax_by_token(&language.to_string())
                     }
                 };
 
-                
+                self.enter(CodeBlock::new(language));
             }
 
             // === Blockquotes and callouts ===
@@ -372,6 +371,9 @@ where
             TagEnd::Emphasis => self.leave(ContainerTag::Element(ElementTag::Em))?,
             TagEnd::Strong => self.leave(ContainerTag::Element(ElementTag::Strong))?,
             TagEnd::Heading(level) => self.leave(ContainerTag::Element(level.into()))?,
+
+            // === Code blocks ===
+            TagEnd::CodeBlock => self.leave(ContainerTag::CodeBlock)?,
 
             // === Blockquotes ===
             // Always rendered as divs

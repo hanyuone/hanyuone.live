@@ -363,7 +363,7 @@ impl From<Table> for RenderNode {
     }
 }
 
-impl From<Table> for Container {
+impl From<Table> for Container<'_> {
     fn from(value: Table) -> Self {
         Self::Table(value)
     }

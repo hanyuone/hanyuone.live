@@ -26,6 +26,8 @@ pub enum ElementTag {
     Li,
     Ol,
     P,
+    Pre,
+    Span,
     Strong,
     Sup,
     Table,
@@ -59,6 +61,8 @@ impl Display for ElementTag {
             Self::Li => "li",
             Self::Ol => "ol",
             Self::P => "p",
+            Self::Pre => "pre",
+            Self::Span => "span",
             Self::Strong => "strong",
             Self::Sup => "sup",
             Self::Table => "table",
@@ -98,6 +102,7 @@ pub enum AttributeName {
     Rowspan,
     Src,
     Start,
+    Style,
     Title,
 }
 
@@ -113,6 +118,7 @@ impl From<AttributeName> for &'static str {
             AttributeName::Rowspan => "rowspan",
             AttributeName::Src => "src",
             AttributeName::Start => "start",
+            AttributeName::Style => "style",
             AttributeName::Title => "title",
         }
     }
@@ -155,7 +161,7 @@ impl From<RenderElement> for RenderNode {
     }
 }
 
-impl From<RenderElement> for Container {
+impl From<RenderElement> for Container<'_> {
     fn from(value: RenderElement) -> Self {
         Self::Element(value)
     }
