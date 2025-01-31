@@ -43,7 +43,7 @@ impl<'a> CodeBlock<'a> {
         code.add_child(RenderNode::Text(self.contents.clone()));
 
         unstyled.add_child(code.into());
-        return unstyled.into();
+        unstyled.into()
     }
 }
 

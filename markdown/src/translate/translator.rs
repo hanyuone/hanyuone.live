@@ -294,7 +294,7 @@ where
                 let language = match kind {
                     CodeBlockKind::Indented => None,
                     CodeBlockKind::Fenced(language) => {
-                        SYNTAX_SET.find_syntax_by_token(&language.to_string())
+                        SYNTAX_SET.find_syntax_by_token(language.as_ref())
                     }
                 };
 
