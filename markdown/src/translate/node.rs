@@ -22,10 +22,11 @@ pub enum RenderIcon {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum RenderNode {
+    Element(RenderElement),
+    // Unique node types, but within <article>
     Text(String),
     Html(RenderHtml),
     Icon(RenderIcon),
-    Element(RenderElement),
     // Separate member because we want them to appear outside of <article>
     Callout(Callout),
 }
