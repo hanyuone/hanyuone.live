@@ -47,12 +47,12 @@ impl Callout {
 
 impl From<Callout> for RenderNode {
     fn from(value: Callout) -> Self {
-        RenderNode::Callout(value)
+        Self::Callout(value)
     }
 }
 
-impl From<Callout> for Container {
+impl From<Callout> for Container<'_> {
     fn from(value: Callout) -> Self {
-        Container::Callout(value)
+        Self::Callout(value)
     }
 }

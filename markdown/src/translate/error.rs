@@ -1,17 +1,19 @@
 use std::fmt::Display;
 
-use super::{container::ContainerTag, element::ElementTag};
+use super::container::ContainerTag;
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub enum TranslateError {
-    ElementError {
-        expected: ElementTag,
-        result: Option<ElementTag>,
-    },
     NoMatchError {
-        tags: Vec<ContainerTag>,
+        expected: ContainerTag,
+        result: ContainerTag,
+    },
+    NoMatchAnyError {
+        expected: Vec<ContainerTag>,
+        result: ContainerTag,
     },
     CalloutError,
+    CodeHighlightError,
     FootnoteError {
         name: String,
     },
@@ -21,22 +23,22 @@ pub enum TranslateError {
 impl Display for TranslateError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let error_str = match self {
-            Self::ElementError { expected, result } => match result {
-                Some(result) => format!("Expected <{}>, got <{}>", expected, result),
-                None => format!("Expected <{}>", expected),
-            },
-            Self::NoMatchError { tags } => {
-                let tags_str = tags
+            Self::NoMatchError { expected, result } => {
+                format!("Expected <{}>, got <{}>", expected, result)
+            }
+            Self::NoMatchAnyError { expected, result } => {
+                let tags_str = expected
                     .iter()
-                    .map(|tag| tag.to_string())
+                    .map(|tag| format!("<{}>", tag))
                     .collect::<Vec<_>>()
                     .join(", ");
 
-                format!("None of the tags {} matched", tags_str)
+                format!("Expected any of [{}], got {}", tags_str, result)
             }
             Self::CalloutError => "Expected callout".to_string(),
             Self::FootnoteError { name } => format!("Footnote \"{}\" does not exist", name),
             Self::TableMergeError => "Invalid merge command".to_string(),
+            Self::CodeHighlightError => "Code block not highlighted properly".to_string(),
         };
 
         write!(f, "Markdown translation error: {}", error_str)

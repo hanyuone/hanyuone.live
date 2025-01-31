@@ -1,12 +1,13 @@
-use pulldown_cmark::{BlockQuoteKind, CowStr, Event, Tag, TagEnd};
+use pulldown_cmark::{BlockQuoteKind, CodeBlockKind, CowStr, Event, Tag, TagEnd};
 
 use crate::structs::metadata::PostTranslateData;
 
 use super::{
     complex::footnotes::Footnotes,
-    container::{callout::Callout, table::Table, Container, ContainerTag},
+    container::{callout::Callout, code_block::CodeBlock, table::Table, Container, ContainerTag},
     element::{AttributeName, ElementTag, RenderElement},
     error::TranslateError,
+    highlight::SYNTAX_SET,
     node::{RenderHtml, RenderNode},
 };
 
@@ -21,7 +22,7 @@ pub struct Translator<'a, I> {
     // Basic variables
     tokens: I,
     output: Vec<RenderNode>,
-    stack: Vec<Container>,
+    stack: Vec<Container<'a>>,
     // Footnote variables
     footnotes: Footnotes<'a>,
     current_footnote: Option<CowStr<'a>>,
@@ -69,47 +70,22 @@ where
     /// Enters into the current container.
     fn enter<C>(&mut self, container: C)
     where
-        C: Into<Container>,
+        C: Into<Container<'a>>,
     {
         self.stack.push(container.into());
     }
 
     fn check_top(&self, top: &Container, tag: ContainerTag) -> Result<(), TranslateError> {
-        match tag {
-            // Match element with element
-            ContainerTag::Element(etag) => {
-                let Container::Element(element) = top else {
-                    return Err(TranslateError::ElementError {
-                        expected: etag,
-                        result: None,
-                    });
-                };
+        let top_tag: ContainerTag = top.into();
 
-                if element.tag != etag {
-                    return Err(TranslateError::ElementError {
-                        expected: etag,
-                        result: Some(element.tag),
-                    });
-                }
-
-                Ok(())
-            }
-            // Match callout with callout
-            ContainerTag::Callout => {
-                let Container::Callout(_) = top else {
-                    return Err(TranslateError::CalloutError);
-                };
-
-                Ok(())
-            }
-            ContainerTag::Table => {
-                let Container::Table(_) = top else {
-                    return Err(TranslateError::TableMergeError);
-                };
-
-                Ok(())
-            }
+        if top_tag != tag {
+            return Err(TranslateError::NoMatchError {
+                expected: tag,
+                result: top_tag,
+            });
         }
+
+        Ok(())
     }
 
     /// "Leaves" the container - i.e. declares that the container has no
@@ -129,7 +105,9 @@ where
         };
 
         self.check_top(&top, tag)?;
-        self.output(top);
+
+        let node: RenderNode = top.try_into()?;
+        self.output(node);
 
         Ok(())
     }
@@ -153,12 +131,17 @@ where
             let result = self.check_top(&top, tag);
 
             if let Ok(()) = result {
-                self.output(top);
+                let node: RenderNode = top.try_into()?;
+                self.output(node);
                 return Ok(());
             }
         }
 
-        Err(TranslateError::NoMatchError { tags })
+        let top_tag: ContainerTag = (&top).into();
+        Err(TranslateError::NoMatchAnyError {
+            expected: tags,
+            result: top_tag,
+        })
     }
 
     /// Leaves the current footnote, adding it to `self.footnotes` for
@@ -306,6 +289,18 @@ where
                 self.enter(element)
             }
 
+            // === Code blocks
+            Tag::CodeBlock(kind) => {
+                let language = match kind {
+                    CodeBlockKind::Indented => None,
+                    CodeBlockKind::Fenced(language) => {
+                        SYNTAX_SET.find_syntax_by_token(language.as_ref())
+                    }
+                };
+
+                self.enter(CodeBlock::new(language));
+            }
+
             // === Blockquotes and callouts ===
             Tag::BlockQuote(kind) => match kind {
                 Some(kind) => self.generate_callout(kind),
@@ -376,6 +371,9 @@ where
             TagEnd::Emphasis => self.leave(ContainerTag::Element(ElementTag::Em))?,
             TagEnd::Strong => self.leave(ContainerTag::Element(ElementTag::Strong))?,
             TagEnd::Heading(level) => self.leave(ContainerTag::Element(level.into()))?,
+
+            // === Code blocks ===
+            TagEnd::CodeBlock => self.leave(ContainerTag::CodeBlock)?,
 
             // === Blockquotes ===
             // Always rendered as divs
