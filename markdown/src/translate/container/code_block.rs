@@ -55,6 +55,12 @@ impl<'a> TryFrom<CodeBlock<'a>> for RenderNode {
 
         for line in token_lines {
             for (style, contents) in line {
+                if contents.trim().is_empty() {
+                    let text = RenderNode::Text(contents.to_string());
+                    code.add_child(text);
+                    continue;
+                }
+                
                 let mut span = RenderElement::new(ElementTag::Span);
 
                 let Color { r, g, b, .. } = style.foreground;
