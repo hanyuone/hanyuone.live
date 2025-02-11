@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.5.0 (2025-02-12)
+
+Add support for **inline** and **display maths blocks** with the help of MathJax. When translating
+from Markdown into HTML, uses MathJax 2 syntax (i.e. matching on `<script type="math/tex" />` instead
+on raw dollar-signs).
+
 ## v0.4.0 (2025-01-31)
 
 Add support for **inline code** and **code blocks** (including **syntax highlighting**).
