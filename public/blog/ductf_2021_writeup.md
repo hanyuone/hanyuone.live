@@ -55,25 +55,33 @@ format:    DUCTF{.................}
 
 Because the cipher is one-to-one, `D` maps to `U`, `U` maps to `j`, and so on. Based on the indices of these characters in `CHARSET`, we know that `f(0) = 1`, `f(1) = 20`... `f(6) = 41`. We now have our 7 simultaneous equations:
 
-```
-                                 g =  1 (1)
-  a +   b +   c +  d +  e +  f + g = 20 (2)
-64a + 32b + 16c + 8d + 4e + 2f + g = 35 (3)
-...
-```
+$$
+\begin{align}
+                                 g &=  1, \\
+  a +   b +   c +  d +  e +  f + g &= 20, \\
+64a + 32b + 16c + 8d + 4e + 2f + g &= 35, \\
+&\cdots
+\end{align}
+$$
 
 We can create a matrix representation of these simultaneous equations, and now we need to solve for `x`:
 
-```
-[  0  0  0 0 0 0 1 ]     [  1 ]
-[  1  1  1 1 1 1 1 ] x = [ 20 ]
-[ 64 32 16 8 4 2 1 ]     [ 35 ]
-...                      ...
-```
+$$
+\begin{bmatrix}
+0 & 0 & 0 & 0 & 0 & 0 & 1 \\
+1 & 1 & 1 & 1 & 1 & 1 & 1 \\
+64 & 32 & 16 & 8 & 4 & 2 & 1 \\
+& & & \vdots & & &
+\end{bmatrix}
+x =
+\begin{bmatrix}
+1 \\ 20 \\ 35 \\ \vdots
+\end{bmatrix}
+$$
 
 Plugging the matrix and column vector into Maple and solving for `x`, `x` is equal to the column vector `<37/80, -633/80, 2437/48, -7229/48, 5963/30, -4349/60, 1>`, which is equivalent to `<41, 15, 40, 9, 28, 27, 1>` mod 47.
 
-Thus, our random polynomial, `f`, is `41x^6 + 15x^5 + 40x^4 + 9x^3 + 28x^2 + 27x + 1`.
+Thus, our random polynomial, `f`, is $41x^6 + 15x^5 + 40x^4 + 9x^3 + 28x^2 + 27x + 1$.
 
 ## Final solution:
 

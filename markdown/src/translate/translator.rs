@@ -438,6 +438,23 @@ where
                 self.output(code)
             }
 
+            // === Maths ===
+            Event::DisplayMath(text) => {
+                let mut display_math = RenderElement::new(ElementTag::Script);
+                display_math.add_attribute(AttributeName::Type, "math/tex".to_string());
+                display_math.add_attribute(AttributeName::Mode, "display".to_string());
+
+                display_math.add_child(RenderNode::Text(text.into_string()));
+                self.output(display_math)
+            },
+            Event::InlineMath(text) => {
+                let mut inline_math = RenderElement::new(ElementTag::Script);
+                inline_math.add_attribute(AttributeName::Type, "math/tex".to_string());
+
+                inline_math.add_child(RenderNode::Text(text.into_string()));
+                self.output(inline_math)
+            },
+
             // === Line breaks ===
             Event::SoftBreak => self.output("\n".to_string()),
             Event::HardBreak => {
