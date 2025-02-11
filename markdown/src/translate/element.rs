@@ -27,6 +27,7 @@ pub enum ElementTag {
     Ol,
     P,
     Pre,
+    Script,
     Span,
     Strong,
     Sup,
@@ -62,6 +63,7 @@ impl Display for ElementTag {
             Self::Ol => "ol",
             Self::P => "p",
             Self::Pre => "pre",
+            Self::Script => "script",
             Self::Span => "span",
             Self::Strong => "strong",
             Self::Sup => "sup",
@@ -99,11 +101,13 @@ pub enum AttributeName {
     Colspan,
     Href,
     Id,
+    Mode,
     Rowspan,
     Src,
     Start,
     Style,
     Title,
+    Type,
 }
 
 impl From<AttributeName> for &'static str {
@@ -115,11 +119,13 @@ impl From<AttributeName> for &'static str {
             AttributeName::Colspan => "colspan",
             AttributeName::Href => "href",
             AttributeName::Id => "id",
+            AttributeName::Mode => "mode",
             AttributeName::Rowspan => "rowspan",
             AttributeName::Src => "src",
             AttributeName::Start => "start",
             AttributeName::Style => "style",
             AttributeName::Title => "title",
+            AttributeName::Type => "type",
         }
     }
 }
