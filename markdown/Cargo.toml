@@ -13,3 +13,6 @@ ron = "0.8.1"
 serde = "1.0.200"
 serde_with = { version = "3.9.0", features = ["chrono_0_4"] }
 syntect = { version = "5.2.0", default-features = false, features = ["default-fancy"] }
+
+# Temporary, fix when https://github.com/jhpratt/deranged/issues/18 is resolved
+deranged = "=0.4.0"
