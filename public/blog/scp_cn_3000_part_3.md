@@ -17,9 +17,9 @@ tags:
 **Sender**: Junior Researcher Jianian Yang\
 **Characteristic Vector**: [JXSK1SD8GLCOAFWKHQI6]
 
-What a strange material... it looks similar to gold but not quite, constantly in a state of flux. It can turn almost liquid like mercury, or become as hard as diamonds; it can have brown patterns one moment and glowing cracks the next. Grooves of varying depth can also be seen on its surface, its patterns sometimes resembling ancient cave paintings, or clay-stained fingerprints - it all depends on the semantic stream the material’s in contact with. Put the metal in the hands of a thousand different people and you'll see a thousand different changes.
+What a strange material... it looks similar to gold but not quite, constantly in a state of flux. It can turn almost liquid like mercury, or become as hard as diamonds; it can have brown patterns one moment and glowing cracks the next. Grooves of varying depth can also be seen on its surface, its patterns sometimes resembling ancient cave paintings, or clay-stained fingerprints - it all depends on the semantic stream the material's in contact with. Put the metal in the hands of a thousand different people and you'll see a thousand different changes.
 
-However, no matter how many times you put this metal in contact with, say, a piece of rock, it doesn't change at all. But humans are different - and the metal reflects that, being ever-changing yet constant. Placed in a person's hands, the overall characteristics of the metal won't change, but it seemingly “adapts” to the holder’s whims in subtle ways. Why is that?
+However, no matter how many times you put this metal in contact with, say, a piece of rock, it doesn't change at all. But humans are different - and the metal reflects that, being ever-changing yet constant. Placed in a person's hands, the overall characteristics of the metal won't change, but it seemingly "adapts" to the holder's whims in subtle ways. Why is that?
 
 What a strange metal - since it's similar to gold, what say we name it "aurite"?
 ***
@@ -27,7 +27,7 @@ What a strange metal - since it's similar to gold, what say we name it "aurite"?
 **Sender**: Senior Researcher Xiwen Li\
 **Characteristic Vector**: [DK732MRODP58LG1PQVJJ]
 
-This metal has revealed to us properties of semantic streams that we haven’t discovered yet, properties directly related to immatter and dampening. Some streams are more resistant, and thus become less dampened when they travel through immatter. Aurite is revealing this to us!
+This metal has revealed to us properties of semantic streams that we haven't discovered yet, properties directly related to immatter and dampening. Some streams are more resistant, and thus become less dampened when they travel through immatter. Aurite is revealing this to us!
 
 We could potentially use aurite to identify semantic streams that can be more easily transmitted between bubbles, find any special characteristics those streams have, and then we can use those characteristics to our advantage. Only civilisations which have traversed through immatter are capable of carrying out this research.
 
@@ -58,7 +58,7 @@ How is this possible? Whatever additions I think to add to the metal, its reacti
 
 The only problem is there's little... far too little... of this metal, and I ran out before I was done experimenting. I have no intention of squabbling with the Foundation, their research is important as well, but I want more of this perfect metal. One kilogram? Two? One hundred? I don't know at this point, I fear I may never be satisfied.
 
-> The Rustsmith Trade Alliance has established itself for a good while now, but truthfully speaking, while there do exist smiths who can rival or surpass our founder Master Chengqi Kong's skills, few if any share his same fiery passion. You can see the spark in Master Kong’s eyes every time he talks about aurite. It’s hard to describe its intensity, but the closest example is perhaps Pygmalion in Ancient Greece, laying eyes on his ivory sculpture. To Master Kong, aurite is his Galatea.
+> The Rustsmith Trade Alliance has established itself for a good while now, but truthfully speaking, while there do exist smiths who can rival or surpass our founder Master Chengqi Kong's skills, few if any share his same fiery passion. You can see the spark in Master Kong's eyes every time he talks about aurite. It's hard to describe its intensity, but the closest example is perhaps Pygmalion in Ancient Greece, laying eyes on his ivory sculpture. To Master Kong, aurite is his Galatea.
 
 ***
 
@@ -85,7 +85,7 @@ Another problem is that, no matter where I go, I feel like someone is always fol
 
 It's safe to say that our bubble, X0-BA, is the most "brilliant" out there, literally speaking. The elders here always say that on the day immatter arrived, they saw the sun high above shatter into ten orbs, swirling around with the immatter that blocked out the sky before crashing down into vast forest on the bubble's west.
 
-Logically, the story makes no sense - the sun is extremely far away from immatter, and there is no way for it to separate into ten orbs that just so happened to land in our bubble. But that is the reality we live in now - no matter what time of day, the forest to the west shines in all directions for miles, with ten pillars of dazzling light flitting about inside. Despite this, the orbs don't actually generate that much heat, instead acting like moving searchlights, which you can see from the observatory. We don't really know what they are, perhaps nothing more than the physical manifestation of “brightness”. I can't provide a better conclusion.
+Logically, the story makes no sense - the sun is extremely far away from immatter, and there is no way for it to separate into ten orbs that just so happened to land in our bubble. But that is the reality we live in now - no matter what time of day, the forest to the west shines in all directions for miles, with ten pillars of dazzling light flitting about inside. Despite this, the orbs don't actually generate that much heat, instead acting like moving searchlights, which you can see from the observatory. We don't really know what they are, perhaps nothing more than the physical manifestation of "brightness". I can't provide a better conclusion.
 
 Regardless of what they really are, the ten "suns" pose a lot of problems. The western forest is now sealed off, with ample resources that we can't extract. Furthermore, we have reason to believe that the strange, heatless light they emit heavily interferes with semantic stream broadcasts coming from other bubbles. We're already experiencing heavy dampening from all the immatter, having these ten extra suns is just adding insult to injury.
 ***
