@@ -38,9 +38,11 @@ pub fn page() -> Html {
             <Head>
                 <title>{"Hanyuan's Website"}</title>
             </Head>
-            <Background />
-            <div class="flex flex-col z-1">
-                <div class="h-screen content-center">
+            <div class="relative flex flex-col">
+                <div class="h-screen blur-sm z-0">
+                    <Background />
+                </div>
+                <div class="h-screen content-center -mt-[100vh] z-10">
                     <div class="flex flex-col">
                         <div class="flex flex-row justify-center">
                             <Typewriter

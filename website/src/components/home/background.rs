@@ -4,11 +4,12 @@ use rand::Rng;
 use wasm_bindgen::JsCast;
 use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement};
 use yew::{function_component, html, use_effect_with, use_state, Html, NodeRef};
-use yew_hooks::use_interval;
+use yew_hooks::{use_interval, use_size};
 
 const POINTS: usize = 20;
 const LINES: usize = 50;
 const MAX_LINES_FROM_POINT: usize = 5;
+
 const FRAME_MSECS: u32 = 50;
 const UPDATE_STATE_FRAMES: usize = 20;
 
@@ -151,7 +152,7 @@ impl BackgroundData {
             // Draw the point itself
             context.begin_path();
             context.set_stroke_style(&"white".into());
-            let _ = context.arc(point.x, point.y, 2.0, 0.0, 2.0 * PI);
+            let _ = context.arc(point.x, point.y, 4.0, 0.0, 2.0 * PI);
             context.stroke();
 
             // Draw any lines
@@ -170,9 +171,24 @@ impl BackgroundData {
 
 #[function_component(Background)]
 pub fn background() -> Html {
-    let node_ref = NodeRef::default();
-    let data = use_state(|| BackgroundData::new(720, 480));
+    let size_ref = NodeRef::default();
+    let canvas_ref = NodeRef::default();
 
+    let size = use_size(size_ref.clone());
+    let data = use_state(|| BackgroundData::new(size.0 as usize, size.1 as usize));
+
+    // Resize canvas whenever wider div is resized
+    {
+        let size = size.clone();
+        let data = data.clone();
+
+        use_effect_with(size, move |size| {
+            let new_data = BackgroundData::new(size.0 as usize, size.1 as usize);
+            data.set(new_data);
+        });
+    }
+
+    // Update background data every frame
     {
         let data = data.clone();
 
@@ -184,12 +200,14 @@ pub fn background() -> Html {
         );
     }
 
+    // Draw on canvas whenever background data is updated
     {
-        let node_ref = node_ref.clone();
+        let canvas_ref = canvas_ref.clone();
+        let size = size.clone();
         let data = data.clone();
 
         use_effect_with(data, move |data| {
-            let canvas = node_ref.cast::<HtmlCanvasElement>().unwrap();
+            let canvas = canvas_ref.cast::<HtmlCanvasElement>().unwrap();
             let context = canvas
                 .get_context("2d")
                 .unwrap()
@@ -197,12 +215,14 @@ pub fn background() -> Html {
                 .dyn_into::<CanvasRenderingContext2d>()
                 .unwrap();
 
-            context.clear_rect(0.0, 0.0, 720.0, 480.0);
+            context.clear_rect(0.0, 0.0, size.0 as f64, size.1 as f64);
             data.draw(context);
         });
     }
 
     html! {
-        <canvas width={720} height={480} ref={node_ref.clone()} />
+        <div class="size-full" ref={size_ref.clone()}>
+            <canvas width={size.0.to_string()} height={size.1.to_string()} ref={canvas_ref.clone()} />
+        </div>
     }
 }
