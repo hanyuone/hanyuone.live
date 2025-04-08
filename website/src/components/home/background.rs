@@ -8,6 +8,7 @@ use yew_hooks::use_interval;
 
 const POINTS: usize = 20;
 const LINES: usize = 50;
+const MAX_LINES_FROM_POINT: usize = 5;
 const FRAME_MSECS: u32 = 50;
 const UPDATE_STATE_FRAMES: usize = 20;
 
@@ -76,25 +77,29 @@ impl BackgroundData {
                     updated.state = BackgroundState::AddLines;
                 }
             }
-            BackgroundState::AddLines => { 
-                let incoming = rng.random_range(0..POINTS);
-                let incoming_point = &points[incoming];
+            BackgroundState::AddLines => {
+                let (incoming, outgoing) = loop {
+                    let incoming = rng.random_range(0..POINTS);
+                    let incoming_point = &points[incoming];
 
-                let outgoing = loop {
+                    if incoming_point.outgoing.len() >= MAX_LINES_FROM_POINT {
+                        continue;
+                    }
+
                     let outgoing = rng.random_range(0..POINTS);
                     let outgoing_point = &points[outgoing];
 
                     if !(incoming_point.outgoing.contains(&outgoing)
-                        && outgoing_point.outgoing.contains(&incoming))
+                        || outgoing_point.outgoing.contains(&incoming))
                     {
-                        break outgoing;
+                        break (incoming, outgoing);
                     }
                 };
 
                 points[incoming].outgoing.push(outgoing);
                 updated.lines = self.lines + 1;
 
-                if updated.lines == LINES {
+                if updated.lines >= LINES {
                     updated.state = BackgroundState::Full;
                 }
             }
@@ -103,10 +108,15 @@ impl BackgroundData {
                 // of our queue every time (so every point eventually gets deleted)
                 points.pop_front();
 
-                // We make sure each line goes to the right point by incrementing
+                // We make sure each line goes to the right point by decrementing
                 // indices
                 for point in &mut points {
-                    point.outgoing = point.outgoing.iter().map(|idx| idx + 1).collect::<Vec<_>>();
+                    point.outgoing = point
+                        .outgoing
+                        .iter()
+                        .filter(|x| **x > 0)
+                        .map(|idx| idx - 1)
+                        .collect::<Vec<_>>();
                 }
 
                 updated.state = BackgroundState::AddPoints;
@@ -138,10 +148,22 @@ impl BackgroundData {
 
     fn draw(&self, context: CanvasRenderingContext2d) {
         for point in &self.points {
+            // Draw the point itself
             context.begin_path();
             context.set_stroke_style(&"white".into());
             let _ = context.arc(point.x, point.y, 2.0, 0.0, 2.0 * PI);
             context.stroke();
+
+            // Draw any lines
+            for outgoing_index in &point.outgoing {
+                let outgoing = &self.points[*outgoing_index];
+
+                context.begin_path();
+                context.set_stroke_style(&"white".into());
+                context.move_to(point.x, point.y);
+                context.line_to(outgoing.x, outgoing.y);
+                context.stroke();
+            }
         }
     }
 }
