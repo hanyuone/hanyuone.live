@@ -2,6 +2,7 @@ use yew::{function_component, html, use_state, Callback, Html};
 
 use crate::components::{
     head::Head,
+    home::background::Background,
     home::typewriter::{Block, Typewriter},
 };
 
@@ -37,8 +38,11 @@ pub fn page() -> Html {
             <Head>
                 <title>{"Hanyuan's Website"}</title>
             </Head>
-            <div class="flex flex-col">
-                <div class="h-screen content-center">
+            <div class="relative flex flex-col">
+                <div class="h-home blur-sm z-0">
+                    <Background />
+                </div>
+                <div class="h-home content-center -mt-home z-10">
                     <div class="flex flex-col">
                         <div class="flex flex-row justify-center">
                             <Typewriter

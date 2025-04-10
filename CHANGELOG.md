@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.1 (2025-04-10)
+
+Added a basic background to the main page.
+
 ## v0.5.0 (2025-02-12)
 
 Add support for **inline** and **display maths blocks** with the help of MathJax. When translating
