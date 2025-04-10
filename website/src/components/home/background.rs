@@ -7,8 +7,11 @@ use yew::{function_component, html, use_effect_with, use_state, Html, NodeRef};
 use yew_hooks::{use_interval, use_size};
 
 const POINTS: usize = 20;
-const LINES: usize = 50;
-const MAX_LINES_FROM_POINT: usize = 5;
+const LINES: usize = 30;
+const MAX_LINES_FROM_POINT: usize = 3;
+
+const JITTER: f64 = 0.1;
+const GRAVITY_RADIUS: f64 = 200.0;
 
 const FRAME_MSECS: u32 = 50;
 const UPDATE_STATE_FRAMES: usize = 20;
@@ -68,7 +71,11 @@ impl BackgroundData {
         updated.state = self.state;
 
         match updated.state {
-            BackgroundState::AddPoints => {
+            BackgroundState::AddPoints => 'add_points: {
+                if self.width == 0 || self.height == 0 {
+                    break 'add_points;
+                }
+
                 let x = rng.random_range(0.0..self.width as f64);
                 let y = rng.random_range(0.0..self.height as f64);
 
@@ -81,14 +88,14 @@ impl BackgroundData {
             BackgroundState::AddLines => {
                 let (incoming, outgoing) = loop {
                     let incoming = rng.random_range(0..POINTS);
-                    let incoming_point = &points[incoming];
+                    let incoming_point = points.get(incoming).unwrap();
 
                     if incoming_point.outgoing.len() >= MAX_LINES_FROM_POINT {
                         continue;
                     }
 
                     let outgoing = rng.random_range(0..POINTS);
-                    let outgoing_point = &points[outgoing];
+                    let outgoing_point = points.get(outgoing).unwrap();
 
                     if !(incoming_point.outgoing.contains(&outgoing)
                         || outgoing_point.outgoing.contains(&incoming))
@@ -128,14 +135,76 @@ impl BackgroundData {
         updated
     }
 
+    fn new_frame_points(&self) -> VecDeque<BackgroundPoint> {
+        let mut points = self.points.clone();
+        let points_len = points.len();
+
+        // Gravity simulation
+        for point_index in 0..points_len {
+            let mut delta_x = 0.0;
+            let mut delta_y = 0.0;
+
+            for other_point_index in 0..points_len {
+                let point = points.get(point_index).unwrap();
+                let other_point = points.get(other_point_index).unwrap();
+
+                if other_point_index == point_index {
+                    continue;
+                }
+
+                // Vector from `point` to `other_point`
+                let dist_x = other_point.x - point.x;
+                let dist_y = other_point.y - point.y;
+                let dist = (dist_x * dist_x + dist_y * dist_y).sqrt();
+
+                // We want the points to *separate* from each other, so make sure
+                // the delta is going in the *opposite* direction
+                let gravity = (1.0 - (dist / GRAVITY_RADIUS)).clamp(0.0, 1.0).powf(2.0);
+                delta_x -= dist_x * gravity;
+                delta_y -= dist_y * gravity;
+            }
+
+            let point = points.get_mut(point_index).unwrap();
+
+            // Add delta
+            point.x += delta_x / (points_len as f64);
+            point.y += delta_y / (points_len as f64);
+
+            // Add jitter
+            let mut rng = rand::rng();
+            let angle = rng.random_range(0.0..2.0 * PI);
+
+            point.x += angle.cos() * JITTER;
+            point.y += angle.sin() * JITTER;
+
+            // If point is out of bounds, wrap around
+            let width = self.width as f64;
+            let height = self.height as f64;
+
+            // To stop jitters from "bouncing" points between either end
+            // of the screen, introduce a "buffer" when we wrap a point around
+            if point.x < 0.0 {
+                point.x += width - (JITTER * 100.0);
+            } else if point.x > width {
+                point.x -= width - (JITTER * 100.0);
+            }
+
+            if point.y < 0.0 {
+                point.y += height - (JITTER * 100.0);
+            } else if point.y > height {
+                point.y -= height - (JITTER * 100.0);
+            }
+        }
+
+        points
+    }
+
     fn new_frame(&self) -> Self {
         if self.last_update_frames > UPDATE_STATE_FRAMES {
             return self.update();
         }
 
-        // Update point positions
-        // TODO: complete once physics system figured out
-        let points = self.points.clone();
+        let points = self.new_frame_points();
 
         Self {
             width: self.width,
