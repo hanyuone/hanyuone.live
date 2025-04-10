@@ -21,6 +21,9 @@ module.exports = {
                 blue: "#83A598",
                 purple: "#D3869B",
             },
+            height: {
+                "home": "calc(100vh - 10rem)",
+            },
             keyframes: {
                 blink: {
                     "0%, 100%": {
@@ -30,6 +33,9 @@ module.exports = {
                         "background-color": "white",
                     },
                 },
+            },
+            margin: {
+                "home": "calc(100vh - 10rem)",
             },
             typography: {
                 DEFAULT: {
