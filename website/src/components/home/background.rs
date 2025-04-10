@@ -119,6 +119,10 @@ impl BackgroundData {
                 // We make sure each line goes to the right point by decrementing
                 // indices
                 for point in &mut points {
+                    web_sys::console::log_1(
+                        &format!("Deleting links to point at ({}, {})", point.x, point.y).into(),
+                    );
+
                     point.outgoing = point
                         .outgoing
                         .iter()
