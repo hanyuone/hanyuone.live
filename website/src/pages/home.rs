@@ -52,7 +52,7 @@ pub fn page() -> Html {
                                 })} />
                         </div>
                         <div class={format!("{} {}", "flex flex-row justify-center transition duration-500", opacity)}>
-                            <p>{"I am a penultimate-year Computer Science student at\u{00a0}"}</p>
+                            <p>{"I am a final-year Advanced Computer Science student at\u{00a0}"}</p>
                             <a
                                 class="text-green underline transition hover:bg-gray"
                                 href="https://www.unsw.edu.au/engineering/our-schools/computer-science-and-engineering">
