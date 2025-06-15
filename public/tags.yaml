@@ -14,3 +14,7 @@
   description: | 
     Anything to do with the SCP Foundation, a collaborative science-fiction
     project about a secret organisation dealing with the supernatural.
+
+- name: review
+  colour: purple
+  description: Reviews on different pieces of media (movies, books, music, games).
