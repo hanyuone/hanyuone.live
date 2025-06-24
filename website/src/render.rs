@@ -41,7 +41,7 @@ impl Renderer {
         }
 
         let prose = html! {
-            <article class="prose dark:prose-invert">
+            <article class="prose dark:prose-invert max-w-none">
                 {self.prose.clone()}
             </article>
         };

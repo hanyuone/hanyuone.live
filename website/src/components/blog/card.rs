@@ -38,9 +38,9 @@ pub fn blog_card(props: &BlogCardProps) -> Html {
                 <p class="flex grow">{&front_matter.description}</p>
                 <div class="inline">
                     <span class="text-gray-500">{&front_matter.publish_date.format("%d %b %Y").to_string()}</span>
-                    <span class="px-0.5 text-white">{"·"}</span>
+                    <span class="px-1 text-white">{"·"}</span>
                     <span class="text-gray-500">{&to_read_time(post_translate.words)}</span>
-                    <span class="px-0.5 text-white">{"·"}</span>
+                    <span class="px-1 text-white">{"·"}</span>
                     {
                         front_matter.tags
                             .iter()
