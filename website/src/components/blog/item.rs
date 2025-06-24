@@ -31,7 +31,7 @@ pub fn blog_item(props: &BlogItemProps) -> Html {
             <Link<Route> to={Route::BlogPost { blog_id: props.id }}>
                 <h3 class="font-bold text-xl hover:underline">{&front_matter.title}</h3>
             </Link<Route>>
-            <div class="flex flex-row">
+            <div class="inline">
                 <span class="text-gray-500">{&front_matter.publish_date.format("%d %b %Y").to_string()}</span>
                 <span class="px-0.5 text-white">{" · "}</span>
                 <span class="text-gray-500">{&to_read_time(post_translate.words)}</span>
