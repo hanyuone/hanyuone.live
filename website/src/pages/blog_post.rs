@@ -1,22 +1,13 @@
 use gloo_net::http::Request;
 use markdown::{
-    structs::{
-        blog::BlogId,
-        metadata::BlogMetadata,
-        tag::{TagId, TagMetadata},
-    },
+    structs::{blog::BlogId, metadata::BlogMetadata},
     translate::node::RenderNode,
 };
-use yew::{
-    function_component, html, html_nested, use_context, use_state, Html, Properties, UseStateHandle,
-};
+use yew::{function_component, html, use_context, use_state, Html, Properties, UseStateHandle};
 use yew_hooks::use_effect_once;
 
 use crate::{
-    components::{
-        blog::{tag::Tag, to_read_time},
-        head::Head,
-    },
+    components::{blog::to_read_time, head::Head},
     context::BlogContext,
     render::Renderer,
 };
