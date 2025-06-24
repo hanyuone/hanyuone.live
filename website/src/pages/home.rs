@@ -6,7 +6,7 @@ use crate::components::{
     home::typewriter::{Block, Typewriter},
 };
 
-const INTRO_BLOCKS: [Block; 3] = [
+const INTRO_BLOCKS: [Block; 4] = [
     Block {
         // We need Unicode escape here (equivalent to "&nbsp;") since Yew
         // does not allow for us to do <p>&nbsp;</p> by itself
@@ -21,6 +21,11 @@ const INTRO_BLOCKS: [Block; 3] = [
         text: ".",
         class: "font-bold text-3xl",
     },
+    Block {
+        // Simulate the blinking cursor effect
+        text: ".",
+        class: "text-3xl text-white text-opacity-0 animate-blink"
+    }
 ];
 
 #[function_component(Page)]
@@ -52,13 +57,15 @@ pub fn page() -> Html {
                                 })} />
                         </div>
                         <div class={format!("{} {}", "flex flex-row justify-center transition duration-500", opacity)}>
-                            <p>{"I am a final-year Advanced Computer Science student at\u{00a0}"}</p>
-                            <a
-                                class="text-green underline transition hover:bg-gray"
-                                href="https://www.unsw.edu.au/engineering/our-schools/computer-science-and-engineering">
-                                {"UNSW"}
-                            </a>
-                            <p>{"."}</p>
+                            <p>
+                                {"I am a final-year Advanced Computer Science student at\u{00a0}"}
+                                <a
+                                    class="text-green underline transition hover:bg-gray"
+                                    href="https://www.unsw.edu.au/engineering/our-schools/computer-science-and-engineering">
+                                    {"UNSW"}
+                                </a>
+                                {"."}
+                            </p>
                         </div>
                     </div>
                 </div>
