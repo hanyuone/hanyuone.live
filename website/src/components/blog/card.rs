@@ -25,22 +25,22 @@ pub fn blog_card(props: &BlogCardProps) -> Html {
     } = &props.metadata;
 
     html! {
-        <div class="flex flex-row hover:bg-gray">
-            <div class="flex-col basis-1/4 p-4">
+        <div class="flex flex-col md:flex-row hover:bg-gray">
+            <div class="flex-col w-full md:basis-1/4 p-4">
                 <img
                     src={front_matter.image.clone()}
                     class="aspect-video object-cover" />
             </div>
-            <div class="flex flex-col basis-3/4 p-4">
+            <div class="flex flex-col md:basis-3/4 p-4">
                 <Link<Route> to={Route::BlogPost { blog_id: props.id }}>
                     <h2 class="font-bold text-2xl hover:underline">{&front_matter.title}</h2>
                 </Link<Route>>
                 <p class="flex grow">{&front_matter.description}</p>
-                <div class="flex flex-row">
+                <div class="inline">
                     <span class="text-gray-500">{&front_matter.publish_date.format("%d %b %Y").to_string()}</span>
-                    <span class="px-0.5 text-white">{"·"}</span>
+                    <span class="px-1 text-white">{"·"}</span>
                     <span class="text-gray-500">{&to_read_time(post_translate.words)}</span>
-                    <span class="px-0.5 text-white">{"·"}</span>
+                    <span class="px-1 text-white">{"·"}</span>
                     {
                         front_matter.tags
                             .iter()

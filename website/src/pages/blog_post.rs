@@ -1,9 +1,16 @@
 use gloo_net::http::Request;
-use markdown::{structs::blog::BlogId, translate::node::RenderNode};
+use markdown::{
+    structs::{blog::BlogId, metadata::BlogMetadata},
+    translate::node::RenderNode,
+};
 use yew::{function_component, html, use_context, use_state, Html, Properties, UseStateHandle};
 use yew_hooks::use_effect_once;
 
-use crate::{components::head::Head, context::BlogContext, render::Renderer};
+use crate::{
+    components::{blog::to_read_time, head::Head},
+    context::BlogContext,
+    render::Renderer,
+};
 
 #[derive(PartialEq, Properties)]
 pub struct BlogPostProps {
@@ -38,7 +45,12 @@ pub fn page(props: &BlogPostProps) -> Html {
         });
     }
 
-    let title = &blog_context.content[&props.blog_id].front_matter.title;
+    let BlogMetadata {
+        front_matter,
+        post_translate,
+    } = &blog_context.content[&props.blog_id];
+
+    let title = &front_matter.title;
     let nodes = ron::from_str::<Vec<RenderNode>>(&content).unwrap_or_default();
 
     html! {
@@ -46,7 +58,17 @@ pub fn page(props: &BlogPostProps) -> Html {
             <Head>
                 <title>{format!("{} | Hanyuan's Website", title)}</title>
             </Head>
-            {Renderer::new().run(nodes)}
+            <div class="flex flex-col p-4 content-center text-center border-b-[1px]">
+                <h2 class="font-bold text-2xl underline">{title}</h2>
+                <p>
+                    <span class="text-gray-500">{&front_matter.publish_date.format("%d %b %Y").to_string()}</span>
+                    <span class="px-1 text-white">{"·"}</span>
+                    <span class="text-gray-500">{&to_read_time(post_translate.words)}</span>
+                </p>
+            </div>
+            <div class="flex flex-col py-4 items-center">
+                {Renderer::new().run(nodes)}
+            </div>
         </>
     }
 }
