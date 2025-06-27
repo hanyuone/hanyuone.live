@@ -36,12 +36,12 @@ pub fn typewriter(props: &TypewriterProps) -> Html {
 
     {
         let on_finish = props.on_finish.clone();
-        let index_clone = index.clone();
+        let index = index.clone();
 
         use_interval(
             move || {
-                if *index_clone < length {
-                    index_clone.set(*index_clone + 1);
+                if *index < length {
+                    index.set(*index + 1);
                 } else {
                     on_finish.emit(());
                 }
@@ -51,7 +51,7 @@ pub fn typewriter(props: &TypewriterProps) -> Html {
     }
 
     html! {
-        <div class="flex flex-row">
+        <p>
             {
                 display_list
                     .iter()
@@ -68,12 +68,11 @@ pub fn typewriter(props: &TypewriterProps) -> Html {
                         };
 
                         html_nested! {
-                            <p class={block.class.to_string()}>{display_text}</p>
+                            <span class={block.class.to_string()}>{display_text}</span>
                         }
                     })
                     .collect::<Vec<_>>()
             }
-            <div class="w-1 h-8 animate-blink" />
-        </div>
+        </p>
     }
 }
