@@ -58,7 +58,7 @@ pub fn page(props: &BlogPostProps) -> Html {
             <Head>
                 <title>{format!("{} | Hanyuan's Website", title)}</title>
             </Head>
-            <div class="w-full p-4 content-center text-center border-b-[1px]">
+            <div class="flex flex-col p-4 content-center text-center border-b-[1px]">
                 <h2 class="font-bold text-2xl underline">{title}</h2>
                 <p>
                     <span class="text-gray-500">{&front_matter.publish_date.format("%d %b %Y").to_string()}</span>
@@ -66,7 +66,7 @@ pub fn page(props: &BlogPostProps) -> Html {
                     <span class="text-gray-500">{&to_read_time(post_translate.words)}</span>
                 </p>
             </div>
-            <div class="p-4">
+            <div class="flex flex-col py-4 items-center">
                 {Renderer::new().run(nodes)}
             </div>
         </>
