@@ -43,29 +43,48 @@ pub fn page() -> Html {
             <Head>
                 <title>{"Hanyuan's Website"}</title>
             </Head>
-            <div class="relative flex flex-col">
-                <div class="h-home blur-sm z-0">
-                    <Background />
-                </div>
-                <div class="h-home content-center -mt-home z-10">
-                    <div class="flex flex-col">
-                        <div class="flex flex-row justify-center">
-                            <Typewriter
-                                blocks={INTRO_BLOCKS.to_vec()}
-                                on_finish={Callback::from(move |_| {
-                                    typing_complete.set(true);
-                                })} />
+            <div class="h-fullmain w-full absolute top-[57px] left-0 blur-sm z-0">
+                <Background />
+            </div>
+            <div class="relative h-main z-10 snap-y snap-mandatory overflow-x-hidden overflow-y-scroll no-scrollbar">
+                <div class="snap-always snap-center">
+                    <div class="min-h-main">
+                        <div class="h-main flex flex-col justify-center items-center">
+                            <div class="flex flex-row">
+                                <Typewriter
+                                    blocks={INTRO_BLOCKS.to_vec()}
+                                    on_finish={Callback::from(move |_| {
+                                        typing_complete.set(true);
+                                    })} />
+                            </div>
+                            <div class={format!("{} {}", "flex flex-row transition duration-500", opacity)}>
+                                <p>
+                                    {"I am a final-year Advanced Computer Science student at\u{00a0}"}
+                                    <a
+                                        class="text-green underline transition hover:bg-gray"
+                                        href="https://www.unsw.edu.au/engineering/our-schools/computer-science-and-engineering">
+                                        {"UNSW"}
+                                    </a>
+                                    {"."}
+                                </p>
+                            </div>
                         </div>
-                        <div class={format!("{} {}", "flex flex-row justify-center transition duration-500", opacity)}>
-                            <p>
-                                {"I am a final-year Advanced Computer Science student at\u{00a0}"}
-                                <a
-                                    class="text-green underline transition hover:bg-gray"
-                                    href="https://www.unsw.edu.au/engineering/our-schools/computer-science-and-engineering">
-                                    {"UNSW"}
-                                </a>
-                                {"."}
-                            </p>
+                    </div>
+                </div>
+                <div class="snap-always snap-center">
+                    <div class="min-h-main">
+                        <div class="h-main flex flex-col justify-center items-center">
+                            <div class={format!("{} {}", "flex flex-row transition duration-500", opacity)}>
+                                <p>
+                                    {"I am a final-year Advanced Computer Science student at\u{00a0}"}
+                                    <a
+                                        class="text-green underline transition hover:bg-gray"
+                                        href="https://www.unsw.edu.au/engineering/our-schools/computer-science-and-engineering">
+                                        {"UNSW"}
+                                    </a>
+                                    {"."}
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
