@@ -14,7 +14,7 @@ pub fn layout(props: &LayoutProps) -> Html {
     html! {
         <div class="bg-black text-white flex flex-col min-h-screen justify-between">
             <header::Header />
-            <main class="grow m-20">
+            <main class="grow p-20">
                 {props.children.clone()}
             </main>
             <footer::Footer />
