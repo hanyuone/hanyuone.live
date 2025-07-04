@@ -22,8 +22,9 @@ module.exports = {
                 purple: "#D3869B",
             },
             height: {
+                "fullmain": "calc(100vh - 7rem - 2px)",
                 // Screen height minus header/footer and padding
-                "home": "calc(100vh - 17rem - 2px)",
+                "main": "calc(100vh - 17rem - 2px)",
             },
             keyframes: {
                 blink: {
@@ -37,7 +38,7 @@ module.exports = {
             },
             margin: {
                 // Screen height minus header/footer and padding
-                "home": "calc(100vh - 17rem - 2px)",
+                "main": "calc(100vh - 17rem - 2px)",
             },
             typography: {
                 DEFAULT: {
