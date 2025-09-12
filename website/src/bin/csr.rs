@@ -1,4 +1,3 @@
-use gloo_net::http::Request;
 use wasm_bindgen::prelude::*;
 use website::{
     app::{App, AppProps},
@@ -7,8 +6,7 @@ use website::{
 
 #[wasm_bindgen(main)]
 async fn main() {
-    let raw_blog_metadata = Request::get("/public/blog/blog_map.ron")
-        .send()
+    let raw_blog_metadata = reqwest::get("/public/blog/blog_map.ron")
         .await
         .unwrap()
         .text()

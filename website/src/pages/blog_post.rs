@@ -1,4 +1,3 @@
-use gloo_net::http::Request;
 use markdown::{
     structs::{blog::BlogId, metadata::BlogMetadata},
     translate::node::RenderNode,
@@ -30,8 +29,7 @@ pub fn page(props: &BlogPostProps) -> Html {
             wasm_bindgen_futures::spawn_local(async move {
                 // We can safely unwrap here, because we're guaranteed that the
                 // file exists when we build our MD files in the first place
-                let raw_content = Request::get(&url)
-                    .send()
+                let raw_content = reqwest::get(&url)
                     .await
                     .unwrap()
                     .text()

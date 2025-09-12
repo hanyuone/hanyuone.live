@@ -18,11 +18,12 @@ required-features = ["static"]
 [dependencies]
 chrono = "0.4.40"
 enum-iterator = "2.0.1"
+futures = "0.3.31"
 getrandom = { version = "0.3.2", features = ["wasm_js"] }
 gloo = "0.11.0"
-gloo-net = "0.5.0"
 markdown = { path = "../markdown" }
 rand = "0.9.0"
+reqwest = { version = "0.12.23", features = ["json"] }
 ron = "0.8.1"
 serde = "1.0.204"
 serde_yml = "0.0.11"
