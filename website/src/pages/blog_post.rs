@@ -7,7 +7,7 @@ use yew::{function_component, html, use_context, use_state, Html, Properties, Us
 use yew_hooks::use_effect_once;
 
 use crate::{
-    components::{blog::to_read_time, head::Head},
+    components::{blog::to_read_time, blog_post::comments::Comments, head::Head},
     context::BlogContext,
     render::Renderer,
 };
@@ -19,6 +19,8 @@ pub struct BlogPostProps {
 
 #[function_component(Page)]
 pub fn page(props: &BlogPostProps) -> Html {
+    web_sys::console::log_1(&"Hello, World!".into());
+    
     let blog_context = use_context::<BlogContext>().unwrap();
     let content: UseStateHandle<String> = use_state(String::new);
 
@@ -66,8 +68,11 @@ pub fn page(props: &BlogPostProps) -> Html {
                     <span class="text-gray-500">{&to_read_time(post_translate.words)}</span>
                 </p>
             </div>
-            <div class="flex flex-col py-4 items-center">
+            <div class="flex flex-col py-4 items-center border-b-[1px]">
                 {Renderer::new().run(nodes)}
+            </div>
+            <div class="flex flex-col py-4 items-center">
+                <Comments />
             </div>
         </>
     }
