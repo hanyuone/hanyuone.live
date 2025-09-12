@@ -25,7 +25,7 @@ async fn authenticate() -> Option<User> {
 fn o_auth() -> Html {
     let route = use_route::<Route>();
 
-    let return_url = format!("https://hanyuone.live/{}", route.unwrap().to_path());
+    let return_url = format!("https://hanyuone.live{}", route.unwrap().to_path());
     let login_url = format!("https://comments.hanyuone.live/auth/login?return_url={return_url}");
 
     html! {
