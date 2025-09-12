@@ -23,7 +23,7 @@ pub fn page(props: &BlogPostProps) -> Html {
 
     {
         let content = content.clone();
-        let url = format!("/public/blog/{}.ron", props.blog_id);
+        let url = format!("{}/public/blog/{}.ron", env!("WEBSITE_URL"), props.blog_id);
 
         use_effect_once(|| {
             wasm_bindgen_futures::spawn_local(async move {

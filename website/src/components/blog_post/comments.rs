@@ -1,4 +1,3 @@
-use gloo::utils::window;
 use serde::Deserialize;
 use yew::{function_component, html, suspense::use_future, Html, HtmlResult, Properties, Suspense};
 use yew_icons::{Icon, IconId};
@@ -25,7 +24,7 @@ async fn authenticate() -> Option<User> {
 #[function_component(OAuth)]
 fn o_auth() -> Html {
     let route = use_route::<Route>();
-    
+
     let return_url = format!("https://hanyuone.live/{}", route.unwrap().to_path());
     let login_url = format!("https://comments.hanyuone.live/auth/login?return_url={return_url}");
 
