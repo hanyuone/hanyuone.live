@@ -19,8 +19,6 @@ pub struct BlogPostProps {
 
 #[function_component(Page)]
 pub fn page(props: &BlogPostProps) -> Html {
-    web_sys::console::log_1(&"Hello, World!".into());
-    
     let blog_context = use_context::<BlogContext>().unwrap();
     let content: UseStateHandle<String> = use_state(String::new);
 
