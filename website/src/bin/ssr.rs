@@ -9,7 +9,7 @@ use website::{
     context::{BlogContext, HeadContext},
     pages::Route,
 };
-use yew::LocalServerRenderer;
+use yew::{platform::Runtime, LocalServerRenderer};
 use yew_router::Routable;
 
 /// Basic struct for converting a HTML file into a "template" - a place where
@@ -170,7 +170,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let env = Env::new().await?;
 
-    render_routes(&env).await?;
+    let runtime = Runtime::builder()
+        .build()?;
+
+    runtime.spawn_pinned(|| async move {
+        render_routes(&env).await.unwrap();
+    });
 
     Ok(())
 }
