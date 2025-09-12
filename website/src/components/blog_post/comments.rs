@@ -1,8 +1,10 @@
 use gloo::utils::window;
-use gloo_net::http::Request;
 use serde::Deserialize;
 use yew::{function_component, html, suspense::use_future, Html, HtmlResult, Properties, Suspense};
 use yew_icons::{Icon, IconId};
+use yew_router::{hooks::use_route, Routable};
+
+use crate::pages::Route;
 
 #[derive(Deserialize)]
 pub struct User {
@@ -12,25 +14,20 @@ pub struct User {
 }
 
 async fn authenticate() -> Option<User> {
-    let comments_auth = Request::get("http://comments.hanyuone.live/profile")
-        .send()
+    reqwest::get("https://comments.hanyuone.live/profile")
         .await
-        .ok()?;
-
-    if comments_auth.ok() {
-        let github_user = comments_auth.json::<User>().await.unwrap();
-        Some(github_user)
-    } else {
-        None
-    }
+        .ok()?
+        .json::<User>()
+        .await
+        .ok()
 }
 
 #[function_component(OAuth)]
 fn o_auth() -> Html {
-    let location = window().location();
-    let return_url = location.href().unwrap();
-
-    let login_url = format!("http://comments.hanyuone.live/auth/login?return_url={return_url}");
+    let route = use_route::<Route>();
+    
+    let return_url = format!("https://hanyuone.live/{}", route.unwrap().to_path());
+    let login_url = format!("https://comments.hanyuone.live/auth/login?return_url={return_url}");
 
     html! {
         <div class="flex flex-col content-center">

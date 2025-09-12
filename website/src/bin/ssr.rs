@@ -1,8 +1,9 @@
 use std::{
     env, io,
-    path::{Path, PathBuf},
+    path::{Path, PathBuf}, sync::Arc,
 };
 
+use futures::channel::oneshot::channel;
 use website::{
     app::{StaticApp, StaticAppProps},
     components::head::{HeadRender, HeadRenderProps},
@@ -155,10 +156,26 @@ fn collect_routes() -> Vec<RouteTarget> {
 
 /// Statically render all routes into plain HTML files, with routes defined
 /// in the `Route` enum.
-async fn render_routes(env: &Env) -> io::Result<()> {
+async fn render_routes(env: Arc<Env>) -> io::Result<()> {
     for RouteTarget { route, target } in collect_routes() {
-        let result = env.render_route(route).await;
-        env.write_str(target, &result).await?;
+        let render_env = env.clone();
+        let write_env = env.clone();
+
+        // Because we use async methods in our routes, we need to make sure
+        // they are statically rendered using a `Runtime`.
+        let runtime = Runtime::builder()
+            .build()
+            .unwrap();
+
+        let (tx, rx) = channel();
+
+        runtime.spawn_pinned(|| async move {
+            let result = render_env.render_route(route).await;
+            let _ = tx.send(result);
+        });
+
+        let result = rx.await.expect("Failed to render route");
+        write_env.write_str(target, &result).await?;
     }
 
     Ok(())
@@ -168,14 +185,9 @@ async fn render_routes(env: &Env) -> io::Result<()> {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     env_logger::init();
 
-    let env = Env::new().await?;
+    let env = Arc::new(Env::new().await?);
 
-    let runtime = Runtime::builder()
-        .build()?;
-
-    runtime.spawn_pinned(|| async move {
-        render_routes(&env).await.unwrap();
-    });
+    render_routes(env).await?;
 
     Ok(())
 }
