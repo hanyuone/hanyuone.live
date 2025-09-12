@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - main
+      # TODO: remove once cookies confirmed working
+      - hanyuan/comments
 
 permissions:
   contents: read
