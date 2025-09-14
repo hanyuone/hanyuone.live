@@ -1,9 +1,10 @@
 use std::{
     env, io,
-    path::{Path, PathBuf}, sync::Arc,
+    path::{Path, PathBuf},
+    sync::Arc,
 };
 
-use futures::channel::oneshot::channel;
+use futures::channel::oneshot;
 use website::{
     app::{StaticApp, StaticAppProps},
     components::head::{HeadRender, HeadRenderProps},
@@ -163,11 +164,9 @@ async fn render_routes(env: Arc<Env>) -> io::Result<()> {
 
         // Because we use async methods in our routes, we need to make sure
         // they are statically rendered using a `Runtime`.
-        let runtime = Runtime::builder()
-            .build()
-            .unwrap();
+        let runtime = Runtime::builder().build().unwrap();
 
-        let (tx, rx) = channel();
+        let (tx, rx) = oneshot::channel();
 
         runtime.spawn_pinned(|| async move {
             let result = render_env.render_route(route).await;

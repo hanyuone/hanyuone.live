@@ -4,7 +4,10 @@ on:
     branches:
       - main
       # TODO: remove once cookies confirmed working
-      - hanyuan/comments
+      - feature/comments
+
+env:
+  WEBSITE_URL: https://hanyuone.live
 
 permissions:
   contents: read

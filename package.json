@@ -8,8 +8,8 @@
     "dev:site": "cd website && WEBSITE_URL=\"http://127.0.0.1:8080\" trunk serve --color always",
     "dev": "concurrently -c auto \"pnpm dev:md\" \"pnpm dev:site\"",
     "build:md": "cargo run -p markdown",
-    "build:wasm": "cd website && WEBSITE_URL=\"https://hanyuone.live\" trunk build --release --features hydration",
-    "build:ssg": "WEBSITE_URL=\"https://hanyuone.live\" cargo run -p website --bin ssr --features static release",
+    "build:wasm": "cd website && trunk build --release --features hydration",
+    "build:ssg": "cargo run -p website --bin ssr --features static release",
     "build": "pnpm build:md && pnpm build:wasm && pnpm build:ssg"
   },
   "keywords": [],
