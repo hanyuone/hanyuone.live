@@ -13,7 +13,9 @@ pub struct User {
 }
 
 async fn authenticate() -> Option<User> {
-    reqwest::get("https://comments.hanyuone.live/profile")
+    let auth_url = format!("{}/profile", env!("COMMENTS_URL"));
+
+    reqwest::get(auth_url)
         .await
         .ok()?
         .json::<User>()
@@ -25,8 +27,8 @@ async fn authenticate() -> Option<User> {
 fn o_auth() -> Html {
     let route = use_route::<Route>();
 
-    let return_url = format!("https://hanyuone.live{}", route.unwrap().to_path());
-    let login_url = format!("https://comments.hanyuone.live/auth/login?return_url={return_url}");
+    let return_url = format!("{}{}", env!("WEBSITE_URL"), route.unwrap().to_path());
+    let login_url = format!("{}/auth/login?return_url={return_url}", env!("COMMENTS_URL"));
 
     html! {
         <div class="flex flex-col content-center">
