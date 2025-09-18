@@ -220,7 +220,7 @@ impl BackgroundData {
         for point in &self.points {
             // Draw the point itself
             context.begin_path();
-            context.set_stroke_style(&"white".into());
+            context.set_stroke_style_str("white");
             let _ = context.arc(point.x, point.y, 4.0, 0.0, 2.0 * PI);
             context.stroke();
 
@@ -229,7 +229,7 @@ impl BackgroundData {
                 let outgoing = &self.points[*outgoing_index];
 
                 context.begin_path();
-                context.set_stroke_style(&"white".into());
+                context.set_stroke_style_str("white");
                 context.move_to(point.x, point.y);
                 context.line_to(outgoing.x, outgoing.y);
                 context.stroke();
