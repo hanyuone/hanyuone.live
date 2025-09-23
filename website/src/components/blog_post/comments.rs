@@ -1,5 +1,7 @@
 use reqwest::Client;
 use serde::Deserialize;
+#[cfg(any(feature = "hydration", feature = "static"))]
+use yew::use_prepared_state;
 use yew::{function_component, html, suspense::use_future, Html, HtmlResult, Properties, Suspense};
 use yew_icons::{Icon, IconId};
 use yew_router::{hooks::use_route, Routable};
@@ -54,7 +56,14 @@ fn o_auth() -> Html {
 
 #[function_component(AuthComments)]
 fn auth_comments() -> HtmlResult {
+    #[cfg(not(any(feature = "hydration", feature = "static")))]
     let auth_state = use_future(authenticate)?;
+    #[cfg(any(feature = "hydration", feature = "static"))]
+    let auth_state = use_prepared_state!(
+        async move |_| -> Option<User> {
+            authenticate().await
+        }
+    )?.unwrap();
 
     let contents = match *auth_state {
         Some(ref user) => html! { <p>{format!("Signed in as user {}", user.username)}</p> },
