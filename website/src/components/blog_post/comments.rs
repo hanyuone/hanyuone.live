@@ -62,7 +62,8 @@ fn auth_comments() -> HtmlResult {
     let auth_state = use_prepared_state!(
         async move |_| -> Option<User> {
             authenticate().await
-        }
+        },
+        ()
     )?.unwrap();
 
     let contents = match *auth_state {
