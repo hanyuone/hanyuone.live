@@ -1,3 +1,4 @@
+use reqwest::Client;
 use serde::Deserialize;
 use yew::{function_component, html, suspense::use_future, Html, HtmlResult, Properties, Suspense};
 use yew_icons::{Icon, IconId};
@@ -15,7 +16,14 @@ pub struct User {
 async fn authenticate() -> Option<User> {
     let auth_url = format!("{}/profile", env!("COMMENTS_URL"));
 
-    reqwest::get(auth_url)
+    let client = Client::new();
+
+    let request_builder = client.get(auth_url);
+    #[cfg(target_arch = "wasm32")]
+    let request_builder = request_builder.fetch_credentials_include();
+
+    request_builder
+        .send()
         .await
         .ok()?
         .json::<User>()
