@@ -1,14 +1,16 @@
 use reqwest::Client;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
+#[cfg(not(any(feature = "hydration", feature = "static")))]
+use yew::suspense::use_future;
 #[cfg(any(feature = "hydration", feature = "static"))]
 use yew::use_prepared_state;
-use yew::{function_component, html, suspense::use_future, Html, HtmlResult, Properties, Suspense};
+use yew::{function_component, html, Html, HtmlResult, Properties, Suspense};
 use yew_icons::{Icon, IconId};
 use yew_router::{hooks::use_route, Routable};
 
 use crate::pages::Route;
 
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct User {
     id: i32,
     username: String,
@@ -24,13 +26,7 @@ async fn authenticate() -> Option<User> {
     #[cfg(target_arch = "wasm32")]
     let request_builder = request_builder.fetch_credentials_include();
 
-    request_builder
-        .send()
-        .await
-        .ok()?
-        .json::<User>()
-        .await
-        .ok()
+    request_builder.send().await.ok()?.json::<User>().await.ok()
 }
 
 #[function_component(OAuth)]
@@ -38,7 +34,10 @@ fn o_auth() -> Html {
     let route = use_route::<Route>();
 
     let return_url = format!("{}{}", env!("WEBSITE_URL"), route.unwrap().to_path());
-    let login_url = format!("{}/auth/login?return_url={return_url}", env!("COMMENTS_URL"));
+    let login_url = format!(
+        "{}/auth/login?return_url={return_url}",
+        env!("COMMENTS_URL")
+    );
 
     html! {
         <div class="flex flex-col content-center">
@@ -58,13 +57,10 @@ fn o_auth() -> Html {
 fn auth_comments() -> HtmlResult {
     #[cfg(not(any(feature = "hydration", feature = "static")))]
     let auth_state = use_future(authenticate)?;
+
     #[cfg(any(feature = "hydration", feature = "static"))]
-    let auth_state = use_prepared_state!(
-        async move |_| -> Option<User> {
-            authenticate().await
-        },
-        ()
-    )?.unwrap();
+    let auth_state =
+        use_prepared_state!((), async move |_| -> Option<User> { authenticate().await })?.unwrap();
 
     let contents = match *auth_state {
         Some(ref user) => html! { <p>{format!("Signed in as user {}", user.username)}</p> },
