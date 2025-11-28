@@ -23,7 +23,8 @@ jobs:
       # Install Trunk and WASM for building webapp
       - uses: jetli/trunk-action@v0.5.0
       - uses: jetli/wasm-bindgen-action@v0.2.0
-        version: '0.2.105'
+        with:
+          version: '0.2.105'
       # Install Node and PNPM
       - uses: actions/setup-node@v4
         with:
