@@ -19,13 +19,11 @@ jobs:
         with:
           toolchain: stable
           targets: wasm32-unknown-unknown
-      # Install Trunk and WASM for building webapp
-      - uses: jetli/wasm-bindgen-action@v0.2.0
-        with:
-          version: '0.2.105'
       # Install cargo-leptos
       - name: Install cargo-leptos
-        run: cargo install --locked cargo-leptos
+        uses: baptiste0928/cargo-install@v3
+        with:
+          crate: cargo-leptos
       # Install Node and PNPM
       - uses: actions/setup-node@v4
         with:
