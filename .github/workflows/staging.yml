@@ -9,6 +9,9 @@ permissions:
   pages: write
   id-token: write
 
+env:
+  LEPTOS_WASM_BINDGEN_VERSION: 0.2.105 
+
 jobs:
   release:
     runs-on: ubuntu-latest
