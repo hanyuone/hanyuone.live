@@ -1,0 +1,84 @@
+name: Deploy hanyuone.live/staging
+on:
+  push:
+    branches:
+      - feature/leptos-rewrite
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      # ==================== SETUP ====================
+      # Install Rust
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          targets: wasm32-unknown-unknown
+      # Install Trunk and WASM for building webapp
+      - uses: jetli/wasm-bindgen-action@v0.2.0
+        with:
+          version: '0.2.105'
+      # Install cargo-leptos
+      - name: Install cargo-leptos
+        run: cargo install --locked cargo-leptos
+      # Install Node and PNPM
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 9
+          run_install: false
+      # Checkout repo
+      - uses: actions/checkout@v6
+      # =================== INSTALL ===================
+      # Cache Rust build files
+      - uses: Swatinem/rust-cache@v2
+      # PNPM caching and installing dependencies
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      # ==================== BUILD ====================
+      - name: Build website
+        run: pnpm build
+      # ================== CHECKOUT ===================
+      # Delete everything
+      - name: Wipe folder except for build files
+        shell: bash
+        run: |
+          shopt -s extglob
+          rm -rf !(target/site)
+      # Move into `gh-pages` branch
+      - name: Checkout gh-pages
+        uses: actions/checkout@v6
+        with:
+          ref: gh-pages
+          clean: false
+      - name: Update staging contents
+        shell: bash
+        run: |
+          rm -rf staging
+          mv target/site/* staging
+      - name: Upload to gh-pages branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "generated"
+          git push
