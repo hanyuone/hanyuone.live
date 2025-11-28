@@ -1,13 +1,15 @@
-name: Deploy to hanyuone.live
+name: Deploy to staging environment
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    main
 
 permissions:
   contents: write
   pages: write
   id-token: write
+
+environment:
+  WEBSITE_URL: "https://hanyuone.live/staging/${{ github.head_ref }}"
 
 jobs:
   release:
@@ -53,20 +55,28 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       # ==================== BUILD ====================
+      - name: Add base URL
+        shell: bash
+        run: |
+          ./scripts/write_index.sh "${{ env.WEBSITE_URL }}"
       - name: Build website
         run: pnpm build
       # ================== CHECKOUT ===================
+      - name: Remove all other folders
+        shell: bash
+        run: |
+          shopt -s extglob
+          rm -rf !(dist)
       - name: Checkout gh-pages
         uses: actions/checkout@v6
         with:
           ref: gh-pages
           clean: false
-      - name: Update contents using dist folder
-        shell: bash
+      - name: Transfer dist folder to proper location
         run: |
-          shopt -s extglob
-          rm -rf !(dist)
-          mv dist/* .
+          rm -rf staging/${{ github.head_ref }}
+          mkdir -p staging/${{ github.head_ref }}
+          mv dist staging/${{ github.head_ref }}
       - name: Upload to gh-pages branch
         run: |
           git config user.name "github-actions[bot]"
