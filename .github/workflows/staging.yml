@@ -8,7 +8,7 @@ permissions:
   pages: write
   id-token: write
 
-environment:
+env:
   WEBSITE_URL: "https://hanyuone.live/staging/${{ github.head_ref }}"
 
 jobs:
