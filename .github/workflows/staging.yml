@@ -64,7 +64,7 @@ jobs:
         shell: bash
         run: |
           shopt -s extglob
-          rm -rf !(target/site)
+          rm -rf !(target)
       # Move into `gh-pages` branch
       - name: Checkout gh-pages
         uses: actions/checkout@v6
