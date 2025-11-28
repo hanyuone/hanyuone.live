@@ -254,30 +254,30 @@ if (!('encodeInto' in cachedTextEncoder)) {
 
 let WASM_VECTOR_LEN = 0;
 
-function wasm_bindgen__convert__closures_____invoke__hbf234d50f7f97c51(arg0, arg1, arg2) {
-    const ptr0 = passArrayJsValueToWasm0(arg2, wasm.__wbindgen_malloc);
-    const len0 = WASM_VECTOR_LEN;
-    wasm.wasm_bindgen__convert__closures_____invoke__hbf234d50f7f97c51(arg0, arg1, ptr0, len0);
-}
-
 function wasm_bindgen__convert__closures_____invoke__h0db42b75ac07a9bf(arg0, arg1, arg2) {
     wasm.wasm_bindgen__convert__closures_____invoke__h0db42b75ac07a9bf(arg0, arg1, arg2);
+}
+
+function wasm_bindgen__convert__closures________invoke__h2a578c3d7796b5d8(arg0, arg1, arg2) {
+    wasm.wasm_bindgen__convert__closures________invoke__h2a578c3d7796b5d8(arg0, arg1, arg2);
 }
 
 function wasm_bindgen__convert__closures_____invoke__hb8b6941fceac7069(arg0, arg1, arg2) {
     wasm.wasm_bindgen__convert__closures_____invoke__hb8b6941fceac7069(arg0, arg1, arg2);
 }
 
-function wasm_bindgen__convert__closures________invoke__h8f263b94fc97ffd9(arg0, arg1, arg2) {
-    wasm.wasm_bindgen__convert__closures________invoke__h8f263b94fc97ffd9(arg0, arg1, arg2);
-}
-
 function wasm_bindgen__convert__closures_____invoke__hcbf75c672e4873e5(arg0, arg1) {
     wasm.wasm_bindgen__convert__closures_____invoke__hcbf75c672e4873e5(arg0, arg1);
 }
 
-function wasm_bindgen__convert__closures________invoke__h2a578c3d7796b5d8(arg0, arg1, arg2) {
-    wasm.wasm_bindgen__convert__closures________invoke__h2a578c3d7796b5d8(arg0, arg1, arg2);
+function wasm_bindgen__convert__closures________invoke__h8f263b94fc97ffd9(arg0, arg1, arg2) {
+    wasm.wasm_bindgen__convert__closures________invoke__h8f263b94fc97ffd9(arg0, arg1, arg2);
+}
+
+function wasm_bindgen__convert__closures_____invoke__hbf234d50f7f97c51(arg0, arg1, arg2) {
+    const ptr0 = passArrayJsValueToWasm0(arg2, wasm.__wbindgen_malloc);
+    const len0 = WASM_VECTOR_LEN;
+    wasm.wasm_bindgen__convert__closures_____invoke__hbf234d50f7f97c51(arg0, arg1, ptr0, len0);
 }
 
 const EXPECTED_RESPONSE_TYPES = new Set(['basic', 'cors', 'default']);
