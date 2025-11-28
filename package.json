@@ -4,13 +4,12 @@
   "description": "A personal website written in Rust.",
   "main": "index.js",
   "scripts": {
-    "dev:md": "cargo watch -w markdown/src -w public -x \"run -p markdown\"",
-    "dev:site": "cd website && trunk serve --color always",
+    "dev:md": "cargo watch -w markdown/src -w blogs/md -x \"run -p markdown\"",
+    "dev:site": "cd website && cargo leptos watch",
     "dev": "concurrently -c auto \"pnpm dev:md\" \"pnpm dev:site\"",
     "build:md": "cargo run -p markdown",
-    "build:wasm": "cd website && trunk build --release --features hydration",
-    "build:ssg": "cargo run -p website --bin ssr --features static release",
-    "build": "pnpm build:md && pnpm build:wasm && pnpm build:ssg"
+    "build:site": "cd website && cargo leptos build --release",
+    "build": "pnpm build:md && pnpm build:site"
   },
   "keywords": [],
   "author": "hanyuone",

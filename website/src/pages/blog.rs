@@ -1,52 +1,29 @@
-use yew::{function_component, html, html_nested, use_context, Html};
+use leptos::prelude::*;
+use leptos_router::components::A;
 
-use crate::{
-    components::{
-        blog::{card::BlogCard, item::BlogItem},
-        head::Head,
-    },
-    context::BlogContext,
-};
+use crate::app::list_slugs;
 
-#[function_component(Page)]
-pub fn page() -> Html {
-    let blog_context = use_context::<BlogContext>().unwrap();
+#[component]
+pub fn BlogPage() -> impl IntoView {
+    // load the posts
+    let posts = Resource::new(|| (), |_| list_slugs());
+    let posts = move || {
+        posts
+            .get()
+            .map(|n| n.unwrap_or_default())
+            .unwrap_or_default()
+    };
 
-    let mut blogs = blog_context.get_sorted().into_iter();
-    let first_blog = blogs.next();
-
-    if let Some((first_id, first_metadata)) = first_blog {
-        return html! {
-            <>
-                <Head>
-                    <title>{"Blog | Hanyuan's Website"}</title>
-                </Head>
-                <BlogCard
-                    id={*first_id}
-                    metadata={first_metadata.clone()} />
-                <div>
-                    {
-                        blogs
-                            .map(|(id, metadata)| {
-                                html_nested! {
-                                    <BlogItem
-                                        id={*id}
-                                        metadata={metadata.clone()} />
-                                }
-                            })
-                            .collect::<Vec<_>>()
-                    }
-                </div>
-            </>
-        };
-    }
-
-    html! {
-        <>
-            <Head>
-                <title>{"Blog | Hanyuan's Website"}</title>
-            </Head>
-            <p>{"No blogs found!"}</p>
-        </>
+    view! {
+        <h1>"My Great Blog"</h1>
+        <Suspense fallback=move || view! { <p>"Loading posts..."</p> }>
+            <ul>
+                <For each=posts key=|post| post.clone() let:post>
+                    <li>
+                        <A href={post.clone()}>{post.clone()}</A>
+                    </li>
+                </For>
+            </ul>
+        </Suspense>
     }
 }

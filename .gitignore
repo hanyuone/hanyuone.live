@@ -17,3 +17,6 @@ Cargo.lock
 *.pdb
 
 node_modules/
+
+# TEMPORARY: remove once website is fully transitioned
+website-old/
