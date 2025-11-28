@@ -1,7 +1,8 @@
 name: Deploy to staging environment
 on:
   pull_request:
-    - main
+    branches:
+      - main
 
 permissions:
   contents: write
