@@ -5,7 +5,7 @@ on:
       - main
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -22,6 +22,8 @@ jobs:
       # Install Trunk and WASM for building webapp
       - uses: jetli/trunk-action@v0.5.0
       - uses: jetli/wasm-bindgen-action@v0.2.0
+        with:
+          version: '0.2.105'
       # Install Node and PNPM
       - uses: actions/setup-node@v4
         with:
@@ -41,25 +43,34 @@ jobs:
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-      - uses: actions/cache@v4
-        name: Setup pnpm cache
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
         with:
           path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-server-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+            ${{ runner.os }}-pnpm-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       # ==================== BUILD ====================
       - name: Build website
         run: pnpm build
-      # =================== DEPLOY ====================
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      # ================== CHECKOUT ===================
+      - name: Checkout gh-pages
+        uses: actions/checkout@v6
         with:
-          path: './dist'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          ref: gh-pages
+          clean: false
+      - name: Update contents using dist folder
+        shell: bash
+        run: |
+          shopt -s extglob
+          rm -rf !(dist)
+          mv dist/* .
+      - name: Upload to gh-pages branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "generated"
+          git push
