@@ -67,7 +67,7 @@ jobs:
         shell: bash
         run: |
           shopt -s extglob
-          rm -rf !(dist | staging)
+          rm -rf !(dist|staging)
           mv dist/* .
       - name: Upload to gh-pages branch
         run: |
