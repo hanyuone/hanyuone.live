@@ -56,10 +56,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       # ==================== BUILD ====================
-      - name: Add base URL
-        shell: bash
-        run: |
-          ./scripts/write_index.sh "${{ env.WEBSITE_URL }}"
       - name: Build website
         run: pnpm build
       # ================== CHECKOUT ===================
