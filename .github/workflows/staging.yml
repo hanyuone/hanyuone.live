@@ -74,6 +74,7 @@ jobs:
       - name: Update staging contents
         shell: bash
         run: |
+          ls
           rm -rf staging
           mv target/site/* staging
       - name: Upload to gh-pages branch
