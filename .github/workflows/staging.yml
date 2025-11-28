@@ -10,7 +10,7 @@ permissions:
   id-token: write
 
 env:
-  WEBSITE_URL: "https://hanyuone.live/staging/${{ github.head_ref }}/"
+  TRUNK_PUBLIC_URL: "https://hanyuone.live/staging/${{ github.head_ref }}/"
 
 jobs:
   release:
