@@ -1,0 +1,14 @@
+[build]
+target = "index.html"
+dist = "../dist"
+
+[watch]
+ignore = ["public/blog"]
+
+[[hooks]]
+stage = "build"
+command = "sh"
+command_arguments = [
+    "-c",
+    "pnpm tailwind"
+]
