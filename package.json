@@ -8,7 +8,7 @@
     "dev:site": "cd website && cargo leptos watch",
     "dev": "concurrently -c auto \"pnpm dev:md\" \"pnpm dev:site\"",
     "build:md": "cargo run -p markdown",
-    "build:site": "cd website && cargo leptos build --release",
+    "build:site": "cd website && cargo leptos serve --release",
     "build": "pnpm build:md && pnpm build:site"
   },
   "keywords": [],
