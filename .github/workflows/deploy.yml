@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - feature/gh-pages-branch
 
 permissions:
   contents: read
@@ -41,8 +42,8 @@ jobs:
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-      - uses: actions/cache@v4
-        name: Setup pnpm cache
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
         with:
           path: ${{ env.STORE_PATH }}
           key: ${{ runner.os }}-server-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -53,13 +54,30 @@ jobs:
       # ==================== BUILD ====================
       - name: Build website
         run: pnpm build
-      # =================== DEPLOY ====================
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      # ================== CHECKOUT ===================
+      - name: Checkout gh-pages
+        uses: actions/checkout@v6
         with:
-          path: './dist'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          ref: gh-pages
+          path: gh-pages
+      - name: Move files into gh-pages
+        run: |
+          rm -rf gh-pages/*
+          mv ./dist gh-pages
+      - name: Upload to gh-pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "generated"
+          git push
+      # =================== DEPLOY ====================
+      # - name: Setup Pages
+      #   uses: actions/configure-pages@v5
+      # - name: Upload artifact
+      #   uses: actions/upload-pages-artifact@v3
+      #   with:
+      #     path: './dist'
+      # - name: Deploy to GitHub Pages
+      #   id: deployment
+      #   uses: actions/deploy-pages@v4
