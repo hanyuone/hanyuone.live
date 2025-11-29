@@ -1,4 +1,3 @@
-use gloo_net::http::Request;
 use markdown::{
     structs::{blog::BlogId, metadata::BlogMetadata},
     translate::node::RenderNode,
@@ -7,7 +6,7 @@ use yew::{function_component, html, use_context, use_state, Html, Properties, Us
 use yew_hooks::use_effect_once;
 
 use crate::{
-    components::{blog::to_read_time, head::Head},
+    components::{blog::to_read_time, blog_post::comments::Comments, head::Head},
     context::BlogContext,
     render::Renderer,
 };
@@ -24,14 +23,13 @@ pub fn page(props: &BlogPostProps) -> Html {
 
     {
         let content = content.clone();
-        let url = format!("/public/blog/{}.ron", props.blog_id);
+        let url = format!("{}/public/blog/{}.ron", env!("WEBSITE_URL"), props.blog_id);
 
         use_effect_once(|| {
             wasm_bindgen_futures::spawn_local(async move {
                 // We can safely unwrap here, because we're guaranteed that the
                 // file exists when we build our MD files in the first place
-                let raw_content = Request::get(&url)
-                    .send()
+                let raw_content = reqwest::get(&url)
                     .await
                     .unwrap()
                     .text()
@@ -66,8 +64,11 @@ pub fn page(props: &BlogPostProps) -> Html {
                     <span class="text-gray-500">{&to_read_time(post_translate.words)}</span>
                 </p>
             </div>
-            <div class="flex flex-col py-4 items-center">
+            <div class="flex flex-col py-4 items-center border-b-[1px]">
                 {Renderer::new().run(nodes)}
+            </div>
+            <div class="flex flex-col py-4 items-center">
+                <Comments />
             </div>
         </>
     }

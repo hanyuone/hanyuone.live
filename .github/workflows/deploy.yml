@@ -3,6 +3,12 @@ on:
   push:
     branches:
       - main
+      # TODO: remove once cookies confirmed working
+      - feature/comments
+
+env:
+  WEBSITE_URL: https://hanyuone.live
+  COMMENTS_URL: https://comments.hanyuone.live
 
 permissions:
   contents: write
