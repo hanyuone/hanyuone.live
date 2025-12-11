@@ -20,13 +20,13 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
         <html lang="en">
             <head>
                 <meta charset="utf-8"/>
-                <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <AutoReload options=options.clone() />
                 <HydrationScripts options root />
-                <MetaTags/>
+                <MetaTags />
             </head>
             <body>
-                <App/>
+                <App />
             </body>
         </html>
     }
@@ -84,18 +84,22 @@ pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
 
-    let root = option_env!("ROOT").unwrap_or("");
+    const ROOT: Option<&'static str> = option_env!("ROOT");
+    let (sheets_href, base) = match ROOT {
+        Some(root) => (format!("{root}/pkg/website.css"), root),
+        None => ("/pkg/website.css".to_string(), "/"),
+    };
 
     view! {
         // injects a stylesheet into the document <head>
         // id=leptos means cargo-leptos will hot-reload this stylesheet
-        <Stylesheet id="leptos" href="/pkg/website.css"/>
+        <Stylesheet id="leptos" href=sheets_href />
 
         // sets the document title
         <Title text="Welcome to Leptos"/>
 
         // content for this welcome page
-        <Router base=root>
+        <Router base>
             <main class="bg-black text-white flex flex-col min-h-screen justify-between">
                 <Routes fallback=|| "Page not found.".into_view()>
                     <Route
