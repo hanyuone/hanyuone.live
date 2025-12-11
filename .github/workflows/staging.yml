@@ -11,7 +11,8 @@ permissions:
   id-token: write
 
 env:
-  WEBSITE_URL: "https://hanyuone.live/staging/${{ github.head_ref }}"
+  ROOT: "/staging/${{ github.event.pull_request.number }}"
+  LEPTOS_WASM_BINDGEN_VERSION: 0.2.105
 
 jobs:
   release:
@@ -23,11 +24,11 @@ jobs:
         with:
           toolchain: stable
           targets: wasm32-unknown-unknown
-      # Install Trunk and WASM for building webapp
-      - uses: jetli/trunk-action@v0.5.0
-      - uses: jetli/wasm-bindgen-action@v0.2.0
+      # Install cargo-leptos
+      - name: Install cargo-leptos
+        uses: baptiste0928/cargo-install@v3
         with:
-          version: '0.2.105'
+          crate: cargo-leptos
       # Install Node and PNPM
       - uses: actions/setup-node@v4
         with:
@@ -58,24 +59,29 @@ jobs:
         run: pnpm install --frozen-lockfile
       # ==================== BUILD ====================
       - name: Build website
-        run: |
-          pnpm build
+        run: pnpm build
       # ================== CHECKOUT ===================
-      - name: Remove all other folders
+      # Delete everything
+      - name: Setup build directory
         shell: bash
         run: |
           shopt -s extglob
-          rm -rf !(dist)
+          rm -rf !(target)
+          mv target/site/staging/${{ github.event.pull_request.number }}/* target/site
+          mv target/site/staging/${{ github.event.pull_request.number }}.html target/site/index.html
+          rmdir target/site/staging/${{ github.event.pull_request.number }}
+      # Move into `gh-pages` branch
       - name: Checkout gh-pages
         uses: actions/checkout@v6
         with:
           ref: gh-pages
           clean: false
-      - name: Transfer dist folder to proper location
+      - name: Transfer build directory to proper location
         run: |
-          rm -rf staging/${{ github.head_ref }}
-          mkdir -p staging/${{ github.head_ref }}
-          mv dist/* staging/${{ github.head_ref }}
+          rm -rf staging/${{ github.event.pull_request.number }}
+          mkdir -p staging/${{ github.event.pull_request.number }}
+          mv target/site/* staging/${{ github.event.pull_request.number }}
+          rm -rf target
       - name: Upload to gh-pages branch
         run: |
           git config user.name "github-actions[bot]"
