@@ -11,7 +11,7 @@ permissions:
   id-token: write
 
 env:
-  ROOT: "/${{ github.event.pull_request.number }}"
+  ROOT: "/staging/${{ github.event.pull_request.number }}"
   LEPTOS_WASM_BINDGEN_VERSION: 0.2.105
 
 jobs:
@@ -67,8 +67,8 @@ jobs:
         run: |
           shopt -s extglob
           rm -rf !(target)
-          mv target/site/${{ github.event.pull_request.number }}/* target/site
-          mv target/site/${{ github.event.pull_request.number }}.html target/site/index.html
+          mv target/site/staging/${{ github.event.pull_request.number }}/* target/site
+          mv target/site/staging/${{ github.event.pull_request.number }}.html target/site/index.html
           rmdir target/site/${{ github.event.pull_request.number }}
       # Move into `gh-pages` branch
       - name: Checkout gh-pages
