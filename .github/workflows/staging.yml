@@ -11,7 +11,7 @@ permissions:
   id-token: write
 
 env:
-  ROOT: "/${{ github.head_ref }}"
+  ROOT: "/${{ github.event.pull_request.number }}"
   LEPTOS_WASM_BINDGEN_VERSION: 0.2.105
 
 jobs:
@@ -67,9 +67,9 @@ jobs:
         run: |
           shopt -s extglob
           rm -rf !(target)
-          mv target/site/${{ github.head.ref }}* target/site
-          mv target/site/${{ github.head.ref }}.html target/site/index.html
-          rmdir target/site/${{ github.head.ref }}
+          mv "target/site/${{ github.event.pull_request.number }}/*" target/site
+          mv "target/site/${{ github.event.pull_request.number }}.html" target/site/index.html
+          rmdir target/site/${{ github.event.pull_request.number }}
       # Move into `gh-pages` branch
       - name: Checkout gh-pages
         uses: actions/checkout@v6
@@ -78,9 +78,9 @@ jobs:
           clean: false
       - name: Transfer build directory to proper location
         run: |
-          rm -rf staging/${{ github.head_ref }}
-          mkdir -p staging/${{ github.head_ref }}
-          mv target/site/* staging/${{ github.head_ref }}
+          rm -rf staging/${{ github.event.pull_request.number }}
+          mkdir -p staging/${{ github.event.pull_request.number }}
+          mv target/site/* staging/${{ github.event.pull_request.number }}
           rm -rf target
       - name: Upload to gh-pages branch
         run: |
