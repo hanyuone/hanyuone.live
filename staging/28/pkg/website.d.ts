@@ -51,12 +51,12 @@ export interface InitOutput {
   readonly intounderlyingsink_abort: (a: number, b: any) => any;
   readonly intounderlyingsink_close: (a: number) => any;
   readonly intounderlyingsink_write: (a: number, b: any) => any;
-  readonly wasm_bindgen__convert__closures_____invoke__h94b317f4efd213ea: (a: number, b: number, c: any) => void;
-  readonly wasm_bindgen__closure__destroy__he14aa0271108db36: (a: number, b: number) => void;
   readonly wasm_bindgen__convert__closures_____invoke__h21765a12b403fcc5: (a: number, b: number, c: any) => void;
   readonly wasm_bindgen__closure__destroy__h2947530277d59059: (a: number, b: number) => void;
   readonly wasm_bindgen__convert__closures_____invoke__h51e9c53b1d9a35ee: (a: number, b: number) => void;
   readonly wasm_bindgen__closure__destroy__h100319400c037366: (a: number, b: number) => void;
+  readonly wasm_bindgen__convert__closures_____invoke__h94b317f4efd213ea: (a: number, b: number, c: any) => void;
+  readonly wasm_bindgen__closure__destroy__he14aa0271108db36: (a: number, b: number) => void;
   readonly wasm_bindgen__convert__closures_____invoke__h9598766e4fa39a6e: (a: number, b: number, c: any, d: any) => void;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
