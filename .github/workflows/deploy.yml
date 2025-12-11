@@ -1,4 +1,4 @@
-name: Deploy static website to GH Pages
+name: Deploy to hanyuone.live
 on:
   push:
     branches:
@@ -6,8 +6,10 @@ on:
 
 permissions:
   contents: write
-  pages: write
   id-token: write
+
+env:
+  WEBSITE_URL: "https://hanyuone.live"
 
 jobs:
   release:
@@ -34,7 +36,7 @@ jobs:
           version: 9
           run_install: false
       # Checkout repo
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       # =================== INSTALL ===================
       # Cache Rust build files
       - uses: Swatinem/rust-cache@v2
@@ -65,7 +67,7 @@ jobs:
         shell: bash
         run: |
           shopt -s extglob
-          rm -rf !(dist)
+          rm -rf !(dist|staging)
           mv dist/* .
       - name: Upload to gh-pages branch
         run: |
