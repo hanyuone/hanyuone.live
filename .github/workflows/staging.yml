@@ -62,22 +62,25 @@ jobs:
         run: pnpm build
       # ================== CHECKOUT ===================
       # Delete everything
-      - name: Wipe folder except for build files
+      - name: Setup build directory
         shell: bash
         run: |
           shopt -s extglob
           rm -rf !(target)
+          mv target/site/${{ github.head.ref }}/* target/site
+          mv target/site/${{ github.head.ref }}.html target/site/index.html
+          rmdir target/site/${{ github.head.ref }}
       # Move into `gh-pages` branch
       - name: Checkout gh-pages
         uses: actions/checkout@v6
         with:
           ref: gh-pages
           clean: false
-      - name: Transfer build folder to proper location
+      - name: Transfer build directory to proper location
         run: |
           rm -rf staging/${{ github.head_ref }}
           mkdir -p staging/${{ github.head_ref }}
-          mv target/site/${{ github.head.ref }} staging
+          mv target/site/* staging/${{ github.head_ref }}
           rm -rf target
       - name: Upload to gh-pages branch
         run: |
