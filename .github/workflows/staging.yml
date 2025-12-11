@@ -67,8 +67,8 @@ jobs:
         run: |
           shopt -s extglob
           rm -rf !(target)
-          mv "target/site/${{ github.event.pull_request.number }}/*" target/site
-          mv "target/site/${{ github.event.pull_request.number }}.html" target/site/index.html
+          mv target/site/${{ github.event.pull_request.number }}/* target/site
+          mv target/site/${{ github.event.pull_request.number }}.html target/site/index.html
           rmdir target/site/${{ github.event.pull_request.number }}
       # Move into `gh-pages` branch
       - name: Checkout gh-pages
