@@ -67,7 +67,7 @@ jobs:
         run: |
           shopt -s extglob
           rm -rf !(target)
-          mv target/site/${{ github.head.ref }}/* target/site
+          mv target/site/${{ github.head.ref }}* target/site
           mv target/site/${{ github.head.ref }}.html target/site/index.html
           rmdir target/site/${{ github.head.ref }}
       # Move into `gh-pages` branch
