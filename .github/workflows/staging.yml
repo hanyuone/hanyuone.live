@@ -69,7 +69,7 @@ jobs:
           rm -rf !(target)
           mv target/site/staging/${{ github.event.pull_request.number }}/* target/site
           mv target/site/staging/${{ github.event.pull_request.number }}.html target/site/index.html
-          rmdir target/site/${{ github.event.pull_request.number }}
+          rmdir target/site/staging/${{ github.event.pull_request.number }}
       # Move into `gh-pages` branch
       - name: Checkout gh-pages
         uses: actions/checkout@v6
