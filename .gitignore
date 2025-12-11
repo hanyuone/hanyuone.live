@@ -18,5 +18,8 @@ Cargo.lock
 
 node_modules/
 
-# TEMPORARY: remove once website is fully transitioned
+# Generated blog .ron files
+blogs/parsed/
+
+# TODO: remove once website is fully transitioned
 website-old/

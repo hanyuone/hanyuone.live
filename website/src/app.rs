@@ -13,6 +13,8 @@ use leptos_router::{
 use crate::pages::{blog::BlogPage, blog_post::BlogPostPage, home::HomePage};
 
 pub fn shell(options: LeptosOptions) -> impl IntoView {
+    let root = option_env!("ROOT").unwrap_or("");
+
     view! {
         <!DOCTYPE html>
         <html lang="en">
@@ -20,7 +22,7 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                 <meta charset="utf-8"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1"/>
                 <AutoReload options=options.clone() />
-                <HydrationScripts options/>
+                <HydrationScripts options root />
                 <MetaTags/>
             </head>
             <body>
@@ -82,6 +84,8 @@ pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
 
+    let root = option_env!("ROOT").unwrap_or("");
+
     view! {
         // injects a stylesheet into the document <head>
         // id=leptos means cargo-leptos will hot-reload this stylesheet
@@ -91,7 +95,7 @@ pub fn App() -> impl IntoView {
         <Title text="Welcome to Leptos"/>
 
         // content for this welcome page
-        <Router>
+        <Router base=root>
             <main class="bg-black text-white flex flex-col min-h-screen justify-between">
                 <Routes fallback=|| "Page not found.".into_view()>
                     <Route

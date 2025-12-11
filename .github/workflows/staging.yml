@@ -11,7 +11,7 @@ permissions:
   id-token: write
 
 env:
-  WEBSITE_URL: "https://hanyuone.live/staging/${{ github.head_ref }}"
+  ROOT: "/${{ github.head_ref }}"
   LEPTOS_WASM_BINDGEN_VERSION: 0.2.105
 
 jobs:
@@ -77,7 +77,7 @@ jobs:
         run: |
           rm -rf staging/${{ github.head_ref }}
           mkdir -p staging/${{ github.head_ref }}
-          mv target/site/* staging/${{ github.head_ref }}
+          mv target/site/${{ github.head.ref }} staging
       - name: Upload to gh-pages branch
         run: |
           git config user.name "github-actions[bot]"
