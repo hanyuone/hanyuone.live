@@ -13,9 +13,8 @@ use std::{
     str::FromStr,
 };
 
-static BLOG_DIR: &str = "public/blog";
-// Seems pretty hacky to build the MD files directly into the website folder
-static TARGET_DIR: &str = "website/public/blog";
+static BLOG_DIR: &str = "blogs/md";
+static TARGET_DIR: &str = "blogs/parsed";
 
 struct BlogFile {
     id: BlogId,

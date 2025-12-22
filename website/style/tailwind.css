@@ -1,0 +1,50 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@config "../tailwind.config.js";
+
+@theme {
+    --animate-blink: blink 1s infinite;
+
+    --color-black: #32302F;
+    --color-gray: #504945;
+    --color-red: #FB4934;
+    --color-orange: #FE8019;
+    --color-yellow: #FABD2F;
+    --color-green: #B8BB26;
+    --color-cyan: #8EC07C;
+    --color-blue: #83A598;
+    --color-purple: #D3869B;
+
+    /* Custom heights */
+    --fullmain: calc(100vh - 7rem - 2px);
+    /* Screen height minus header/footer and padding */
+    --main: calc(100vh - 17rem - 2px);
+
+    @keyframes blink {
+
+        0%,
+        100% {
+            background-color: transparent;
+        }
+
+        50% {
+            background-color: white;
+        }
+    }
+}
+
+@layer utilities {
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        /* IE and Edge */
+        scrollbar-width: none;
+        /* Firefox */
+    }
+}

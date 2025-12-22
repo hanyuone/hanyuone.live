@@ -2,6 +2,6 @@
 members = [
     "macros",
     "markdown",
-    "website"
+    "website",
 ]
 resolver = "2"

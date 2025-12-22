@@ -6,4 +6,4 @@ pub struct TagMetadata {
     pub description: String,
 }
 
-generate_tag_id!("public/tags.yaml");
+generate_tag_id!("blogs/tags.yaml");
