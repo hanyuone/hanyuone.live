@@ -10,7 +10,10 @@ use leptos_router::{
     SsrMode,
 };
 
-use crate::pages::{blog::BlogPage, blog_post::BlogPostPage, home::HomePage};
+use crate::{
+    components::{footer::Footer, header::Header},
+    pages::{blog::BlogPage, blog_post::BlogPostPage, home::HomePage},
+};
 
 pub fn shell(options: LeptosOptions) -> impl IntoView {
     let root = option_env!("ROOT").unwrap_or("");
@@ -87,7 +90,7 @@ pub fn App() -> impl IntoView {
     const ROOT: Option<&'static str> = option_env!("ROOT");
     let (sheets_href, base) = match ROOT {
         Some(root) => (format!("{root}/pkg/website.css"), root),
-        None => ("/pkg/website.css".to_string(), "/"),
+        None => ("/pkg/website.css".to_string(), ""),
     };
 
     view! {
@@ -96,41 +99,45 @@ pub fn App() -> impl IntoView {
         <Stylesheet id="leptos" href=sheets_href />
 
         // sets the document title
-        <Title text="Welcome to Leptos"/>
+        <Title text="Welcome to Leptos" />
 
         // content for this welcome page
         <Router base>
-            <main class="bg-black text-white flex flex-col min-h-screen justify-between">
-                <Routes fallback=|| "Page not found.".into_view()>
-                    <Route
-                        path=path!("/")
-                        view=HomePage
-                        ssr=SsrMode::Static(
-                            StaticRoute::new(),
-                        ) />
-                    <Route
-                        path=path!("/blog")
-                        view=BlogPage
-                        ssr=SsrMode::Static(
-                            StaticRoute::new().regenerate(|_| watch_path(Path::new("./blogs/blog_map.ron"))),
-                        ) />
-                    <Route
-                        path=path!("/blog/:slug")
-                        view=BlogPostPage
-                        ssr=SsrMode::Static(
-                            StaticRoute::new()
-                                .prerender_params(|| async move {
-                                    [("slug".into(), list_slugs().await.unwrap_or_default())]
-                                        .into_iter()
-                                        .collect()
-                                })
-                                .regenerate(|params| {
-                                    let slug = params.get("slug").unwrap();
-                                    watch_path(Path::new(&format!("./blogs/parsed/{slug}.ron")))
-                                }),
-                        ) />
-                </Routes>
-            </main>
+            <div class="bg-black text-white flex flex-col min-h-screen justify-between">
+                <Header />
+                <main class="grow p-20">
+                    <Routes fallback=|| "Page not found.".into_view()>
+                        <Route
+                            path=path!("/")
+                            view=HomePage
+                            ssr=SsrMode::Static(
+                                StaticRoute::new(),
+                            ) />
+                        <Route
+                            path=path!("/blog")
+                            view=BlogPage
+                            ssr=SsrMode::Static(
+                                StaticRoute::new().regenerate(|_| watch_path(Path::new("./blogs/blog_map.ron"))),
+                            ) />
+                        <Route
+                            path=path!("/blog/:slug")
+                            view=BlogPostPage
+                            ssr=SsrMode::Static(
+                                StaticRoute::new()
+                                    .prerender_params(|| async move {
+                                        [("slug".into(), list_slugs().await.unwrap_or_default())]
+                                            .into_iter()
+                                            .collect()
+                                    })
+                                    .regenerate(|params| {
+                                        let slug = params.get("slug").unwrap();
+                                        watch_path(Path::new(&format!("./blogs/parsed/{slug}.ron")))
+                                    }),
+                            ) />
+                    </Routes>
+                </main>
+                <Footer />
+            </div>
         </Router>
     }
 }

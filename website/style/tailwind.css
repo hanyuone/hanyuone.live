@@ -2,8 +2,6 @@
 @plugin "@tailwindcss/typography";
 @config "../tailwind.config.js";
 
-@source inline("hover:bg-purple");
-
 @theme {
     --animate-blink: blink 1s infinite;
 
