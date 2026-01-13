@@ -1,27 +1,29 @@
 use icondata as i;
 use leptos::prelude::*;
 
-use crate::components::icon::Icon;
+use crate::{components::icon::Icon, ROOT};
 
 #[component]
 pub fn Header() -> impl IntoView {
+    let root = ROOT.unwrap_or("");
+
     view! {
         <nav>
             // Desktop view
             <div class="hidden md:flex flex-row mx-4 border-b border-white">
                 // Home page link
                 <div class="flex">
-                    <a href="/" class="px-4 py-4 font-mono hover:bg-gray transition-colors">
+                    <a href={format!("{root}/")} class="px-4 py-4 font-mono hover:bg-gray transition-colors">
                         "hanyuone.live"
                     </a>
                 </div>
                 // Other pages
                 <div class="flex px-4">
-                    <a href="/blog" class="px-4 py-4 text-white hover:bg-blue transition-colors">
+                    <a href={format!("{root}/blog")} class="px-4 py-4 text-white hover:bg-blue transition-colors">
                         "Blog"
                     </a>
                     <a
-                        href="/public/resume.pdf"
+                        href={format!("{root}/resume.pdf")}
                         class="px-4 py-4 text-white hover:bg-blue transition-colors">
                         "Resume"
                     </a>

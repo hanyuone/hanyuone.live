@@ -13,10 +13,11 @@ use leptos_router::{
 use crate::{
     components::{footer::Footer, header::Header},
     pages::{blog::BlogPage, blog_post::BlogPostPage, home::HomePage},
+    ROOT,
 };
 
 pub fn shell(options: LeptosOptions) -> impl IntoView {
-    let root = option_env!("ROOT").unwrap_or("");
+    let root = ROOT.unwrap_or("");
 
     view! {
         <!DOCTYPE html>
@@ -87,7 +88,6 @@ pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
 
-    const ROOT: Option<&'static str> = option_env!("ROOT");
     let (sheets_href, base) = match ROOT {
         Some(root) => (format!("{root}/pkg/website.css"), root),
         None => ("/pkg/website.css".to_string(), ""),
