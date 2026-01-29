@@ -24,6 +24,7 @@ tokio-stream = "0.1.17"
 leptos_icons = "0.7.0"
 icondata = "0.6.0"
 icondata_core = "0.1.0"
+chrono = "0.4.43"
 
 [features]
 hydrate = ["leptos/hydrate", "dep:console_error_panic_hook", "dep:wasm-bindgen"]
