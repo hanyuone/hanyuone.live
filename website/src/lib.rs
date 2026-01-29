@@ -1,6 +1,7 @@
 pub mod app;
 pub mod components;
 pub mod pages;
+pub mod renderer;
 
 const ROOT: Option<&'static str> = option_env!("ROOT");
 
