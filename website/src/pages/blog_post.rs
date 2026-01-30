@@ -2,6 +2,7 @@ use std::{collections::HashMap, str::FromStr};
 
 use chrono::TimeDelta;
 use leptos::prelude::*;
+use leptos_meta::Title;
 use leptos_router::{hooks::use_params, params::Params};
 use markdown::{
     structs::{blog::BlogId, metadata::BlogMetadata},
@@ -55,6 +56,7 @@ pub fn BlogPostPage() -> impl IntoView {
     let post_contents = Resource::new(slug, get_blog_post_ron);
 
     view! {
+        <Title text={front_matter.title.clone()} />
         <div class="flex flex-col p-4 content-center text-center border-b-[1px]">
             <h2 class="font-bold text-2xl underline">{front_matter.title}</h2>
             <p>

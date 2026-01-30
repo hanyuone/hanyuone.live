@@ -1,4 +1,5 @@
 use leptos::prelude::*;
+use leptos_meta::Title;
 use leptos_router::components::A;
 
 use crate::app::list_slugs;
@@ -15,6 +16,7 @@ pub fn BlogPage() -> impl IntoView {
     };
 
     view! {
+        <Title text="Blog" />
         <h1>"My Great Blog"</h1>
         <Suspense fallback=move || view! { <p>"Loading posts..."</p> }>
             <ul>

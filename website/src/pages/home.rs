@@ -1,4 +1,5 @@
 use leptos::prelude::*;
+use leptos_meta::Title;
 
 /// Renders the home page of your application.
 #[component]
@@ -8,6 +9,7 @@ pub fn HomePage() -> impl IntoView {
     let on_click = move |_| *count.write() += 1;
 
     view! {
+        <Title text="Home" />
         <h1>"Welcome to Leptos!"</h1>
         <button on:click=on_click>"Click Me: " {count}</button>
     }

@@ -89,6 +89,8 @@ pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
 
+    let formatter = |text| format!("{text} - Hanyuan's site");
+
     let (sheets_href, base) = match ROOT {
         Some(root) => (format!("{root}/pkg/website.css"), root),
         None => ("/pkg/website.css".to_string(), ""),
@@ -106,7 +108,7 @@ pub fn App() -> impl IntoView {
         <Stylesheet id="leptos" href=sheets_href />
 
         // sets the document title
-        <Title text="Welcome to Leptos" />
+        <Title formatter />
 
         // content for this welcome page
         <Router base>
