@@ -1,4 +1,4 @@
-use std::path::Path;
+use std::{collections::HashMap, path::Path};
 
 use futures::{channel::mpsc, Stream};
 use leptos::prelude::*;
@@ -9,6 +9,7 @@ use leptos_router::{
     static_routes::StaticRoute,
     SsrMode,
 };
+use markdown::structs::{blog::BlogId, metadata::BlogMetadata};
 
 use crate::{
     components::{footer::Footer, header::Header},
@@ -93,6 +94,12 @@ pub fn App() -> impl IntoView {
         None => ("/pkg/website.css".to_string(), ""),
     };
 
+    let metadata_map = use_context::<HashMap<BlogId, BlogMetadata>>().unwrap();
+    let slugs = metadata_map
+        .keys()
+        .map(|id| id.to_string())
+        .collect::<Vec<_>>();
+
     view! {
         // injects a stylesheet into the document <head>
         // id=leptos means cargo-leptos will hot-reload this stylesheet
@@ -124,10 +131,14 @@ pub fn App() -> impl IntoView {
                             view=BlogPostPage
                             ssr=SsrMode::Static(
                                 StaticRoute::new()
-                                    .prerender_params(|| async move {
-                                        [("slug".into(), list_slugs().await.unwrap_or_default())]
-                                            .into_iter()
-                                            .collect()
+                                    .prerender_params(move || {
+                                        let slugs = slugs.clone();
+                                        
+                                        async move {
+                                            [("slug".into(), slugs.clone())]
+                                                .into_iter()
+                                                .collect()
+                                        }
                                     })
                                     .regenerate(|params| {
                                         let slug = params.get("slug").unwrap();

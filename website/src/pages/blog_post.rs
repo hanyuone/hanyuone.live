@@ -1,7 +1,12 @@
+use std::{collections::HashMap, str::FromStr};
+
 use chrono::TimeDelta;
 use leptos::prelude::*;
 use leptos_router::{hooks::use_params, params::Params};
-use markdown::{structs::metadata::BlogMetadata, translate::node::RenderNode};
+use markdown::{
+    structs::{blog::BlogId, metadata::BlogMetadata},
+    translate::node::RenderNode,
+};
 
 #[derive(Params, PartialEq)]
 pub struct BlogPostParams {
@@ -37,26 +42,27 @@ pub fn BlogPostPage() -> impl IntoView {
             .unwrap_or_default()
     };
 
-    let metadata = Resource::new(slug, get_metadata);
+    let metadata_map = use_context::<HashMap<BlogId, BlogMetadata>>().unwrap();
+    let slug_id = BlogId::from_str(&slug())
+        .map_err(|e| ServerFnError::new(e))
+        .unwrap();
+
+    let BlogMetadata {
+        front_matter,
+        post_translate,
+    } = metadata_map.get(&slug_id).unwrap().clone();
+
     let post_contents = Resource::new(slug, get_blog_post_ron);
 
     view! {
-        <Suspense fallback=move || view! { <p>"Loading metadata..."</p> }>
-            {move || Suspend::new(async move {
-                let BlogMetadata { front_matter, post_translate } = metadata.await.unwrap();
-
-                view! {
-                    <div class="flex flex-col p-4 content-center text-center border-b-[1px]">
-                        <h2 class="font-bold text-2xl underline">{front_matter.title}</h2>
-                        <p>
-                            <span class="text-gray-500">{front_matter.publish_date.format("%d %b %Y").to_string()}</span>
-                            <span class="px-1 text-white">{"·"}</span>
-                            <span class="text-gray-500">{to_read_time(post_translate.words)}</span>
-                        </p>
-                    </div>
-                }
-            })}
-        </Suspense>
+        <div class="flex flex-col p-4 content-center text-center border-b-[1px]">
+            <h2 class="font-bold text-2xl underline">{front_matter.title}</h2>
+            <p>
+                <span class="text-gray-500">{front_matter.publish_date.format("%d %b %Y").to_string()}</span>
+                <span class="px-1 text-white">{"·"}</span>
+                <span class="text-gray-500">{to_read_time(post_translate.words)}</span>
+            </p>
+        </div>
         <Suspense fallback=move || view! { <p>"Loading post..."</p> }>
             {move || Suspend::new(async move {
                 let renderer = crate::renderer::Renderer::new();
@@ -73,22 +79,6 @@ pub fn BlogPostPage() -> impl IntoView {
             })}
         </Suspense>
     }
-}
-
-#[server]
-async fn get_metadata(slug: String) -> Result<BlogMetadata, ServerFnError> {
-    use std::{collections::HashMap, str::FromStr};
-
-    use markdown::structs::blog::BlogId;
-    use tokio::fs;
-
-    let raw_blog_map = fs::read("./blogs/blog_map.ron").await?;
-    let blog_map =
-        ron::from_str::<HashMap<BlogId, BlogMetadata>>(&String::from_utf8(raw_blog_map).unwrap())?;
-
-    let slug_id = BlogId::from_str(&slug).map_err(|e| ServerFnError::new(e))?;
-
-    Ok(blog_map.get(&slug_id).unwrap().clone())
 }
 
 #[server]

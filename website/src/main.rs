@@ -1,18 +1,33 @@
 #[cfg(feature = "ssr")]
 #[tokio::main]
 async fn main() {
+    use std::{collections::HashMap, fs};
+
     use leptos::prelude::*;
-    use leptos_axum::{generate_route_list_with_ssg};
+    use leptos_axum::generate_route_list_with_exclusions_and_ssg_and_context;
+    use markdown::structs::{blog::BlogId, metadata::BlogMetadata};
     use website::app::*;
 
     let conf = get_configuration(None).unwrap();
     let leptos_options = conf.leptos_options;
 
     // Generate the list of routes in your Leptos App
-    let (routes, static_routes) = generate_route_list_with_ssg({
-        let leptos_options = leptos_options.clone();
-        move || shell(leptos_options.clone())
-    });
+    let (_routes, static_routes) = generate_route_list_with_exclusions_and_ssg_and_context(
+        {
+            let leptos_options = leptos_options.clone();
+            move || shell(leptos_options.clone())
+        },
+        None,
+        || {
+            let raw_blog_map = fs::read("./blogs/blog_map.ron").unwrap();
+            let blog_map = ron::from_str::<HashMap<BlogId, BlogMetadata>>(
+                &String::from_utf8(raw_blog_map).unwrap(),
+            )
+            .unwrap();
+
+            provide_context(blog_map);
+        },
+    );
 
     static_routes.generate(&leptos_options).await;
 
@@ -25,7 +40,7 @@ async fn main() {
         let addr = leptos_options.site_addr;
 
         let app = Router::new()
-            .leptos_routes(&leptos_options, routes, {
+            .leptos_routes(&leptos_options, _routes, {
                 let leptos_options = leptos_options.clone();
                 move || shell(leptos_options.clone())
             })
