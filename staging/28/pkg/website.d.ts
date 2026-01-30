@@ -51,10 +51,10 @@ export interface InitOutput {
   readonly intounderlyingsink_abort: (a: number, b: any) => any;
   readonly intounderlyingsink_close: (a: number) => any;
   readonly intounderlyingsink_write: (a: number, b: any) => any;
-  readonly wasm_bindgen__convert__closures_____invoke__h32724aaa35d55028: (a: number, b: number, c: any) => void;
-  readonly wasm_bindgen__closure__destroy__h04542028275cc3b6: (a: number, b: number) => void;
   readonly wasm_bindgen__convert__closures_____invoke__hed78ce3951be6750: (a: number, b: number, c: any) => void;
   readonly wasm_bindgen__closure__destroy__h544a5e08b3d059e1: (a: number, b: number) => void;
+  readonly wasm_bindgen__convert__closures_____invoke__h32724aaa35d55028: (a: number, b: number, c: any) => void;
+  readonly wasm_bindgen__closure__destroy__h04542028275cc3b6: (a: number, b: number) => void;
   readonly wasm_bindgen__convert__closures_____invoke__ha8e5e41b2d52a77d: (a: number, b: number) => void;
   readonly wasm_bindgen__closure__destroy__h4ffc17f50f363357: (a: number, b: number) => void;
   readonly wasm_bindgen__convert__closures_____invoke__h60e9f0752214a7fb: (a: number, b: number, c: any, d: any) => void;
