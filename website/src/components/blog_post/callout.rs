@@ -47,6 +47,7 @@ pub fn Callout(
     #[prop(into)] title: String,
     children: Children,
 ) -> impl IntoView {
+    // TODO: fix icon placement/size
     view! {
         <div class={format!("max-w-[65ch] my-4 p-2 {}", colour.clone())}>
             <div class="flex flex-row">

@@ -18,6 +18,7 @@ pub fn blog_card(id: BlogId, metadata: BlogMetadata) -> impl IntoView {
         post_translate,
     } = &metadata;
 
+    // TODO: make blog image fixed-size
     view! {
         <div class="flex flex-col md:flex-row hover:bg-gray">
             <div class="flex-col w-full md:basis-1/4 p-4">

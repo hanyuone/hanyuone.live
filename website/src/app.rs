@@ -9,12 +9,10 @@ use leptos_router::{
     static_routes::StaticRoute,
     SsrMode,
 };
+use markdown::structs::tag::TagId;
 
 use crate::{
-    components::{footer::Footer, header::Header},
-    context::BlogContext,
-    pages::{blog::BlogPage, blog_post::BlogPostPage, home::HomePage},
-    ROOT,
+    ROOT, components::{footer::Footer, header::Header}, context::BlogContext, pages::{blog::BlogPage, blog_post::BlogPostPage, home::HomePage, tag::TagPage}
 };
 
 pub fn shell(options: LeptosOptions) -> impl IntoView {
@@ -88,6 +86,11 @@ pub fn App() -> impl IntoView {
         .map(|id| id.to_string())
         .collect::<Vec<_>>();
 
+    let tags = TagId::get_all()
+        .into_iter()
+        .map(|tag| tag.to_string())
+        .collect::<Vec<_>>();
+
     view! {
         // injects a stylesheet into the document <head>
         // id=leptos means cargo-leptos will hot-reload this stylesheet
@@ -132,6 +135,22 @@ pub fn App() -> impl IntoView {
                                         let slug = params.get("slug").unwrap();
                                         watch_path(Path::new(&format!("./blogs/parsed/{slug}.ron")))
                                     }),
+                            ) />
+                        <Route
+                            path=path!("tag/:tag_id")
+                            view=TagPage
+                            ssr=SsrMode::Static(
+                                StaticRoute::new()
+                                    .prerender_params(move || {
+                                        let tags = tags.clone();
+
+                                        async move {
+                                            [("tag_id".into(), tags.clone())]
+                                                .into_iter()
+                                                .collect()
+                                        }
+                                    })
+                                    .regenerate(|_| watch_path(Path::new("./blogs/tags.yaml")))
                             ) />
                     </Routes>
                 </main>

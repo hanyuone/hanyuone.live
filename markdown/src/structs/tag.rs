@@ -7,3 +7,9 @@ pub struct TagMetadata {
 }
 
 generate_tag_id!("blogs/tags.yaml");
+
+impl TagId {
+    pub fn get_all() -> Vec<TagId> {
+        enum_iterator::all::<TagId>().collect()
+    }
+}

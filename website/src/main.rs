@@ -10,6 +10,9 @@ async fn main() {
     let conf = get_configuration(None).unwrap();
     let leptos_options = conf.leptos_options;
 
+    let raw_blog_map = fs::read("./blogs/blog_map.ron").unwrap();
+    let blog_context = BlogContext::new(&String::from_utf8(raw_blog_map).unwrap());
+
     // Generate the list of routes in your Leptos App
     let (_routes, static_routes) = generate_route_list_with_exclusions_and_ssg_and_context(
         {
@@ -17,10 +20,9 @@ async fn main() {
             move || shell(leptos_options.clone())
         },
         None,
-        || {
-            let raw_blog_map = fs::read("./blogs/blog_map.ron").unwrap();
-            let blog_context = BlogContext::new(&String::from_utf8(raw_blog_map).unwrap());
-            provide_context(blog_context);
+        {
+            let blog_context = blog_context.clone();
+            move || provide_context(blog_context.clone())
         },
     );
 
@@ -40,10 +42,9 @@ async fn main() {
                 move || shell(leptos_options.clone())
             })
             .fallback(leptos_axum::file_and_error_handler_with_context(
-                || {
-                    let raw_blog_map = fs::read("./blogs/blog_map.ron").unwrap();
-                    let blog_context = BlogContext::new(&String::from_utf8(raw_blog_map).unwrap());
-                    provide_context(blog_context);
+                {
+                    let blog_context = blog_context.clone();
+                    move || provide_context(blog_context.clone())
                 },
                 shell,
             ))
