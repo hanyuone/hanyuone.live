@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::structs::{blog::BlogId, metadata::BlogMetadata};
+use markdown::structs::{blog::BlogId, metadata::BlogMetadata};
 
 #[derive(Clone)]
 pub struct BlogContext {

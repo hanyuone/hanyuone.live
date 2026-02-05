@@ -4,7 +4,7 @@ use leptos::prelude::*;
 use leptos_meta::Title;
 use leptos_router::{hooks::use_params, params::Params};
 use markdown::{
-    structs::{blog::BlogId, context::BlogContext, metadata::BlogMetadata},
+    structs::{blog::BlogId, metadata::BlogMetadata},
     translate::node::RenderNode,
 };
 
