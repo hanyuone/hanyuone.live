@@ -1,7 +1,6 @@
 use leptos::prelude::*;
+use leptos_icons::Icon;
 use markdown::translate::container::callout::CalloutKind;
-
-use crate::components::icon::Icon;
 
 pub struct CalloutData {
     pub colour: String,

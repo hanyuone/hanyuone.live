@@ -1,7 +1,8 @@
 use icondata as i;
 use leptos::prelude::*;
+use leptos_icons::Icon;
 
-use crate::{components::icon::Icon, ROOT};
+use crate::ROOT;
 
 #[component]
 pub fn Header() -> impl IntoView {

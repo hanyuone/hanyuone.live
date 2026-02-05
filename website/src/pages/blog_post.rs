@@ -1,59 +1,41 @@
-use std::{collections::HashMap, str::FromStr};
+use std::str::FromStr;
 
-use chrono::TimeDelta;
 use leptos::prelude::*;
 use leptos_meta::Title;
 use leptos_router::{hooks::use_params, params::Params};
 use markdown::{
-    structs::{blog::BlogId, metadata::BlogMetadata},
+    structs::{blog::BlogId, context::BlogContext, metadata::BlogMetadata},
     translate::node::RenderNode,
 };
+
+use crate::components::blog::to_read_time;
 
 #[derive(Params, PartialEq)]
 pub struct BlogPostParams {
     slug: Option<String>,
 }
 
-pub fn to_read_time(words: usize) -> String {
-    let time_delta = TimeDelta::seconds((words / 3) as i64);
-    let seconds = time_delta.num_seconds();
-
-    if seconds < 60 {
-        return "<1 min".to_string();
-    }
-
-    let minutes = time_delta.num_minutes();
-
-    if minutes < 60 {
-        return format!("{} min", minutes);
-    }
-
-    "long read".to_string()
-}
-
 #[component]
 pub fn BlogPostPage() -> impl IntoView {
     let params = use_params::<BlogPostParams>();
-    let slug = move || {
-        params
-            .read()
-            .as_ref()
-            .ok()
-            .and_then(|params| params.slug.clone())
-            .unwrap_or_default()
-    };
+    let slug = params
+        .read()
+        .as_ref()
+        .ok()
+        .and_then(|params| params.slug.clone())
+        .unwrap_or_default();
 
-    let metadata_map = use_context::<HashMap<BlogId, BlogMetadata>>().unwrap();
-    let slug_id = BlogId::from_str(&slug())
+    let context = use_context::<BlogContext>().unwrap();
+    let slug_id = BlogId::from_str(&slug)
         .map_err(|e| ServerFnError::new(e))
         .unwrap();
 
     let BlogMetadata {
         front_matter,
         post_translate,
-    } = metadata_map.get(&slug_id).unwrap().clone();
+    } = context.get(&slug_id).unwrap().clone();
 
-    let post_contents = Resource::new(slug, get_blog_post_ron);
+    let post_contents = Resource::new(move || slug.clone(), get_blog_post_ron);
 
     view! {
         <Title text={front_matter.title.clone()} />

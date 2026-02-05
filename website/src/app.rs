@@ -1,4 +1,4 @@
-use std::{collections::HashMap, path::Path};
+use std::path::Path;
 
 use futures::{channel::mpsc, Stream};
 use leptos::prelude::*;
@@ -9,7 +9,7 @@ use leptos_router::{
     static_routes::StaticRoute,
     SsrMode,
 };
-use markdown::structs::{blog::BlogId, metadata::BlogMetadata};
+use markdown::structs::context::BlogContext;
 
 use crate::{
     components::{footer::Footer, header::Header},
@@ -69,25 +69,11 @@ fn watch_path(path: &Path) -> impl Stream<Item = ()> {
     rx
 }
 
-#[server]
-pub async fn list_slugs() -> Result<Vec<String>, ServerFnError> {
-    use markdown::structs::{blog::BlogId, metadata::BlogMetadata};
-    use std::collections::HashMap;
-    use tokio::fs;
-
-    let raw_blog_map = fs::read("./blogs/blog_map.ron").await?;
-    let blog_map =
-        ron::from_str::<HashMap<BlogId, BlogMetadata>>(&String::from_utf8(raw_blog_map).unwrap())?;
-
-    let slugs = blog_map.keys().map(|id| id.to_string()).collect::<Vec<_>>();
-
-    Ok(slugs)
-}
-
 #[component]
 pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
+    let metadata_map = use_context::<BlogContext>().unwrap();
 
     let formatter = |text| format!("{text} - Hanyuan's site");
 
@@ -96,8 +82,8 @@ pub fn App() -> impl IntoView {
         None => ("/pkg/website.css".to_string(), ""),
     };
 
-    let metadata_map = use_context::<HashMap<BlogId, BlogMetadata>>().unwrap();
     let slugs = metadata_map
+        .content
         .keys()
         .map(|id| id.to_string())
         .collect::<Vec<_>>();
@@ -135,7 +121,7 @@ pub fn App() -> impl IntoView {
                                 StaticRoute::new()
                                     .prerender_params(move || {
                                         let slugs = slugs.clone();
-                                        
+
                                         async move {
                                             [("slug".into(), slugs.clone())]
                                                 .into_iter()

@@ -1,31 +1,35 @@
 use leptos::prelude::*;
-use leptos_meta::Title;
-use leptos_router::components::A;
+use markdown::structs::context::BlogContext;
 
-use crate::app::list_slugs;
+use crate::components::blog::{card::BlogCard, item::BlogItem};
 
 #[component]
 pub fn BlogPage() -> impl IntoView {
-    // load the posts
-    let posts = Resource::new(|| (), |_| list_slugs());
-    let posts = move || {
-        posts
-            .get()
-            .map(|n| n.unwrap_or_default())
-            .unwrap_or_default()
-    };
+    let context = use_context::<BlogContext>().unwrap();
+    let sorted = context.get_sorted();
 
-    view! {
-        <Title text="Blog" />
-        <h1>"My Great Blog"</h1>
-        <Suspense fallback=move || view! { <p>"Loading posts..."</p> }>
-            <ul>
-                <For each=posts key=|post| post.clone() let:post>
-                    <li>
-                        <A href={post.clone()}>{post.clone()}</A>
-                    </li>
-                </For>
-            </ul>
-        </Suspense>
+    if sorted.is_empty() {
+        view! { <p>"No blogs found!"</p> }.into_any()
+    } else {
+        let mut sorted_iter = sorted.into_iter();
+        let (first_id, first_metadata) = sorted_iter.next().unwrap();
+
+        view! {
+            <BlogCard
+                id={*first_id}
+                metadata={first_metadata.clone()} />
+            <div>
+                {
+                    sorted_iter
+                        .map(|(id, metadata)| view! {
+                            <BlogItem
+                                id={*id}
+                                metadata={metadata.clone()} />
+                        })
+                        .collect::<Vec<_>>()
+                }
+            </div>
+        }
+        .into_any()
     }
 }

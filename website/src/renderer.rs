@@ -8,16 +8,14 @@ use leptos::{
     },
     prelude::*,
 };
+use leptos_icons::Icon;
 use markdown::translate::{
     container,
     element::{ElementTag, RenderElement},
     node::{RenderIcon, RenderNode},
 };
 
-use crate::components::{
-    blog_post::callout::{Callout, CalloutData},
-    icon::Icon,
-};
+use crate::components::blog_post::callout::{Callout, CalloutData};
 
 /// Given a predefined `ElementTag` and a list of children, creates
 /// a Leptos `AnyView` object. Necessary because of Leptos's HTML

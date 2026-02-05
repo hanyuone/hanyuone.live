@@ -1,11 +1,11 @@
 #[cfg(feature = "ssr")]
 #[tokio::main]
 async fn main() {
-    use std::{collections::HashMap, fs};
+    use std::fs;
 
     use leptos::prelude::*;
     use leptos_axum::generate_route_list_with_exclusions_and_ssg_and_context;
-    use markdown::structs::{blog::BlogId, metadata::BlogMetadata};
+    use markdown::structs::context::BlogContext;
     use website::app::*;
 
     let conf = get_configuration(None).unwrap();
@@ -20,12 +20,8 @@ async fn main() {
         None,
         || {
             let raw_blog_map = fs::read("./blogs/blog_map.ron").unwrap();
-            let blog_map = ron::from_str::<HashMap<BlogId, BlogMetadata>>(
-                &String::from_utf8(raw_blog_map).unwrap(),
-            )
-            .unwrap();
-
-            provide_context(blog_map);
+            let blog_context = BlogContext::new(&String::from_utf8(raw_blog_map).unwrap());
+            provide_context(blog_context);
         },
     );
 
@@ -44,7 +40,14 @@ async fn main() {
                 let leptos_options = leptos_options.clone();
                 move || shell(leptos_options.clone())
             })
-            .fallback(leptos_axum::file_and_error_handler(shell))
+            .fallback(leptos_axum::file_and_error_handler_with_context(
+                || {
+                    let raw_blog_map = fs::read("./blogs/blog_map.ron").unwrap();
+                    let blog_context = BlogContext::new(&String::from_utf8(raw_blog_map).unwrap());
+                    provide_context(blog_context);
+                },
+                shell,
+            ))
             .with_state(leptos_options);
 
         // run our app with hyper
