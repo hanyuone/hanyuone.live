@@ -5,8 +5,7 @@ async fn main() {
 
     use leptos::prelude::*;
     use leptos_axum::generate_route_list_with_exclusions_and_ssg_and_context;
-    use markdown::structs::context::BlogContext;
-    use website::app::*;
+    use website::{app::*, context::BlogContext};
 
     let conf = get_configuration(None).unwrap();
     let leptos_options = conf.leptos_options;

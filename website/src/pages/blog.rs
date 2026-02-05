@@ -1,7 +1,9 @@
 use leptos::prelude::*;
-use markdown::structs::context::BlogContext;
 
-use crate::components::blog::{card::BlogCard, item::BlogItem};
+use crate::{
+    components::blog::{card::BlogCard, item::BlogItem},
+    context::BlogContext,
+};
 
 #[component]
 pub fn BlogPage() -> impl IntoView {

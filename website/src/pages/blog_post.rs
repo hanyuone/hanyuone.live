@@ -8,7 +8,7 @@ use markdown::{
     translate::node::RenderNode,
 };
 
-use crate::components::blog::to_read_time;
+use crate::{components::blog::to_read_time, context::BlogContext};
 
 #[derive(Params, PartialEq)]
 pub struct BlogPostParams {

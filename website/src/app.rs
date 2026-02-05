@@ -9,10 +9,10 @@ use leptos_router::{
     static_routes::StaticRoute,
     SsrMode,
 };
-use markdown::structs::context::BlogContext;
 
 use crate::{
     components::{footer::Footer, header::Header},
+    context::BlogContext,
     pages::{blog::BlogPage, blog_post::BlogPostPage, home::HomePage},
     ROOT,
 };
