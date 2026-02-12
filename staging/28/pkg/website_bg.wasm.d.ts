@@ -1,8 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
 export const memory: WebAssembly.Memory;
+export const Background_9720441756215322581: (a: any) => void;
+export const HomeAnimation_14651908795469971363: (a: any) => void;
 export const hydrate: () => void;
-export const CountButton_8829042607726491460: (a: any) => void;
 export const __wbg_intounderlyingbytesource_free: (a: number, b: number) => void;
 export const intounderlyingbytesource_autoAllocateChunkSize: (a: number) => number;
 export const intounderlyingbytesource_cancel: (a: number) => void;
@@ -18,8 +19,10 @@ export const intounderlyingsink_close: (a: number) => any;
 export const intounderlyingsink_write: (a: number, b: any) => any;
 export const wasm_bindgen__convert__closures_____invoke__hed78ce3951be6750: (a: number, b: number, c: any) => void;
 export const wasm_bindgen__closure__destroy__h544a5e08b3d059e1: (a: number, b: number) => void;
-export const wasm_bindgen__convert__closures_____invoke__h32724aaa35d55028: (a: number, b: number, c: any) => void;
-export const wasm_bindgen__closure__destroy__h04542028275cc3b6: (a: number, b: number) => void;
+export const wasm_bindgen__convert__closures_____invoke__h0c755bc612e3ba70: (a: number, b: number, c: any, d: any) => void;
+export const wasm_bindgen__closure__destroy__h4e40b57d48530542: (a: number, b: number) => void;
+export const wasm_bindgen__convert__closures_____invoke__hbdeb8ef788a8b986: (a: number, b: number) => void;
+export const wasm_bindgen__closure__destroy__h4aaed6e427588211: (a: number, b: number) => void;
 export const wasm_bindgen__convert__closures_____invoke__h60e9f0752214a7fb: (a: number, b: number, c: any, d: any) => void;
 export const __wbindgen_malloc: (a: number, b: number) => number;
 export const __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
