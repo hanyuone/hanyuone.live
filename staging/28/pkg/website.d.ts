@@ -1,7 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
+export function Background_9720441756215322581(el: HTMLElement): void;
+export function HomeAnimation_14651908795469971363(el: HTMLElement): void;
 export function hydrate(): void;
-export function CountButton_8829042607726491460(el: HTMLElement): void;
 /**
  * The `ReadableStreamType` enum.
  *
@@ -38,8 +39,9 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
+  readonly Background_9720441756215322581: (a: any) => void;
+  readonly HomeAnimation_14651908795469971363: (a: any) => void;
   readonly hydrate: () => void;
-  readonly CountButton_8829042607726491460: (a: any) => void;
   readonly __wbg_intounderlyingbytesource_free: (a: number, b: number) => void;
   readonly intounderlyingbytesource_autoAllocateChunkSize: (a: number) => number;
   readonly intounderlyingbytesource_cancel: (a: number) => void;
@@ -55,8 +57,10 @@ export interface InitOutput {
   readonly intounderlyingsink_write: (a: number, b: any) => any;
   readonly wasm_bindgen__convert__closures_____invoke__hed78ce3951be6750: (a: number, b: number, c: any) => void;
   readonly wasm_bindgen__closure__destroy__h544a5e08b3d059e1: (a: number, b: number) => void;
-  readonly wasm_bindgen__convert__closures_____invoke__h32724aaa35d55028: (a: number, b: number, c: any) => void;
-  readonly wasm_bindgen__closure__destroy__h04542028275cc3b6: (a: number, b: number) => void;
+  readonly wasm_bindgen__convert__closures_____invoke__h0c755bc612e3ba70: (a: number, b: number, c: any, d: any) => void;
+  readonly wasm_bindgen__closure__destroy__h4e40b57d48530542: (a: number, b: number) => void;
+  readonly wasm_bindgen__convert__closures_____invoke__hbdeb8ef788a8b986: (a: number, b: number) => void;
+  readonly wasm_bindgen__closure__destroy__h4aaed6e427588211: (a: number, b: number) => void;
   readonly wasm_bindgen__convert__closures_____invoke__h60e9f0752214a7fb: (a: number, b: number, c: any, d: any) => void;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
