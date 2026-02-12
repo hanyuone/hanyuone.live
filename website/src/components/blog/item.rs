@@ -7,13 +7,13 @@ use markdown::structs::{
     tag::{TagId, TagMetadata},
 };
 
-use crate::{ROOT, components::blog::{tag::Tag, to_read_time}};
+use crate::{
+    components::blog::{tag::Tag, to_read_time},
+    ROOT,
+};
 
 #[component]
-pub fn BlogItem(
-    id: BlogId,
-    metadata: BlogMetadata
-) -> impl IntoView {
+pub fn BlogItem(id: BlogId, metadata: BlogMetadata) -> impl IntoView {
     let root = ROOT.unwrap_or("");
 
     let BlogMetadata {

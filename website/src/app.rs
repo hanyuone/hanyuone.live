@@ -12,7 +12,10 @@ use leptos_router::{
 use markdown::structs::tag::TagId;
 
 use crate::{
-    ROOT, components::{footer::Footer, header::Header}, context::BlogContext, pages::{blog::BlogPage, blog_post::BlogPostPage, home::HomePage, tag::TagPage}
+    components::{footer::Footer, header::Header},
+    context::BlogContext,
+    pages::{blog::BlogPage, blog_post::BlogPostPage, home::HomePage, tag::TagPage},
+    ROOT,
 };
 
 pub fn shell(options: LeptosOptions) -> impl IntoView {

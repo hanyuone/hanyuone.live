@@ -6,7 +6,8 @@ use markdown::structs::{
 };
 
 use crate::{
-    ROOT, components::blog::{tag::Tag, to_read_time}
+    components::blog::{tag::Tag, to_read_time},
+    ROOT,
 };
 
 #[component]

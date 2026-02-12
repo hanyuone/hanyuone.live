@@ -1,7 +1,10 @@
 use std::{collections::VecDeque, f64::consts::PI};
 
 use leptos::{
-    html::{Canvas, Div}, logging::log, prelude::*, wasm_bindgen::JsCast, web_sys::{CanvasRenderingContext2d, HtmlCanvasElement}
+    html::{Canvas, Div},
+    prelude::*,
+    wasm_bindgen::JsCast,
+    web_sys::{CanvasRenderingContext2d, HtmlCanvasElement},
 };
 use leptos_use::{use_interval, use_resize_observer, UseIntervalReturn};
 use rand::Rng;
@@ -255,7 +258,6 @@ pub fn Background() -> impl IntoView {
 
     use_resize_observer(size_ref, move |entries, _| {
         let rect = entries[0].content_rect();
-        log!("Width: {}, height: {}", rect.width(), rect.height());
 
         set_data.set(BackgroundData::new(
             rect.width() as usize,
