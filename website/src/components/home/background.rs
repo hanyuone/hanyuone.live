@@ -1,10 +1,13 @@
 use std::{collections::VecDeque, f64::consts::PI};
 
+use leptos::{
+    html::{Canvas, Div},
+    prelude::*,
+    wasm_bindgen::JsCast,
+    web_sys::{CanvasRenderingContext2d, HtmlCanvasElement},
+};
+use leptos_use::{use_interval, use_resize_observer, UseIntervalReturn};
 use rand::Rng;
-use wasm_bindgen::JsCast;
-use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement};
-use yew::{function_component, html, use_effect_with, use_state, Html, NodeRef};
-use yew_hooks::{use_interval, use_size};
 
 const POINTS: usize = 20;
 const LINES: usize = 30;
@@ -13,7 +16,7 @@ const MAX_LINES_FROM_POINT: usize = 3;
 const JITTER: f64 = 0.1;
 const GRAVITY_RADIUS: f64 = 200.0;
 
-const FRAME_MSECS: u32 = 50;
+const FRAME_MSECS: u64 = 50;
 const UPDATE_STATE_FRAMES: usize = 20;
 
 #[derive(Clone, PartialEq)]
@@ -40,7 +43,7 @@ enum BackgroundState {
     Full,
 }
 
-#[derive(PartialEq)]
+#[derive(Clone, PartialEq)]
 struct BackgroundData {
     width: usize,
     height: usize,
@@ -238,45 +241,42 @@ impl BackgroundData {
     }
 }
 
-#[function_component(Background)]
-pub fn background() -> Html {
-    let size_ref = NodeRef::default();
-    let canvas_ref = NodeRef::default();
+#[island]
+pub fn Background() -> impl IntoView {
+    let size_ref = NodeRef::<Div>::new();
+    let canvas_ref = NodeRef::<Canvas>::new();
 
-    let size = use_size(size_ref.clone());
-    let data = use_state(|| BackgroundData::new(size.0 as usize, size.1 as usize));
+    let UseIntervalReturn {
+        counter,
+        reset: _,
+        is_active: _,
+        pause: _,
+        resume: _,
+    } = use_interval(FRAME_MSECS);
 
-    // Resize canvas whenever wider div is resized
-    {
-        let size = size.clone();
-        let data = data.clone();
+    let (data, set_data) = signal(BackgroundData::new(0, 0));
 
-        use_effect_with(size, move |size| {
-            let new_data = BackgroundData::new(size.0 as usize, size.1 as usize);
-            data.set(new_data);
-        });
-    }
+    use_resize_observer(size_ref, move |entries, _| {
+        let rect = entries[0].content_rect();
 
-    // Update background data every frame
-    {
-        let data = data.clone();
+        set_data.set(BackgroundData::new(
+            rect.width() as usize,
+            rect.height() as usize,
+        ));
+    });
 
-        use_interval(
-            move || {
-                data.set(data.new_frame());
-            },
-            FRAME_MSECS,
-        );
-    }
+    // Update data on every frame
+    Effect::watch(
+        move || counter.get(),
+        move |_, _, _| set_data.set(data.get_untracked().new_frame()),
+        false,
+    );
 
-    // Draw on canvas whenever background data is updated
-    {
-        let canvas_ref = canvas_ref.clone();
-        let size = size.clone();
-        let data = data.clone();
-
-        use_effect_with(data, move |data| {
-            let canvas = canvas_ref.cast::<HtmlCanvasElement>().unwrap();
+    // Draw on canvas whenever data gets updated
+    Effect::watch(
+        move || data.get(),
+        move |data, _, _| {
+            let canvas: HtmlCanvasElement = canvas_ref.get_untracked().unwrap();
             let context = canvas
                 .get_context("2d")
                 .unwrap()
@@ -284,14 +284,15 @@ pub fn background() -> Html {
                 .dyn_into::<CanvasRenderingContext2d>()
                 .unwrap();
 
-            context.clear_rect(0.0, 0.0, size.0 as f64, size.1 as f64);
+            context.clear_rect(0.0, 0.0, data.width as f64, data.height as f64);
             data.draw(context);
-        });
-    }
+        },
+        false,
+    );
 
-    html! {
-        <div class="size-full" ref={size_ref.clone()}>
-            <canvas width={size.0.to_string()} height={size.1.to_string()} ref={canvas_ref.clone()} />
+    view! {
+        <div class="size-full" node_ref=size_ref>
+            <canvas width={move || data.get().width} height={move || data.get().height} node_ref=canvas_ref />
         </div>
     }
 }
