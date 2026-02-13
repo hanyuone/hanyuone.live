@@ -51,7 +51,9 @@ pub fn Callout(
     view! {
         <div class={format!("max-w-[65ch] my-4 p-2 {}", colour.clone())}>
             <div class="flex flex-row">
-                <Icon icon />
+                <div class="p-1">
+                    <Icon icon />
+                </div>
                 <p class="font-bold">{title.clone()}</p>
             </div>
             <article class="prose dark:prose-invert">
