@@ -1,7 +1,7 @@
 ---
 title: SCP-CN-3000, Part 4
 description: A love story emerges across bubbles?
-image: /public/blog_media/scp_cn_3000/part_4_cover.jpg
+image: /blog_media/scp_cn_3000/part_4_cover.jpg
 publish_date: 2025-09-23 00:06
 tags:
 - translation

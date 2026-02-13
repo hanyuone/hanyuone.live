@@ -130,6 +130,28 @@ impl From<AttributeName> for &'static str {
     }
 }
 
+impl Display for AttributeName {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let attr_str = match self {
+            AttributeName::Align => "align",
+            AttributeName::Alt => "alt",
+            AttributeName::Class => "class",
+            AttributeName::Colspan => "colspan",
+            AttributeName::Href => "href",
+            AttributeName::Id => "id",
+            AttributeName::Mode => "mode",
+            AttributeName::Rowspan => "rowspan",
+            AttributeName::Src => "src",
+            AttributeName::Start => "start",
+            AttributeName::Style => "style",
+            AttributeName::Title => "title",
+            AttributeName::Type => "type",
+        };
+
+        write!(f, "{}", attr_str)
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Attribute {
     pub key: AttributeName,

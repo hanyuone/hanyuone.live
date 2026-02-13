@@ -1,22 +1,18 @@
+use leptos::prelude::*;
 use markdown::structs::tag::TagId;
-use yew::{classes, function_component, html, Html, Properties};
-use yew_router::prelude::Link;
 
-use crate::pages::Route;
+use crate::ROOT;
 
-#[derive(Properties, PartialEq)]
-pub struct TagProps {
-    pub name: String,
-    pub colour: String,
-}
+#[component]
+pub fn Tag(name: String, colour: String) -> impl IntoView {
+    let root = ROOT.unwrap_or("");
+    let href = format!("{root}/tag/{}", name.parse::<TagId>().unwrap());
 
-#[function_component(Tag)]
-pub fn tag(props: &TagProps) -> Html {
-    html! {
-        <Link<Route> to={Route::Tag { tag_id: props.name.parse::<TagId>().unwrap() }} classes={classes!("inline-flex")}>
-            <div class={format!("rounded-sm mr-1 px-1 transition bg-{0}/50 hover:bg-{0}", props.colour)}>
-                {props.name.clone()}
+    view! {
+        <a href=href class="inline-flex">
+            <div class={format!("rounded-sm mr-1 px-1 transition bg-{colour}/50 hover:bg-{colour}")}>
+                {name.clone()}
             </div>
-        </Link<Route>>
+        </a>
     }
 }

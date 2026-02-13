@@ -260,7 +260,6 @@ where
 
     //// TRANSLATOR LOOP
 
-    // TODO: add codeblocks w/ syntax highlighting
     fn run_start(&mut self, tag: Tag<'a>) {
         match tag {
             // === Raw HTML ===
