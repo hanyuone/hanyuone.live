@@ -1,0 +1,11 @@
+/home/runner/work/hanyuone.live/hanyuone.live/target/front/wasm32-unknown-unknown/release/deps/notify-bccdc65b28e582ce.d: /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/notify-8.2.0/src/lib.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/notify-8.2.0/src/null.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/notify-8.2.0/src/poll.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/notify-8.2.0/src/config.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/notify-8.2.0/src/error.rs
+
+/home/runner/work/hanyuone.live/hanyuone.live/target/front/wasm32-unknown-unknown/release/deps/libnotify-bccdc65b28e582ce.rlib: /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/notify-8.2.0/src/lib.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/notify-8.2.0/src/null.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/notify-8.2.0/src/poll.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/notify-8.2.0/src/config.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/notify-8.2.0/src/error.rs
+
+/home/runner/work/hanyuone.live/hanyuone.live/target/front/wasm32-unknown-unknown/release/deps/libnotify-bccdc65b28e582ce.rmeta: /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/notify-8.2.0/src/lib.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/notify-8.2.0/src/null.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/notify-8.2.0/src/poll.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/notify-8.2.0/src/config.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/notify-8.2.0/src/error.rs
+
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/notify-8.2.0/src/lib.rs:
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/notify-8.2.0/src/null.rs:
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/notify-8.2.0/src/poll.rs:
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/notify-8.2.0/src/config.rs:
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/notify-8.2.0/src/error.rs:
