@@ -15,6 +15,7 @@ dist/
 node_modules/
 
 # Generated blog .ron files
+blogs/blog_map.ron
 blogs/parsed/
 
 # TODO: remove once website is fully transitioned
