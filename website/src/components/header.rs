@@ -29,8 +29,8 @@ pub fn MobileHeader() -> impl IntoView {
             // Mobile hamburger menu
             <div
                 class="absolute top-14 w-full px-4 bg-black flex flex-col transition duration-200 ease-in-out text-right"
-                class=(["opacity-100", "translate-y-0"], move || hamburger_open.get())
-                class=(["opacity-0", "translate-y-1"], move || !hamburger_open.get())>
+                class=(["opacity-100", "translate-y-0", "z-20"], move || hamburger_open.get())
+                class=(["opacity-0", "translate-y-1", "z-0"], move || !hamburger_open.get())>
                 <a href={format!("{root}/blog")} class="w-full py-2 text-white hover:bg-blue transition-colors">
                     "Blog"
                 </a>
