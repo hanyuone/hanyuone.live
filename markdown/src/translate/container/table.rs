@@ -101,7 +101,6 @@ impl Chunk {
 
     // Chunk helper functions
 
-    
     /// Returns the current position of the cell we're adding.
     /// Call when we're fetching cells from the parser.
     ///

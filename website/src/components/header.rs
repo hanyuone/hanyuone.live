@@ -1,5 +1,5 @@
 use icondata as i;
-use leptos::{logging::log, prelude::*};
+use leptos::prelude::*;
 use leptos_icons::Icon;
 
 use crate::ROOT;
