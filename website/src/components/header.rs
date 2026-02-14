@@ -1,17 +1,16 @@
 use icondata as i;
-use leptos::prelude::*;
+use leptos::{logging::log, prelude::*};
 use leptos_icons::Icon;
 
 use crate::ROOT;
 
-#[component]
-pub fn Header() -> impl IntoView {
+#[island]
+pub fn MobileHeader() -> impl IntoView {
     let root = ROOT.unwrap_or("");
-
     let (hamburger_open, set_hamburger_open) = signal(false);
 
     view! {
-        <nav>
+        <div>
             // Mobile view
             <div class="md:hidden flex flex-row mx-4 border-b-[1px] border-white">
                 <div class="flex">
@@ -20,9 +19,9 @@ pub fn Header() -> impl IntoView {
                     </a>
                 </div>
                 <div class="flex px-4 py-4 ml-auto items-center">
-                    <button class="text-neutral-200" on:click={move |_| {
-                        set_hamburger_open.set(!hamburger_open.get());
-                    }}>
+                    <button class="text-neutral-200" on:click=move |_| {
+                        set_hamburger_open.update(|open| *open = !*open);
+                    }>
                         <Icon icon={i::LuMenu} height="1.1em" />
                     </button>
                 </div>
@@ -58,6 +57,17 @@ pub fn Header() -> impl IntoView {
                     </a>
                 </div>
             </div>
+        </div>
+    }
+}
+
+#[component]
+pub fn Header() -> impl IntoView {
+    let root = ROOT.unwrap_or("");
+
+    view! {
+        <nav>
+            <MobileHeader />
             // Desktop view
             <div class="hidden md:flex flex-row mx-4 border-b border-white">
                 // Home page link
