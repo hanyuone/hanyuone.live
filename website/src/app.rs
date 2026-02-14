@@ -106,7 +106,7 @@ pub fn App() -> impl IntoView {
         <Router base>
             <div class="bg-black text-white flex flex-col min-h-screen justify-between">
                 <Header />
-                <main class="grow p-20">
+                <main class="grow px-10 py-20 lg:px-20">
                     <Routes fallback=|| "Page not found.".into_view()>
                         <Route
                             path=path!("/")

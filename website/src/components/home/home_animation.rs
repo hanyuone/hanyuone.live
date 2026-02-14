@@ -17,7 +17,7 @@ const INTRO_BLOCKS: [Block; 4] = [
     Block {
         // We need Unicode escape here (equivalent to "&nbsp;") since Yew
         // does not allow for us to do <p>&nbsp;</p> by itself
-        text: "Hi, my name is\u{00a0}\u{200b}",
+        text: "Hi, my name's\u{00a0}\u{200b}",
         class: "font-bold text-3xl",
     },
     Block {

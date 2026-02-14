@@ -21,12 +21,7 @@ pub fn TagPage() -> impl IntoView {
         .read()
         .as_ref()
         .ok()
-        .and_then(|params| {
-            params
-                .tag_id
-                .clone()
-                .and_then(|id| Some(id.parse::<TagId>().unwrap()))
-        })
+        .and_then(|params| params.tag_id.clone().map(|id| id.parse::<TagId>().unwrap()))
         .unwrap();
     let tag_metadata: TagMetadata = tag_id.clone().into();
 

@@ -22,9 +22,9 @@ pub fn HomePage() -> impl IntoView {
             <div class="snap-always snap-center">
                 <div class="min-h-(--main)">
                     <div class="h-(--main) flex flex-col justify-center">
-                        <p>"Welcome to this little corner of the internet! (The internet sure has a lot of corners...)"</p>
-                        <br />
                         <p>
+                            "Welcome to this little corner of the internet! (The internet sure has a lot of corners...)"
+                            <br /><br />
                             "I have a deep fascination with programming languages. I have made a couple of\u{00a0}\u{200b}"
                             <a
                                 class="text-green underline transition hover:bg-gray"
@@ -51,9 +51,7 @@ pub fn HomePage() -> impl IntoView {
                             </a>
                             "\u{00a0}\u{200b}at UNSW, which focuses on Rust's design choices and how those choices
                              (and aspects borrowed from other programming paradigms) help programmers avoid bugs."
-                        </p>
-                        <br />
-                        <p>
+                            <br /><br />
                             "I'm also interested in real-world languages - I speak Mandarin Chinese and English, and am learning French and Hokkien.
                              I translate web stories as a hobby, you can find some of my work in\u{00a0}\u{200b}"
                             <a
@@ -78,9 +76,7 @@ pub fn HomePage() -> impl IntoView {
                                 "resume"
                             </a>
                             "\u{00a0}\u{200b}for more information."
-                        </p>
-                        <br />
-                        <p>
+                            <br /><br />
                             "Finally, you can find my book, manga and film ratings on\u{00a0}\u{200b}"
                             <a
                                 class="text-green underline transition hover:bg-gray"

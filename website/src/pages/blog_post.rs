@@ -27,7 +27,7 @@ pub fn BlogPostPage() -> impl IntoView {
 
     let context = use_context::<BlogContext>().unwrap();
     let slug_id = BlogId::from_str(&slug)
-        .map_err(|e| ServerFnError::new(e))
+        .map_err(ServerFnError::new)
         .unwrap();
 
     let BlogMetadata {
