@@ -8,7 +8,7 @@ pub fn Footer() -> impl IntoView {
                 <div class="flex">
                     <p>"Made with\u{00a0}\u{200b}"</p>
                     <p class="text-red">"<3"</p>
-                    <p>"\u{00a0}\u{200b}in 2024-25"</p>
+                    <p>"\u{00a0}\u{200b}in 2024-26"</p>
                 </div>
             </div>
         </footer>
