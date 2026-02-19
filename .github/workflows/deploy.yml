@@ -70,7 +70,6 @@ jobs:
           shopt -s extglob
           rm -rf !(target|.gitignore)
           mv target/site/* .
-          rm -rf target
       - name: Upload to gh-pages branch
         run: |
           git config user.name "github-actions[bot]"
@@ -78,3 +77,10 @@ jobs:
           git add .
           git commit -m "generated"
           git push
+      # We need to check out our original branch (`main` in this case)
+      # because `rust-cache` needs to find a `Cargo.toml` file, which the
+      # `gh-pages` branch does not have.
+      - name: Return to current branch for Rust caching
+        uses: actions/checkout@v6
+        with:
+          ref: main
