@@ -67,7 +67,7 @@ jobs:
         shell: bash
         run: |
           shopt -s extglob
-          rm -rf !(target|.gitignore)
+          rm -rf !(target|CNAME)
           mv target/site/staging/${{ github.event.pull_request.number }}/* target/site
           mv target/site/staging/${{ github.event.pull_request.number }}.html target/site/index.html
           rmdir target/site/staging/${{ github.event.pull_request.number }}
@@ -82,6 +82,7 @@ jobs:
           rm -rf staging/${{ github.event.pull_request.number }}
           mkdir -p staging/${{ github.event.pull_request.number }}
           mv target/site/* staging/${{ github.event.pull_request.number }}
+          rm -rf target
       - name: Upload to gh-pages branch
         run: |
           git config user.name "github-actions[bot]"
