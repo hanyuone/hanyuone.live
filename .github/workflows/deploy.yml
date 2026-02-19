@@ -68,7 +68,7 @@ jobs:
         shell: bash
         run: |
           shopt -s extglob
-          rm -rf !(target)
+          rm -rf !(target|CNAME)
           mv target/site/* .
           rm -rf target
       - name: Upload to gh-pages branch
@@ -81,4 +81,4 @@ jobs:
       - name: Return to current branch for Rust caching
         uses: actions/checkout@v6
         with:
-          ref: ${{ github.head_ref }}
+          ref: main
