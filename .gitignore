@@ -1,4 +1,0 @@
-# Stop CNAME from being deleted
-CNAME
-# Stop `target` from being pushed, but keep it for caching purposes
-target/
