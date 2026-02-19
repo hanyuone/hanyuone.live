@@ -90,3 +90,7 @@ jobs:
           git add .
           git commit -m "generated"
           git push
+      - name: Return to current branch for Rust caching
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.head_ref }}
