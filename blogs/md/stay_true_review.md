@@ -1,7 +1,7 @@
 ---
 title: Stay True book review
 description: Or, 2,000 words on why you should read this book
-image: /public/blog_media/stay_true_review/cover.jpg
+image: /blog_media/stay_true_review/cover.jpg
 publish_date: 2025-05-16 11:21
 tags:
 - review
@@ -31,7 +31,7 @@ But the two added to each others' lives, their personalities intertwining in so 
 
 I think Hsu's style of writing especially shines when he describes his university days. The way he writes - snappy, almost staccato when describing individual moments clustered around a specific time - makes me think about Polaroid photos. Slightly blurry, tens or hundreds taken at a time, documenting every minute detail as if to recreate a whole. It does help my point that the front cover literally has a camera, and there are full-page photos scattered throughout the book.
 
-![Polaroids from my 21st birthday - what Hsu's writing style reminded me of](/public/blog_media/stay_true_review/polaroids.jpg)
+![Polaroids from my 21st birthday - what Hsu's writing style reminded me of](/blog_media/stay_true_review/polaroids.jpg)
 
 To provide an example:
 > We were on the roof of our dorm, just after dinner, waiting for the sunset. It was late May - the beginnings of T-shirt and shorts weather, though I opted for a striped, wool sweater I'd recently thrifted. Finding our way to the summit of Ida Sproul Hall was a final curiosity satisfied before moving out.

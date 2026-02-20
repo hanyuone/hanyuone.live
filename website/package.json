@@ -4,15 +4,14 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "tailwind": "pnpm exec tailwindcss -i styles/tailwind.css -o $TRUNK_STAGING_DIR/tailwind.css"
+        "tailwind": "pnpm exec tailwindcss -i style/tailwind.css -o style/main.css"
     },
     "keywords": [],
     "author": "hanyuone",
     "license": "ISC",
-    "dependencies": {
-        "tailwindcss": "^3.4.3"
-    },
     "devDependencies": {
-        "@tailwindcss/typography": "^0.5.13"
+        "@tailwindcss/cli": "^4.1.17",
+        "@tailwindcss/typography": "^0.5.13",
+        "tailwindcss": "^4.1.17"
     }
 }

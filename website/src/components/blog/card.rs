@@ -1,45 +1,40 @@
+use leptos::prelude::*;
 use markdown::structs::{
     blog::BlogId,
     metadata::BlogMetadata,
     tag::{TagId, TagMetadata},
 };
-use yew::{function_component, html, html_nested, Html, Properties};
-use yew_router::components::Link;
 
 use crate::{
     components::blog::{tag::Tag, to_read_time},
-    pages::Route,
+    ROOT,
 };
 
-#[derive(Properties, PartialEq)]
-pub struct BlogCardProps {
-    pub id: BlogId,
-    pub metadata: BlogMetadata,
-}
+#[component]
+pub fn blog_card(id: BlogId, metadata: BlogMetadata) -> impl IntoView {
+    let root = ROOT.unwrap_or("");
 
-#[function_component(BlogCard)]
-pub fn blog_card(props: &BlogCardProps) -> Html {
     let BlogMetadata {
         front_matter,
         post_translate,
-    } = &props.metadata;
+    } = &metadata;
 
-    html! {
+    view! {
         <div class="flex flex-col md:flex-row hover:bg-gray">
             <div class="flex-col w-full md:basis-1/4 p-4">
                 <img
                     src={front_matter.image.clone()}
-                    class="aspect-video object-cover" />
+                    class="w-full aspect-video object-cover" />
             </div>
             <div class="flex flex-col md:basis-3/4 p-4">
-                <Link<Route> to={Route::BlogPost { blog_id: props.id }}>
-                    <h2 class="font-bold text-2xl hover:underline">{&front_matter.title}</h2>
-                </Link<Route>>
-                <p class="flex grow">{&front_matter.description}</p>
+                <a href={format!("{root}/blog/{}", id)}>
+                    <h2 class="font-bold text-2xl hover:underline">{front_matter.title.clone()}</h2>
+                </a>
+                <p class="flex grow">{front_matter.description.clone()}</p>
                 <div class="inline">
-                    <span class="text-gray-500">{&front_matter.publish_date.format("%d %b %Y").to_string()}</span>
+                    <span class="text-gray-500">{front_matter.publish_date.format("%d %b %Y").to_string()}</span>
                     <span class="px-1 text-white">{"·"}</span>
-                    <span class="text-gray-500">{&to_read_time(post_translate.words)}</span>
+                    <span class="text-gray-500">{to_read_time(post_translate.words)}</span>
                     <span class="px-1 text-white">{"·"}</span>
                     {
                         front_matter.tags
@@ -52,7 +47,7 @@ pub fn blog_card(props: &BlogCardProps) -> Html {
                                     })
                                     .unwrap_or("green".to_string());
 
-                                html_nested! {
+                                view! {
                                     <Tag
                                         name={tag_name.clone()}
                                         colour={colour} />

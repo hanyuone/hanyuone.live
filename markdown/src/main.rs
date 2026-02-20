@@ -13,9 +13,9 @@ use std::{
     str::FromStr,
 };
 
-static BLOG_DIR: &str = "public/blog";
-// Seems pretty hacky to build the MD files directly into the website folder
-static TARGET_DIR: &str = "website/public/blog";
+static BLOG_DIR: &str = "blogs/md";
+static BLOG_MAP_DIR: &str = "blogs";
+static TARGET_DIR: &str = "blogs/parsed";
 
 struct BlogFile {
     id: BlogId,
@@ -70,7 +70,11 @@ fn create_blog_files(content_dir: &str) -> io::Result<Vec<BlogFile>> {
     Ok(results)
 }
 
-fn write_blog_files(target_dir: impl AsRef<Path>, files: Vec<BlogFile>) -> io::Result<()> {
+fn write_blog_files(
+    blog_map_dir: impl AsRef<Path>,
+    target_dir: impl AsRef<Path>,
+    files: Vec<BlogFile>,
+) -> io::Result<()> {
     // Create dist/public directory, for copying in frontmatter and MD files
     fs::create_dir_all(&target_dir)?;
 
@@ -94,7 +98,7 @@ fn write_blog_files(target_dir: impl AsRef<Path>, files: Vec<BlogFile>) -> io::R
     }
 
     // Write list of blog cards to target dir
-    let blog_map_filename = target_dir.as_ref().join("blog_map.ron");
+    let blog_map_filename = blog_map_dir.as_ref().join("blog_map.ron");
     let bytestring = ron::to_string(&blog_map).expect("Written as bytes");
 
     fs::write(blog_map_filename, bytestring.clone())?;
@@ -103,15 +107,15 @@ fn write_blog_files(target_dir: impl AsRef<Path>, files: Vec<BlogFile>) -> io::R
 }
 
 // Guaranteed that these directories exist - if not, panicking is okay
-pub fn build_md_files(blog_dir: &str, target_dir: &str) -> io::Result<()> {
+pub fn build_md_files(blog_dir: &str, blog_map_dir: &str, target_dir: &str) -> io::Result<()> {
     let target_dir = PathBuf::from(target_dir);
     let files = create_blog_files(blog_dir)?;
-    write_blog_files(target_dir, files)?;
+    write_blog_files(blog_map_dir, target_dir, files)?;
 
     Ok(())
 }
 
 fn main() -> io::Result<()> {
-    build_md_files(BLOG_DIR, TARGET_DIR)?;
+    build_md_files(BLOG_DIR, BLOG_MAP_DIR, TARGET_DIR)?;
     Ok(())
 }
