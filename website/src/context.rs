@@ -1,26 +1,6 @@
-use std::{cell::RefCell, collections::HashMap, rc::Rc};
+use std::collections::HashMap;
 
 use markdown::structs::{blog::BlogId, metadata::BlogMetadata};
-use yew::Html;
-
-#[derive(Default)]
-pub struct HeadContext {
-    pub content: Rc<RefCell<Html>>,
-}
-
-impl PartialEq for HeadContext {
-    fn eq(&self, _: &Self) -> bool {
-        true
-    }
-}
-
-impl Clone for HeadContext {
-    fn clone(&self) -> Self {
-        Self {
-            content: self.content.clone(),
-        }
-    }
-}
 
 #[derive(Clone)]
 pub struct BlogContext {

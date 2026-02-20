@@ -1,40 +1,35 @@
 use std::str::FromStr;
 
+use leptos::prelude::*;
 use markdown::structs::{
     blog::BlogId,
     metadata::BlogMetadata,
     tag::{TagId, TagMetadata},
 };
-use yew::{function_component, html, html_nested, Html, Properties};
-use yew_router::components::Link;
 
 use crate::{
     components::blog::{tag::Tag, to_read_time},
-    pages::Route,
+    ROOT,
 };
 
-#[derive(PartialEq, Properties)]
-pub struct BlogItemProps {
-    pub id: BlogId,
-    pub metadata: BlogMetadata,
-}
+#[component]
+pub fn BlogItem(id: BlogId, metadata: BlogMetadata) -> impl IntoView {
+    let root = ROOT.unwrap_or("");
 
-#[function_component(BlogItem)]
-pub fn blog_item(props: &BlogItemProps) -> Html {
     let BlogMetadata {
         front_matter,
         post_translate,
-    } = &props.metadata;
+    } = &metadata;
 
-    html! {
+    view! {
         <div class="flex-col p-4 border-t-[1px] border-white hover:bg-gray">
-            <Link<Route> to={Route::BlogPost { blog_id: props.id }}>
-                <h3 class="font-bold text-xl hover:underline">{&front_matter.title}</h3>
-            </Link<Route>>
+            <a href={format!("{root}/blog/{}", id)}>
+                <h3 class="font-bold text-xl hover:underline">{front_matter.title.clone()}</h3>
+            </a>
             <div class="inline">
-                <span class="text-gray-500">{&front_matter.publish_date.format("%d %b %Y").to_string()}</span>
+                <span class="text-gray-500">{front_matter.publish_date.format("%d %b %Y").to_string()}</span>
                 <span class="px-1 text-white">{"·"}</span>
-                <span class="text-gray-500">{&to_read_time(post_translate.words)}</span>
+                <span class="text-gray-500">{to_read_time(post_translate.words)}</span>
                 <span class="px-1 text-white">{"·"}</span>
                 {
                     front_matter.tags
@@ -47,7 +42,7 @@ pub fn blog_item(props: &BlogItemProps) -> Html {
                                     })
                                     .unwrap_or("green".to_string());
 
-                            html_nested! {
+                            view! {
                                 <Tag
                                     name={tag_name.clone()}
                                     colour={colour} />

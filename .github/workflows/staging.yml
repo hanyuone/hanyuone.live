@@ -1,0 +1,100 @@
+name: Deploy to staging environment
+on:
+  pull_request:
+    types:
+      - synchronize
+    branches:
+      - main
+
+permissions:
+  contents: write
+  id-token: write
+
+env:
+  ROOT: "/staging/${{ github.event.pull_request.number }}"
+  LEPTOS_WASM_BINDGEN_VERSION: 0.2.105
+  LEPTOS_TAILWIND_VERSION: v4.1.18
+  WEBSITE_URL: https://hanyuone.live
+  COMMENTS_URL: https://comments.hanyuone.live
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      # ==================== SETUP ====================
+      # Install Rust
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          targets: wasm32-unknown-unknown
+      # Install cargo-leptos
+      - name: Install cargo-leptos
+        uses: baptiste0928/cargo-install@v3
+        with:
+          crate: cargo-leptos
+      # Install Node and PNPM
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 9
+          run_install: false
+      # Checkout repo
+      - uses: actions/checkout@v6
+      # =================== INSTALL ===================
+      # Cache Rust build files
+      - uses: Swatinem/rust-cache@v2
+      # PNPM caching and installing dependencies
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      # ==================== BUILD ====================
+      - name: Build website
+        run: pnpm build
+      # ================== CHECKOUT ===================
+      # Delete everything
+      - name: Setup build directory
+        shell: bash
+        run: |
+          shopt -s extglob
+          rm -rf !(target|CNAME)
+          mv target/site/staging/${{ github.event.pull_request.number }}/* target/site
+          mv target/site/staging/${{ github.event.pull_request.number }}.html target/site/index.html
+          rmdir target/site/staging/${{ github.event.pull_request.number }}
+      # Move into `gh-pages` branch
+      - name: Checkout gh-pages
+        uses: actions/checkout@v6
+        with:
+          ref: gh-pages
+          clean: false
+      - name: Transfer build directory to proper location
+        run: |
+          rm -rf staging/${{ github.event.pull_request.number }}
+          mkdir -p staging/${{ github.event.pull_request.number }}
+          mv target/site/* staging/${{ github.event.pull_request.number }}
+          rm -rf target
+      - name: Upload to gh-pages branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "generated"
+          git push
+      # We need to check out our original branch because `rust-cache` needs to
+      # find a `Cargo.toml` file, which the `gh-pages` branch does not have.
+      - name: Return to current branch for Rust caching
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.head_ref }}

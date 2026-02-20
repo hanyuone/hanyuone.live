@@ -1,58 +1,62 @@
+use leptos::prelude::*;
+use leptos_icons::Icon;
 use markdown::translate::container::callout::CalloutKind;
-use yew::{classes, function_component, html, props, Children, Html, Properties};
-use yew_icons::{Icon, IconId};
 
-#[derive(Properties, PartialEq)]
-pub struct CalloutProps {
-    colour: String,
-    icon: IconId,
-    title: String,
-    #[prop_or_default]
-    pub children: Children,
+pub struct CalloutData {
+    pub colour: String,
+    pub icon: &'static icondata_core::IconData,
+    pub title: String,
 }
 
-impl From<CalloutKind> for CalloutProps {
+impl From<CalloutKind> for CalloutData {
     fn from(value: CalloutKind) -> Self {
         match value {
-            CalloutKind::Note => props!(CalloutProps {
-                colour: "bg-blue/50",
-                icon: IconId::BootstrapInfoCircleFill,
-                title: "Note",
-            }),
-            CalloutKind::Tip => props!(CalloutProps {
-                colour: "bg-green/50",
-                icon: IconId::BootstrapLightbulbFill,
-                title: "Tip",
-            }),
-            CalloutKind::Important => props!(CalloutProps {
-                colour: "bg-purple/50",
-                icon: IconId::BootstrapCheckCircleFill,
-                title: "Important",
-            }),
-            CalloutKind::Warning => props!(CalloutProps {
-                colour: "bg-yellow/50",
-                icon: IconId::BootstrapExclamationTriangleFill,
-                title: "Warning",
-            }),
-            CalloutKind::Caution => props!(CalloutProps {
-                colour: "bg-red/50",
-                icon: IconId::BootstrapXOctagonFill,
-                title: "Caution",
-            }),
+            CalloutKind::Note => Self {
+                colour: "bg-blue/50".to_string(),
+                icon: icondata::BsInfoCircleFill,
+                title: "Note".to_string(),
+            },
+            CalloutKind::Tip => Self {
+                colour: "bg-green/50".to_string(),
+                icon: icondata::BsLightbulbFill,
+                title: "Tip".to_string(),
+            },
+            CalloutKind::Important => Self {
+                colour: "bg-purple/50".to_string(),
+                icon: icondata::BsCheckCircleFill,
+                title: "Important".to_string(),
+            },
+            CalloutKind::Warning => Self {
+                colour: "bg-yellow/50".to_string(),
+                icon: icondata::BsExclamationTriangleFill,
+                title: "Warning".to_string(),
+            },
+            CalloutKind::Caution => Self {
+                colour: "bg-red/50".to_string(),
+                icon: icondata::BsXOctagonFill,
+                title: "Caution".to_string(),
+            },
         }
     }
 }
 
-#[function_component(Callout)]
-pub fn callout(props: &CalloutProps) -> Html {
-    html! {
-        <div class={classes!("max-w-[65ch]", "my-4", "p-2", props.colour.clone())}>
+#[component]
+pub fn Callout(
+    #[prop(into)] colour: String,
+    #[prop(into)] icon: &'static icondata_core::IconData,
+    #[prop(into)] title: String,
+    children: Children,
+) -> impl IntoView {
+    view! {
+        <div class={format!("max-w-[65ch] my-4 p-2 {}", colour.clone())}>
             <div class="flex flex-row">
-                <Icon class="p-1" icon_id={props.icon} />
-                <p class="font-bold">{props.title.clone()}</p>
+                <div class="p-1">
+                    <Icon icon />
+                </div>
+                <p class="font-bold">{title.clone()}</p>
             </div>
             <article class="prose dark:prose-invert">
-                {props.children.clone()}
+                {children()}
             </article>
         </div>
     }

@@ -1,2 +1,2 @@
 pub mod background;
-pub mod typewriter;
+pub mod home_animation;

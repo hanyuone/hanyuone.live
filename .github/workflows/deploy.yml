@@ -1,4 +1,4 @@
-name: Deploy static website to GH Pages
+name: Deploy to hanyuone.live
 on:
   push:
     branches:
@@ -6,14 +6,15 @@ on:
       # TODO: remove once cookies confirmed working
       - feature/comments
 
+permissions:
+  contents: write
+  id-token: write
+
 env:
+  LEPTOS_WASM_BINDGEN_VERSION: 0.2.105
+  LEPTOS_TAILWIND_VERSION: v4.1.18
   WEBSITE_URL: https://hanyuone.live
   COMMENTS_URL: https://comments.hanyuone.live
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
 
 jobs:
   release:
@@ -25,9 +26,11 @@ jobs:
         with:
           toolchain: stable
           targets: wasm32-unknown-unknown
-      # Install Trunk and WASM for building webapp
-      - uses: jetli/trunk-action@v0.5.0
-      - uses: jetli/wasm-bindgen-action@v0.2.0
+      # Install cargo-leptos
+      - name: Install cargo-leptos
+        uses: baptiste0928/cargo-install@v3
+        with:
+          crate: cargo-leptos
       # Install Node and PNPM
       - uses: actions/setup-node@v4
         with:
@@ -38,7 +41,7 @@ jobs:
           version: 9
           run_install: false
       # Checkout repo
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       # =================== INSTALL ===================
       # Cache Rust build files
       - uses: Swatinem/rust-cache@v2
@@ -47,25 +50,42 @@ jobs:
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-      - uses: actions/cache@v4
-        name: Setup pnpm cache
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
         with:
           path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-server-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+            ${{ runner.os }}-pnpm-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       # ==================== BUILD ====================
       - name: Build website
         run: pnpm build
-      # =================== DEPLOY ====================
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      # ================== CHECKOUT ===================
+      - name: Checkout gh-pages
+        uses: actions/checkout@v6
         with:
-          path: './dist'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          ref: gh-pages
+          clean: false
+      - name: Update contents using target/site folder
+        shell: bash
+        run: |
+          shopt -s extglob
+          rm -rf !(target|CNAME)
+          mv target/site/* .
+          rm -rf target
+      - name: Upload to gh-pages branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "generated"
+          git push
+      # We need to check out our original branch (`main` in this case)
+      # because `rust-cache` needs to find a `Cargo.toml` file, which the
+      # `gh-pages` branch does not have.
+      - name: Return to current branch for Rust caching
+        uses: actions/checkout@v6
+        with:
+          ref: main
