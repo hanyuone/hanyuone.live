@@ -1849,7 +1849,7 @@ checksum = "5e5032e24019045c762d3c0f28f5b6b8bbf38563a65908389bf7978758920897"
 
 [[package]]
 name = "macros"
-version = "0.6.0"
+version = "0.7.1"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1883,7 +1883,7 @@ dependencies = [
 
 [[package]]
 name = "markdown"
-version = "0.6.0"
+version = "0.7.1"
 dependencies = [
  "chrono",
  "enum-iterator",
@@ -3474,7 +3474,7 @@ dependencies = [
 
 [[package]]
 name = "website"
-version = "0.6.0"
+version = "0.7.1"
 dependencies = [
  "axum",
  "chrono",
