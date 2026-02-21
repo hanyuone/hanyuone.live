@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.7.1 (2026-02-14)
+
+Moved from Yew to Leptos, which has better support for SSR. Fixed some bugs in relation to mobile
+views of the website.
+
+## v0.7.0 (2025-11-28)
+
+Added **staging environments** for each pull request. Converted deployment to using `gh-pages` branch
+instead of Actions.
+
 ## v0.6.0 (2025-06-28)
 
 Added support for **mobile devices**.
