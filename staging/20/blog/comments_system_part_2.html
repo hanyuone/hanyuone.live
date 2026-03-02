@@ -1,0 +1,158 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><!><link rel="modulepreload" href="/staging/20/pkg/website.js" crossorigin="XndaqrPN88RVRA3aj0ge0Q"><link rel="preload" href="/staging/20/pkg/website.wasm" as="fetch" type="application/wasm" crossorigin="XndaqrPN88RVRA3aj0ge0Q"><script type="module" nonce="XndaqrPN88RVRA3aj0ge0Q">((root, pkg_path, output_name, wasm_output_name) => {
+	let MOST_RECENT_CHILDREN_CB = [];
+
+	function idle(c) {
+		if ("requestIdleCallback" in window) {
+			window.requestIdleCallback(c);
+		} else {
+			c();
+		}
+	}
+	async function hydrateIslands(rootNode, mod) {
+		async function traverse(node) {
+			if (node.nodeType === Node.ELEMENT_NODE) {
+				const tag = node.tagName.toLowerCase();
+				if(tag === 'leptos-island') {
+					const children = [];
+					const id = node.dataset.component || null;
+
+					await hydrateIsland(node, id, mod);
+					
+					for(const child of node.children) {
+						await traverse(child, children);
+					}
+				} else {
+					if (tag === 'leptos-children') {
+						MOST_RECENT_CHILDREN_CB.push(node.$$on_hydrate);
+						for(const child of node.children) {
+							await traverse(child);
+						};
+						// un-set the "most recent children"
+						MOST_RECENT_CHILDREN_CB.pop();
+					} else {
+						for(const child of node.children) {
+							await traverse(child);
+						};
+					}
+				}
+			}
+		}
+
+		await traverse(rootNode);
+	}
+	async function hydrateIsland(el, id, mod) {
+		const islandFn = mod[id];
+		if (islandFn) {
+			const children_cb = MOST_RECENT_CHILDREN_CB[MOST_RECENT_CHILDREN_CB.length-1];
+			if (children_cb) {
+				children_cb();
+			}
+			const res = islandFn(el);
+			if (res && res.then) {
+				await res;
+			}
+		} else {
+			console.warn(`Could not find WASM function for the island ${id}.`);
+		}
+	}
+	idle(() => {
+		import(`${root}/${pkg_path}/${output_name}.js`)
+			.then(mod => {
+				mod.default({module_or_path: `${root}/${pkg_path}/${wasm_output_name}.wasm`}).then(() => {
+					mod.hydrate();
+					hydrateIslands(document.body, mod);
+				});
+
+				window.__hydrateIsland = (el, id) => hydrateIsland(el, id, mod);
+			})
+	});
+})
+("/staging/20", "pkg", "website", "website");</script><!--HEAD--><link id="leptos" rel="stylesheet" href="/staging/20/pkg/website.css"><title>Comments system devlog, Part 2 - Hanyuan's site</title></head><body><div class="bg-black text-white flex flex-col min-h-screen justify-between"><nav><leptos-island data-component="MobileHeader_14484353534515111953"><div><div class="md:hidden flex flex-row mx-4 border-b-[1px] border-white"><div class="flex"><a href="/staging/20/" class="px-4 py-4 font-mono hover:bg-gray transition-colors">hanyuone.live</a></div><div class="flex px-4 py-4 ml-auto items-center"><button class="text-neutral-200"><svg width="1em" height="1.1em" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" fill="none" role="graphics-symbol"><g><path d="M4 12h16" />
+<path d="M4 18h16" />
+<path d="M4 6h16" /></g></svg></button></div></div><div class="absolute top-14 w-full px-4 bg-black flex flex-col transition duration-200 ease-in-out text-right    opacity-0 translate-y-1 z-0"><a href="/staging/20/blog" class="w-full py-2 text-white hover:bg-blue transition-colors">Blog</a><a href="/staging/20/resume.pdf" class="w-full py-2 text-white hover:bg-blue transition-colors">Resume</a><div class="flex items-center justify-end"><a href="https://github.com/hanyuone" class="pr-4 py-2 text-neutral-200 hover:text-purple transition-colors"><svg width="1em" height="1.1em" viewBox="0 0 16 16" fill="currentColor" role="graphics-symbol"><g><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8" /></g></svg></a><a href="https://linkedin.com/in/hanyuan-li" class="pr-4 py-2 text-neutral-200 hover:text-blue transition-colors"><svg width="1em" height="1.1em" viewBox="0 0 16 16" fill="currentColor" role="graphics-symbol"><g><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z" /></g></svg></a><a href="mailto:work@hanyuone.live" class="py-2 text-neutral-200 hover:text-yellow transition-colors"><svg width="1em" height="1.1em" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" fill="none" role="graphics-symbol"><g><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" />
+<rect x="2" y="4" width="20" height="16" rx="2" /></g></svg></a></div></div></div></leptos-island><div class="hidden md:flex flex-row mx-4 border-b border-white"><div class="flex"><a href="/staging/20/" class="px-4 py-4 font-mono hover:bg-gray transition-colors">hanyuone.live</a></div><div class="flex px-4"><a href="/staging/20/blog" class="px-4 py-4 text-white hover:bg-blue transition-colors">Blog</a><a href="/staging/20/resume.pdf" class="px-4 py-4 text-white hover:bg-blue transition-colors">Resume</a></div><div class="flex px-4 py-4 ml-auto items-center"><a href="https://github.com/hanyuone" class="px-2 text-neutral-200 hover:text-purple transition-colors"><svg width="1em" height="1.1em" viewBox="0 0 16 16" fill="currentColor" role="graphics-symbol"><g><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8" /></g></svg></a><a href="https://linkedin.com/in/hanyuan-li" class="px-2 text-neutral-200 hover:text-blue transition-colors"><svg width="1em" height="1.1em" viewBox="0 0 16 16" fill="currentColor" role="graphics-symbol"><g><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z" /></g></svg></a><a href="mailto:work@hanyuone.live" class="px-2 text-neutral-200 hover:text-yellow transition-colors"><svg width="1em" height="1.1em" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" fill="none" role="graphics-symbol"><g><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" />
+<rect x="2" y="4" width="20" height="16" rx="2" /></g></svg></a></div></div></nav><main class="grow px-10 py-20 lg:px-20"><div class="flex flex-col p-4 content-center text-center border-b-[1px]"><h2 class="font-bold text-2xl underline">Comments system devlog, Part 2</h2><p><span class="text-gray-500">15 Feb 2026</span><span class="px-1 text-white">·</span><span class="text-gray-500">8 min</span></p></div><div class="flex flex-col py-4 items-center"><article class="prose dark:prose-invert"><p>First off, I wanted part 2 of this series to be me implementing the most basic MVP on the<!>
+<!>client side - something that actually pushes progress for the project forward. Linking a button<!>
+<!>with the GitHub logo to the authentication system, and having mock comments on blogs that I<!>
+<!>could actually see, something like that. And I did make some progress on that front, on a<!>
+<!>pull request, but<!>…<!> Yew got in the way.<!></p><h3>Rust web frameworks<!></h3><p>The way <code>hanyuone.live<!></code> is structured is mostly based on <a href="https://blakerain.com/blog/ssg-and-hydration-with-yew/" title="">this blog post<!></a> -<!>
+<!>I wanted to make a website entirely in Rust, with a statically-generated blog system, and someone<!>
+<!>had already done the hard design work for me. Inside the blog you can find insights into Yew<!>
+<!>internals, hydration and Markdown parsing/regeneration on the client, all done in an efficient way.<!>
+<!>I highly recommend giving it a read.<!></p><p>The author decided to use <a href="https://yew.rs" title="">Yew<!></a> as their main web framework - it is essentially<!>
+<!>a Rust version of React, with the same HTML-in-code magic done through a macro, <code>html!<!></code>. It<!>’<!>s great<!>
+<!>for single-page applications (SPAs), all the rage a few years ago, and has<!>…<!> some support for <strong>static site<!>
+<!>generation<!></strong> (SSG), where HTML pages are generated in advance, very useful for SEO. This limited support<!>
+<!>for anything outside of client-side rendering (CSR, what is used for SPAs) will come up later.<!></p><p>From there, the website structure is as follows:<!></p><ul><li>Locally, the website is built as a SPA, using Yew<!>’<!>s default CSR. Nothing crazy here.<!></li><li>However, when <em>building<!></em> the website to be deployed, Yew<!>’<!>s server-side rendering (SSR) features are used,<!>
+<!>plus SSG and another feature called <strong>hydration<!></strong>, where client-side WASM <!>“<!>injects<!>”<!> reactivity into what<!>
+<!>are normally static HTML pages.<!></li><!></ul><p>These two modes are very, very different, and there were headaches when trying to set up a build system<!>
+<!>that could accommodate both (some work was done by investigating the blog and GitHub repos, other work<!>
+<!>had to be done completely from scratch by yours truly). But the system worked, blog Markdown files were converted<!>
+<!>into webpages (or rather, converted into a condensed form that was trivial to convert into HTML, to speed<!>
+<!>up website load times), and the CSR and SSR versions of the site functioned identically.<!></p><p>That is, until I tried to implement a client for the comments system.<!></p><h3>Yew, <code>Suspense<!></code> and OAuth<!></h3><p>From <a href="/blog/comments_system_part_1" title="">Part 1<!></a> of the devlog, the comments system uses the OAuth 2 flow to allow<!>
+<!>users to log in through larger tech platforms like GitHub or Google (and therefore, offload most of our<!>
+<!>security concerns to these large platforms). Accessing information using a GitHub account and OAuth 2 looks<!>
+<!>something like this:<!></p><figure title="" id=""><img alt="A diagram of the OAuth 2 flow." src="/blog_media/comments_system/oauth2.png"><figcaption>A diagram of the OAuth 2 flow.<!></figcaption><!></figure><p><!></p><p>The comments system currently has a few endpoints related to authentication<sup id="anchor_1"><a href="#footnote_1">1<!></a><!></sup>:<!></p><ul><li><code>/auth/login<!></code>, which redirects the user to <code>github.com<!></code> to verify their account, and returns a GH access token<!></li><li><code>/auth/session<!></code>, which generates a local session token from the GH access token, storing that user<!>’<!>s username<!>
+<!>and PFP on a local database.<!></li><li><code>/profile<!></code>, which first goes through some authentication middleware that converts a session token into<!>
+<!>a corresponding user ID, and returns that user<!>’<!>s information.<!></li><!></ul><p>For an unregistered user, when we access a blog post, the website does the following:<!></p><ol start="1"><li>It first attempts to fetch a user<!>’<!>s profile. If the middleware fails (e.g. we don<!>’<!>t have a token, our token<!>
+<!>expired), a button to login via GitHub is displayed.<!></li><li>The user clicks the button, and <code>/auth/login<!></code> is requested.<!></li><li>The user logs in via GitHub, and is redirected to the <code>/auth/session<!></code> endpoint.<!></li><li>A session ID gets generated, and the user is redirected again, back to that blog post.<!></li><li>The website fetches the user<!>’<!>s profile again, and because we now have a valid session ID, the user<!>’<!>s details<!>
+<!>are fetched, and they can now write comments.<!></li><!></ol><p>Phew! That was a lot of low-level auth to go through, and now we have enough context to see why Yew was a problem.<!>
+<!>In order to check whether a user is logged in or not (and thus, either display a login button or a list of comments),<!>
+<!>we need to send a request to the comments system, specifically to <code>/profile<!></code>. We don<!>’<!>t want the page to hang while<!>
+<!>that request is being made, however - this is where the <a href="https://yew.rs/docs/concepts/suspense" title=""><code>Suspense<!></code><!></a> component<!>
+<!>comes in handy.<!></p><p>How it works is, <code>Suspense<!></code> renders some HTML element <code>fallback<!></code> until whatever is inside <code>&lt;Suspense /&gt;<!></code> has finished<!>
+<!>processing. We indicate whether we finish processing in the background using <code>SuspensionResult<!></code>, like in the example<!>
+<!>code below:<!></p><pre><code><span style="color: rgb(192, 197, 206)">#[<!></span><span style="color: rgb(191, 97, 106)">hook<!></span><span style="color: rgb(192, 197, 206)">]<!></span>
+<span style="color: rgb(180, 142, 173)">fn<!></span><span style="color: rgb(192, 197, 206)"> <!></span><span style="color: rgb(143, 161, 179)">use_user<!></span><span style="color: rgb(192, 197, 206)">() -&gt; SuspensionResult&lt;User&gt; {<!></span>
+<span style="color: rgb(192, 197, 206)">    <!></span><span style="color: rgb(180, 142, 173)">match<!></span><span style="color: rgb(192, 197, 206)"> <!></span><span style="color: rgb(150, 181, 180)">load_user<!></span><span style="color: rgb(192, 197, 206)">() {<!></span>
+<span style="color: rgb(192, 197, 206)">        <!></span><span style="color: rgb(101, 115, 126)">// If a user is loaded, then we return it as Ok(user).<!></span>
+<span style="color: rgb(192, 197, 206)">        Some(m) =&gt; Ok(m),<!></span>
+<span style="color: rgb(192, 197, 206)">        None =&gt; {<!></span>
+<span style="color: rgb(192, 197, 206)">            <!></span><span style="color: rgb(101, 115, 126)">// When user is still loading, then we create a `Suspension`<!></span>
+<span style="color: rgb(192, 197, 206)">            <!></span><span style="color: rgb(101, 115, 126)">// and call `SuspensionHandle::resume` when data loading<!></span>
+<span style="color: rgb(192, 197, 206)">            <!></span><span style="color: rgb(101, 115, 126)">// completes, the component will be re-rendered<!></span>
+<span style="color: rgb(192, 197, 206)">            <!></span><span style="color: rgb(101, 115, 126)">// automatically.<!></span>
+<span style="color: rgb(192, 197, 206)">            <!></span><span style="color: rgb(180, 142, 173)">let<!></span><span style="color: rgb(192, 197, 206)"> (s, handle) = Suspension::new();<!></span>
+<span style="color: rgb(192, 197, 206)">            <!></span><span style="color: rgb(150, 181, 180)">on_load_user_complete<!></span><span style="color: rgb(192, 197, 206)">(<!></span><span style="color: rgb(180, 142, 173)">move<!></span><span style="color: rgb(192, 197, 206)"> || {handle.<!></span><span style="color: rgb(150, 181, 180)">resume<!></span><span style="color: rgb(192, 197, 206)">();});<!></span>
+<span style="color: rgb(192, 197, 206)">            Err(s)<!></span>
+<span style="color: rgb(192, 197, 206)">        },<!></span>
+<span style="color: rgb(192, 197, 206)">    }<!></span>
+<span style="color: rgb(192, 197, 206)">}<!></span>
+<!>
+<span style="color: rgb(192, 197, 206)">#[<!></span><span style="color: rgb(191, 97, 106)">component<!></span><span style="color: rgb(192, 197, 206)">(Content)]<!></span>
+<span style="color: rgb(180, 142, 173)">fn<!></span><span style="color: rgb(192, 197, 206)"> <!></span><span style="color: rgb(143, 161, 179)">content<!></span><span style="color: rgb(192, 197, 206)">() -&gt; HtmlResult {<!></span>
+<span style="color: rgb(192, 197, 206)">    <!></span><span style="color: rgb(180, 142, 173)">let<!></span><span style="color: rgb(192, 197, 206)"> user = <!></span><span style="color: rgb(150, 181, 180)">use_user<!></span><span style="color: rgb(192, 197, 206)">()?;<!></span>
+<!>
+<span style="color: rgb(192, 197, 206)">    Ok(html! {&lt;div&gt;{"<!></span><span style="color: rgb(163, 190, 140)">Hello, <!></span><span style="color: rgb(192, 197, 206)">"}{&amp;user.name}&lt;/div&gt;})<!></span>
+<span style="color: rgb(192, 197, 206)">}<!></span>
+<!>
+<span style="color: rgb(192, 197, 206)">#[<!></span><span style="color: rgb(191, 97, 106)">component<!></span><span style="color: rgb(192, 197, 206)">(App)]<!></span>
+<span style="color: rgb(180, 142, 173)">fn<!></span><span style="color: rgb(192, 197, 206)"> <!></span><span style="color: rgb(143, 161, 179)">app<!></span><span style="color: rgb(192, 197, 206)">() -&gt; Html {<!></span>
+<span style="color: rgb(192, 197, 206)">    <!></span><span style="color: rgb(180, 142, 173)">let<!></span><span style="color: rgb(192, 197, 206)"> fallback = html! {&lt;div&gt;{"<!></span><span style="color: rgb(163, 190, 140)">Loading...<!></span><span style="color: rgb(192, 197, 206)">"}&lt;/div&gt;};<!></span>
+<!>
+<span style="color: rgb(192, 197, 206)">    html! {<!></span>
+<span style="color: rgb(192, 197, 206)">        &lt;Suspense {fallback}&gt;<!></span>
+<span style="color: rgb(192, 197, 206)">            &lt;Content /&gt;<!></span>
+<span style="color: rgb(192, 197, 206)">        &lt;/Suspense&gt;<!></span>
+<span style="color: rgb(192, 197, 206)">    }<!></span>
+<span style="color: rgb(192, 197, 206)">}<!></span>
+<!></code><!></pre><p>As you can see, <code>Suspense<!></code> works wonders for very basic use-cases, like above, but it breaks apart for anything<!>
+<!>remotely more complicated. The main problem was <code>Suspense<!></code> and the Rust/WASM difficulties mentioned in Part 1,<!>
+<!>specifically around <code>reqwest<!></code> and async. Because Yew hadn<!>’<!>t had an update in over 2 years at the time of<!>
+<!>implementation<sup id="anchor_2"><a href="#footnote_2">2<!></a><!></sup>, some libraries around that area were discontinued and had become buggy, resulting in<!>
+<!>unsolvable bugs. Couple that with little to no documentation around <code>Suspense<!></code> itself, and it quickly became<!>
+<!>impossible to make progress.<!></p><p>After a week or two of no progress, it was time to switch libraries.<!></p><h3>In comes Leptos<!></h3><p><a href="https://www.leptos.dev/" title="">Leptos<!></a> is a newer library modelled after <a href="https://www.solidjs.com/" title="">SolidJS<!></a> and<!>
+<a href="https://svelte.dev/" title="">Svelte<!></a>, which also has reactivity (through <em>signals<!></em>) but foregoes a virtual DOM. After<!>
+<!>some initial research, it appeared that Leptos was a good fit for refactoring - it uses very similar JSX-like<!>
+<!>syntax, and was very actively developed.<!></p><p>As I moved the website over to Leptos, I also took the chance to change the <code>website<!></code> crate up somewhat:<!></p><ul><li>SSR in Leptos is more supported, with its model of <code>server<!></code> and <code>component<!></code> functions being easier to work with.<!>
+<!>The original build system, of local development being done in CSR and deployments in SSR, has now been switched to<!>
+<!>both running SSR, with local builds running a minimal Axum server and deployments using SSG.<!></li><li>Leptos has a feature called <a href="https://book.leptos.dev/islands.html" title=""><em>islands<!></em><!></a>, where sites are static by default<!>
+<!>with small areas that are reactive. I<!>’<!>ve now moved <code>website<!></code> to using islands, which greatly reduces the size of<!>
+<!>my built HTML files without sacrificing functionality.<!></li><!></ul><p>For now I<!>’<!>m really happy with Leptos, and from the next devlog on I can, hopefully, start actually doing dev work.<!></p><div id="footnote_1"><div><p>1: <em>Authentication<!></em> and <em>authorisation<!></em> are two similar-sounding, but different concepts, and our system does<!>
+<!>a bit of both. OAuth 2 is used for <em>authorisation<!></em> - given a user has already logged in, OAuth2 provides that user<!>
+<!>with a token that allows them to perform certain actions. The actions I actually care about in our system is<!>
+<!>accessing a user<!>’<!>s username and profile picture, since I<!>’<!>m really just using GitHub<!>’<!>s OAuth as a lazy substitute<!>
+<!>for account management. I use GitHub<!>’<!>s OAuth for <em>authentication<!></em> - verifying a user<!>’<!>s identity through linking it<!>
+<!>to a GitHub account - but on the GitHub side, I create an app that authorises the comments system to fetch username<!>
+<!>and PFP information.<!> <a href="#anchor_1">↩️<!></a><!></p><!></div><!></div><div id="footnote_2"><div><p>2: <!>As of December 8, 2025, Yew <a href="https://github.com/yewstack/yew/releases/tag/yew-v0.22.0" title="">released v0.22.0<!></a>, which<!>
+<!>I believe fixes <a href="https://github.com/yewstack/yew/pull/3776" title="">a huge problem<!></a> that I had when implementing the frontend.<!> <a href="#anchor_2">↩️<!></a><!></p><!></div><!></div><!></article><!></div><div class="flex flex-col py-4 items-center"><leptos-island data-component="OAuth_2039685854387681325"><div class="flex flex-col content-center"><a href="https://comments.hanyuone.live/auth/login?return_url=https://hanyuone.live/staging/20/blog/comments_system_part_2" class="bg-white text-black p-2 rounded"><div class="flex flex-row justify-center content-center"><div class="p-1"><svg width="1em" height="1.1em" viewBox="0 0 16 16" fill="currentColor" role="graphics-symbol"><g><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8" /></g></svg></div><p>Login using GitHub</p></div></a></div></leptos-island></div></main><footer class="mx-4 border-t"><div class="flex flex-row px-4 py-4"><div class="flex"><p>Made with ​</p><p class="text-red">&lt;3</p><p> ​in 2024-26</p></div></div></footer></div></body></html><script nonce="XndaqrPN88RVRA3aj0ge0Q">__RESOLVED_RESOURCES=[];__SERIALIZED_ERRORS=[];__PENDING_RESOURCES=[];__RESOURCE_RESOLVERS=[];</script><script nonce="XndaqrPN88RVRA3aj0ge0Q">__INCOMPLETE_CHUNKS=[];</script>
