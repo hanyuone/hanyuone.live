@@ -28,6 +28,7 @@ leptos-use = "0.18.0"
 serde = "1.0.228"
 getrandom = { version = "0.3.4", features = ["wasm_js"] }
 reqwest = { version = "0.13.2", features = ["json"] }
+tower-http = { version = "0.6.8", features = ["cors"] }
 
 [dependencies.web-sys]
 version = "0.3.69"
