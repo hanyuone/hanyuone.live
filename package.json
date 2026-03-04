@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev:md": "cargo watch -w markdown/src -w blogs/md -x \"run -p markdown\"",
-    "dev:site": "cd website && WEBSITE_URL=\"http://127.0.0.1:8080\" COMMENTS_URL=\"http://127.0.0.1:8787\" cargo leptos watch",
+    "dev:site": "cd website && COMMENTS_URL=\"http://127.0.0.1:8787\" cargo leptos watch",
     "dev": "concurrently -c auto \"pnpm dev:md\" \"pnpm dev:site\"",
     "build:md": "cargo run -p markdown",
     "build:site": "cd website && cargo leptos serve --release",

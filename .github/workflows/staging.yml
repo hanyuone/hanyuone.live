@@ -14,7 +14,6 @@ env:
   ROOT: "/staging/${{ github.event.pull_request.number }}"
   LEPTOS_WASM_BINDGEN_VERSION: 0.2.105
   LEPTOS_TAILWIND_VERSION: v4.1.18
-  WEBSITE_URL: https://hanyuone.live
   COMMENTS_URL: https://comments.hanyuone.live
 
 jobs:
