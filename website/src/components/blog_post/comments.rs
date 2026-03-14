@@ -4,7 +4,7 @@ use leptos_icons::Icon;
 use leptos_use::use_document;
 use serde::{Deserialize, Serialize};
 
-use crate::COMMENTS_URL;
+use crate::{pages::blog_post::BlogSlug, COMMENTS_URL};
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct User {
@@ -39,25 +39,81 @@ fn OAuth() -> impl IntoView {
     }
 }
 
+#[derive(Clone)]
+struct CommentData {
+    id: String,
+    contents: String,
+}
+
+#[component]
+fn Comment(#[prop(into)] data: CommentData) -> impl IntoView {
+    view! {}
+}
+
+async fn get_comments(slug: Option<BlogSlug>) -> Vec<CommentData> {
+    vec![]
+}
+
 #[island]
-pub fn Comments() -> impl IntoView {
-    let auth_state = LocalResource::new(get_profile);
+fn CommentList() -> impl IntoView {
+    let slug = use_context::<BlogSlug>();
+    let comments = LocalResource::new(move || get_comments(slug.clone()));
 
     view! {
-        <Suspense fallback=move || view! { <div>{"Loading..."}</div> }>
-            {move || Suspend::new(async move {
-                let auth_state = auth_state.await;
+        <div>
+            <Suspense fallback=move || view! { <p>"Loading comments..."</p> }>
+                {move || Suspend::new(async move {
+                    let comments = comments.await;
 
-                match auth_state {
-                    Ok(ref user) => {
+                    if comments.is_empty() {
+                        view! { <p>"No comments"</p> }.into_any()
+                    } else {
                         view! {
-                            <p>{format!("Signed in as user {}", user.username)}</p>
+                            <For
+                                each=move || comments.clone()
+                                key=|comment| comment.id.clone()
+                                let(data)>
+                                <Comment data />
+                            </For>
                         }.into_any()
                     }
-                    Err(_) => view! { <OAuth /> }.into_any(),
-                }
-            })}
-        </Suspense>
+                })}
+            </Suspense>
+        </div>
+    }
+}
+
+#[component]
+fn CommentWidget(#[prop(into)] user: User) -> impl IntoView {
+    view! {
+        <div class="flex flex-col">
+            // Posting comments
+            <form>
+                <div class="flex flex-col">
+                    // Text input for posting comment
+                    <textarea
+                        name="comment"
+                        placeholder="Enter your thoughts here..."
+                        class="bg-white text-black text-start rounded p-2 h-24" />
+                    // User avatar, post comment button
+                    <div class="flex flex-row mt-2">
+                        <div class="flex flex-row items-center">
+                            <img src={user.avatar_url} class="p-1 h-10" />
+                            <p class="p-1">{user.username}</p>
+                            <div class="p-1">
+                                <Icon icon={i::BsGithub} height="1.1em" />
+                            </div>
+                        </div>
+                        <input
+                            type="submit"
+                            value="Post"
+                            class="ml-auto px-4 py-1 rounded transition bg-blue/50 hover:bg-blue" />
+                    </div>
+                </div>
+            </form>
+            // List of existing comments
+            <CommentList />
+        </div>
     }
 }
 
@@ -82,4 +138,24 @@ async fn get_profile() -> Result<User, Error> {
 
     #[cfg(not(target_arch = "wasm32"))]
     Err("Only supported on WASM mode".into())
+}
+
+#[island]
+pub fn CommentToggle() -> impl IntoView {
+    let auth_state = LocalResource::new(get_profile);
+
+    view! {
+        <Suspense fallback=move || view! { <p>"Loading..."</p> }>
+            {move || Suspend::new(async move {
+                let auth_state = auth_state.await;
+
+                match auth_state {
+                    Ok(ref user) => view! {
+                        <CommentWidget user={user.clone()} />
+                    }.into_any(),
+                    Err(_) => view! { <OAuth /> }.into_any(),
+                }
+            })}
+        </Suspense>
+    }
 }
