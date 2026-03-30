@@ -1,23 +1,19 @@
 use leptos::prelude::*;
+use leptos_router::components::A;
 use markdown::structs::{
     blog::BlogId,
     metadata::BlogMetadata,
     tag::{TagId, TagMetadata},
 };
 
-use crate::{
-    components::blog::{tag::Tag, to_read_time},
-    ROOT,
-};
+use crate::components::blog::{tag::Tag, to_read_time};
 
 #[component]
 pub fn blog_card(id: BlogId, metadata: BlogMetadata) -> impl IntoView {
-    let root = ROOT.unwrap_or("");
-
     let BlogMetadata {
         front_matter,
         post_translate,
-    } = &metadata;
+    } = metadata;
 
     view! {
         <div class="flex flex-col md:flex-row hover:bg-gray">
@@ -27,9 +23,9 @@ pub fn blog_card(id: BlogId, metadata: BlogMetadata) -> impl IntoView {
                     class="w-full aspect-video object-cover" />
             </div>
             <div class="flex flex-col md:basis-3/4 p-4">
-                <a href={format!("{root}/blog/{}", id)}>
+                <A href={format!("blog/{}", id)}>
                     <h2 class="font-bold text-2xl hover:underline">{front_matter.title.clone()}</h2>
-                </a>
+                </A>
                 <p class="flex grow">{front_matter.description.clone()}</p>
                 <div class="inline">
                     <span class="text-gray-500">{front_matter.publish_date.format("%d %b %Y").to_string()}</span>
