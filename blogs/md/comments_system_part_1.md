@@ -1,7 +1,7 @@
 ---
 title: Comments system devlog, Part 1
 description: And the trials and tribulations I had to go through to get it up and running.
-image: /blog_media/hello_world/title.png
+image: blog_media/hello_world/title.png
 publish_date: 2025-09-18 22:51
 tags:
 - meta
@@ -40,9 +40,9 @@ My website itself is hosted on Cloudflare, and so I thought it would be easy to 
 on CF and call it a day. Cloudflare itself has a product, known as Containers, which allows me to do exactly
 that. Let's take a deeper look into how Containers works, and...
 
-![Wait... what's that bit highlighted in blue?](/blog_media/comments_system/containers.png)
+![Wait... what's that bit highlighted in blue?](blog_media/comments_system/containers.png)
 
-![Oh...](/blog_media/comments_system/workers_paid.png)
+![Oh...](blog_media/comments_system/workers_paid.png)
 
 Change of plans - we have to roll our own comments system. Time to reinvent the wheel.
 
