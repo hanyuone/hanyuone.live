@@ -11,10 +11,10 @@ permissions:
   id-token: write
 
 env:
-  SITE_BASE: "https://hanyuone.live/staging/${{ github.event.pull_request.number }}/"
+  LEPTOS_SITE_BASE: "https://hanyuone.live/staging/${{ github.event.pull_request.number }}/"
   # TODO: remove once path-relative URLs implemented
   ROOT: "/staging/${{ github.event.pull_request.number }}"
-  LEPTOS_WASM_BINDGEN_VERSION: 0.2.105
+  LEPTOS_WASM_BINDGEN_VERSION: 0.2.108
   LEPTOS_TAILWIND_VERSION: v4.1.18
 
 jobs:
@@ -32,6 +32,8 @@ jobs:
         uses: baptiste0928/cargo-install@v3
         with:
           crate: cargo-leptos
+          git: https://github.com/hanyuone/cargo-leptos
+          branch: ssg-site-base
       # Install Node and PNPM
       - uses: actions/setup-node@v4
         with:
