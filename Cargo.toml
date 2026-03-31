@@ -5,3 +5,9 @@ members = [
     "website",
 ]
 resolver = "2"
+
+[patch.crates-io]
+leptos = { git = "https://github.com/hanyuone/leptos", branch = "ssg-site-base" }
+leptos_axum = { git = "https://github.com/hanyuone/leptos", branch = "ssg-site-base" }
+leptos_meta = { git = "https://github.com/hanyuone/leptos", branch = "ssg-site-base" }
+leptos_router = { git = "https://github.com/hanyuone/leptos", branch = "ssg-site-base" }
