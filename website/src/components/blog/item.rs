@@ -19,7 +19,7 @@ pub fn BlogItem(id: BlogId, metadata: BlogMetadata) -> impl IntoView {
 
     view! {
         <div class="flex-col p-4 border-t-[1px] border-white hover:bg-gray">
-            <A href={format!("blog/{}", id)}>
+            <A href=id.to_string()>
                 <h3 class="font-bold text-xl hover:underline">{front_matter.title.clone()}</h3>
             </A>
             <div class="inline">
