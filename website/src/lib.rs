@@ -4,6 +4,7 @@ pub mod context;
 pub mod pages;
 pub mod renderer;
 
+const SITE_BASE: &'static str = env!("SITE_BASE");
 const ROOT: Option<&'static str> = option_env!("ROOT");
 
 #[cfg(feature = "hydrate")]

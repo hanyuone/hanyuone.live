@@ -23,7 +23,7 @@ pub fn blog_card(id: BlogId, metadata: BlogMetadata) -> impl IntoView {
                     class="w-full aspect-video object-cover" />
             </div>
             <div class="flex flex-col md:basis-3/4 p-4">
-                <A href={format!("blog/{}", id)}>
+                <A href=id.to_string()>
                     <h2 class="font-bold text-2xl hover:underline">{front_matter.title.clone()}</h2>
                 </A>
                 <p class="flex grow">{front_matter.description.clone()}</p>

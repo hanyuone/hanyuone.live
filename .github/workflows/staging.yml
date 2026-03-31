@@ -11,6 +11,8 @@ permissions:
   id-token: write
 
 env:
+  SITE_BASE: "https://hanyuone.live/staging/${{ github.event.pull_request.number }}"
+  # TODO: remove once path-relative URLs implemented
   ROOT: "/staging/${{ github.event.pull_request.number }}"
   LEPTOS_WASM_BINDGEN_VERSION: 0.2.105
   LEPTOS_TAILWIND_VERSION: v4.1.18

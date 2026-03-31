@@ -12,10 +12,7 @@ use leptos_router::{
 use markdown::structs::tag::TagId;
 
 use crate::{
-    components::{footer::Footer, header::Header},
-    context::BlogContext,
-    pages::{blog::BlogPage, blog_post::BlogPostPage, home::HomePage, tag::TagPage},
-    ROOT,
+    ROOT, SITE_BASE, components::{footer::Footer, header::Header}, context::BlogContext, pages::{blog::BlogPage, blog_post::BlogPostPage, home::HomePage, tag::TagPage}
 };
 
 pub fn shell(options: LeptosOptions) -> impl IntoView {
@@ -27,7 +24,7 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
             <head>
                 <meta charset="utf-8"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <base href=root />
+                <base href=SITE_BASE />
                 <AutoReload options=options.clone() />
                 <HydrationScripts options root islands=true />
                 <MetaTags />
