@@ -8,6 +8,12 @@ tags:
 - scp
 ---
 
+> [!note]
+> This is **part 5** of a translation of [SCP-CN-3000](https://scp-wiki-cn.wikidot.com/scp-cn-3000),
+> written and illustrated by [DouglasLiu](https://www.wikidot.com/user:info/douglasliu)
+> and [DrStse](https://www.wikidot.com/user:info/drstse).
+
+
 | Picture | Information |
 | :-----: | :---------- |
 | <img src="https://scpsandboxcn.wikidot.com/local--files/douglasliu-2/cn3k-char-3.jpg" width="100" /> | **Bubble**: DV-S8 |
