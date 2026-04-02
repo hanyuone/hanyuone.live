@@ -3,8 +3,8 @@
 export const memory: WebAssembly.Memory;
 export const Background_7011291641563722467: (a: any) => void;
 export const MobileHeader_14484353534515111953: (a: any) => void;
-export const hydrate: () => void;
 export const HomeAnimation_14651908795469971363: (a: any) => void;
+export const hydrate: () => void;
 export const __wbg_intounderlyingsource_free: (a: number, b: number) => void;
 export const intounderlyingsource_cancel: (a: number) => void;
 export const intounderlyingsource_pull: (a: number, b: any) => any;
