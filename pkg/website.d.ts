@@ -50,8 +50,8 @@ export interface InitOutput {
     readonly memory: WebAssembly.Memory;
     readonly Background_7011291641563722467: (a: any) => void;
     readonly MobileHeader_14484353534515111953: (a: any) => void;
-    readonly hydrate: () => void;
     readonly HomeAnimation_14651908795469971363: (a: any) => void;
+    readonly hydrate: () => void;
     readonly __wbg_intounderlyingsource_free: (a: number, b: number) => void;
     readonly intounderlyingsource_cancel: (a: number) => void;
     readonly intounderlyingsource_pull: (a: number, b: any) => any;
