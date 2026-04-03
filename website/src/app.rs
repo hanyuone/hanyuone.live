@@ -12,19 +12,20 @@ use leptos_router::{
 use markdown::structs::tag::TagId;
 
 use crate::{
-    ROOT, LEPTOS_SITE_BASE, components::{footer::Footer, header::Header}, context::BlogContext, pages::{blog::BlogPage, blog_post::BlogPostPage, home::HomePage, tag::TagPage}
+    components::{footer::Footer, header::Header},
+    context::BlogContext,
+    pages::{blog::BlogPage, blog_post::BlogPostPage, home::HomePage, tag::TagPage},
+    ROOT,
 };
 
 pub fn shell(options: LeptosOptions) -> impl IntoView {
-    let root = ROOT.unwrap_or("");
-
     view! {
         <!DOCTYPE html>
         <html lang="en">
             <head>
                 <meta charset="utf-8"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <base href=LEPTOS_SITE_BASE />
+                <leptos_meta::Base options=options.clone() />
                 <AutoReload options=options.clone() />
                 <HydrationScripts options islands=true />
                 <MetaTags />
