@@ -1,10 +1,10 @@
 /* tslint:disable */
 /* eslint-disable */
 export const memory: WebAssembly.Memory;
+export const MobileHeader_5252500168264856710: (a: any) => void;
+export const hydrate: () => void;
 export const Background_7011291641563722467: (a: any) => void;
 export const HomeAnimation_14651908795469971363: (a: any) => void;
-export const hydrate: () => void;
-export const MobileHeader_5252500168264856710: (a: any) => void;
 export const __wbg_intounderlyingsink_free: (a: number, b: number) => void;
 export const intounderlyingsink_abort: (a: number, b: any) => any;
 export const intounderlyingsink_close: (a: number) => any;
