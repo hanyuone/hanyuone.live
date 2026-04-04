@@ -76,12 +76,6 @@ pub fn App() -> impl IntoView {
     let metadata_map = use_context::<BlogContext>().unwrap();
 
     let formatter = |text| format!("{text} - Hanyuan's site");
-
-    let sheets_href = match ROOT {
-        Some(root) => format!("{root}/pkg/website.css").trim_start_matches("/").to_string(),
-        None => "pkg/website.css".to_string(),
-    };
-
     let base = ROOT.unwrap_or_default();
 
     let slugs = metadata_map
@@ -98,7 +92,7 @@ pub fn App() -> impl IntoView {
     view! {
         // injects a stylesheet into the document <head>
         // id=leptos means cargo-leptos will hot-reload this stylesheet
-        <Stylesheet id="leptos" href=sheets_href />
+        <Stylesheet id="leptos" href="pkg/website.css" />
 
         // sets the document title
         <Title formatter />
