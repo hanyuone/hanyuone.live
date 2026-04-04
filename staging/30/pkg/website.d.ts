@@ -48,10 +48,10 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
     readonly memory: WebAssembly.Memory;
+    readonly MobileHeader_5252500168264856710: (a: any) => void;
+    readonly hydrate: () => void;
     readonly Background_7011291641563722467: (a: any) => void;
     readonly HomeAnimation_14651908795469971363: (a: any) => void;
-    readonly hydrate: () => void;
-    readonly MobileHeader_5252500168264856710: (a: any) => void;
     readonly __wbg_intounderlyingsink_free: (a: number, b: number) => void;
     readonly intounderlyingsink_abort: (a: number, b: any) => any;
     readonly intounderlyingsink_close: (a: number) => any;
