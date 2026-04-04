@@ -48,10 +48,10 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
     readonly memory: WebAssembly.Memory;
-    readonly MobileHeader_5252500168264856710: (a: any) => void;
     readonly Background_7011291641563722467: (a: any) => void;
     readonly HomeAnimation_14651908795469971363: (a: any) => void;
     readonly hydrate: () => void;
+    readonly MobileHeader_5252500168264856710: (a: any) => void;
     readonly __wbg_intounderlyingsink_free: (a: number, b: number) => void;
     readonly intounderlyingsink_abort: (a: number, b: any) => any;
     readonly intounderlyingsink_close: (a: number) => any;
@@ -65,14 +65,14 @@ export interface InitOutput {
     readonly intounderlyingbytesource_pull: (a: number, b: any) => any;
     readonly intounderlyingbytesource_start: (a: number, b: any) => void;
     readonly intounderlyingbytesource_type: (a: number) => number;
-    readonly wasm_bindgen__closure__destroy__ha2adfe3508b4ab82: (a: number, b: number) => void;
-    readonly wasm_bindgen__closure__destroy__h24664d6f9b0d65e3: (a: number, b: number) => void;
+    readonly wasm_bindgen__closure__destroy__h0f1eedd7b9896b3e: (a: number, b: number) => void;
     readonly wasm_bindgen__closure__destroy__h932bdcfdbe694c5a: (a: number, b: number) => void;
-    readonly wasm_bindgen__convert__closures_____invoke__hd44bc2aa8adfb52c: (a: number, b: number, c: any, d: any) => void;
+    readonly wasm_bindgen__closure__destroy__hf04056b14e674a60: (a: number, b: number) => void;
+    readonly wasm_bindgen__convert__closures_____invoke__h8545e90af2a6531f: (a: number, b: number, c: any, d: any) => void;
     readonly wasm_bindgen__convert__closures_____invoke__h0cdb8634e78189d1: (a: number, b: number, c: any, d: any) => void;
-    readonly wasm_bindgen__convert__closures_____invoke__h1e13adc60a4b7089: (a: number, b: number, c: any) => void;
+    readonly wasm_bindgen__convert__closures_____invoke__h2944a8aab15e60f8: (a: number, b: number, c: any) => void;
     readonly wasm_bindgen__convert__closures_____invoke__hf55f8353cb50513c: (a: number, b: number, c: any) => void;
-    readonly wasm_bindgen__convert__closures_____invoke__h8d2f73bef16c674d: (a: number, b: number) => void;
+    readonly wasm_bindgen__convert__closures_____invoke__h4ec7d9bc14539c74: (a: number, b: number) => void;
     readonly __wbindgen_malloc: (a: number, b: number) => number;
     readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
     readonly __wbindgen_exn_store: (a: number) => void;
