@@ -77,10 +77,12 @@ pub fn App() -> impl IntoView {
 
     let formatter = |text| format!("{text} - Hanyuan's site");
 
-    let (sheets_href, base) = match ROOT {
-        Some(root) => (format!("{root}/pkg/website.css"), root),
-        None => ("/pkg/website.css".to_string(), ""),
+    let sheets_href = match ROOT {
+        Some(root) => format!("{root}/pkg/website.css").trim_start_matches("/").to_string(),
+        None => "pkg/website.css".to_string(),
     };
+
+    let base = ROOT.unwrap_or_default();
 
     let slugs = metadata_map
         .content

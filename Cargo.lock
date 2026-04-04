@@ -47,7 +47,7 @@ dependencies = [
 [[package]]
 name = "any_spawner"
 version = "0.3.0"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 dependencies = [
  "futures",
  "thiserror 2.0.18",
@@ -279,9 +279,9 @@ checksum = "e629a66d692cb9ff1a1c664e41771b3dcaf961985a9774c0eb0bd1b51cf60a48"
 
 [[package]]
 name = "cc"
-version = "1.2.58"
+version = "1.2.59"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e1e928d4b69e3077709075a938a05ffbedfa53a84c8f766efbf8220bb1ff60e1"
+checksum = "b7a4d3ec6524d28a329fc53654bbadc9bdd7b0431f5d65f1a56ffb28a1ee5283"
 dependencies = [
  "find-msvc-tools",
  "shlex",
@@ -385,7 +385,7 @@ dependencies = [
 [[package]]
 name = "const_str_slice_concat"
 version = "0.1.0"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 
 [[package]]
 name = "convert_case"
@@ -615,7 +615,7 @@ checksum = "48c757948c5ede0e46177b7add2e67155f70e33c07fea8284df6576da70b3719"
 [[package]]
 name = "either_of"
 version = "0.1.8"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 dependencies = [
  "paste",
  "pin-project-lite",
@@ -1055,7 +1055,7 @@ checksum = "df3b46402a9d5adb4c86a0cf463f42e19994e3ee891101b1841f30a545cb49a9"
 [[package]]
 name = "hydration_context"
 version = "0.3.0"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 dependencies = [
  "futures",
  "js-sys",
@@ -1563,7 +1563,7 @@ checksum = "09edd9e8b54e49e587e4f6295a7d29c3ea94d469cb40ab8ca70b288248a81db2"
 [[package]]
 name = "leptos"
 version = "0.8.17"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 dependencies = [
  "any_spawner",
  "base64 0.22.1",
@@ -1629,7 +1629,7 @@ dependencies = [
 [[package]]
 name = "leptos_axum"
 version = "0.8.8"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 dependencies = [
  "any_spawner",
  "axum",
@@ -1651,7 +1651,7 @@ dependencies = [
 [[package]]
 name = "leptos_config"
 version = "0.8.9"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 dependencies = [
  "config",
  "regex",
@@ -1663,7 +1663,7 @@ dependencies = [
 [[package]]
 name = "leptos_dom"
 version = "0.8.8"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 dependencies = [
  "js-sys",
  "or_poisoned",
@@ -1677,7 +1677,7 @@ dependencies = [
 [[package]]
 name = "leptos_hot_reload"
 version = "0.8.6"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 dependencies = [
  "anyhow",
  "camino",
@@ -1704,7 +1704,7 @@ dependencies = [
 [[package]]
 name = "leptos_integration_utils"
 version = "0.8.8"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 dependencies = [
  "futures",
  "hydration_context",
@@ -1718,7 +1718,7 @@ dependencies = [
 [[package]]
 name = "leptos_macro"
 version = "0.8.15"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 dependencies = [
  "attribute-derive",
  "cfg-if",
@@ -1741,7 +1741,7 @@ dependencies = [
 [[package]]
 name = "leptos_meta"
 version = "0.8.6"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 dependencies = [
  "futures",
  "indexmap 2.13.1",
@@ -1755,7 +1755,7 @@ dependencies = [
 [[package]]
 name = "leptos_router"
 version = "0.8.13"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 dependencies = [
  "any_spawner",
  "either_of",
@@ -1779,7 +1779,7 @@ dependencies = [
 [[package]]
 name = "leptos_router_macro"
 version = "0.8.6"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 dependencies = [
  "proc-macro-error2",
  "proc-macro2",
@@ -1790,7 +1790,7 @@ dependencies = [
 [[package]]
 name = "leptos_server"
 version = "0.8.7"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 dependencies = [
  "any_spawner",
  "base64 0.22.1",
@@ -1959,7 +1959,7 @@ dependencies = [
 [[package]]
 name = "next_tuple"
 version = "0.1.0"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 
 [[package]]
 name = "notify"
@@ -2006,7 +2006,7 @@ dependencies = [
 [[package]]
 name = "oco_ref"
 version = "0.2.1"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 dependencies = [
  "serde",
  "thiserror 2.0.18",
@@ -2021,7 +2021,7 @@ checksum = "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
 [[package]]
 name = "or_poisoned"
 version = "0.1.0"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 
 [[package]]
 name = "parking"
@@ -2278,7 +2278,7 @@ dependencies = [
 [[package]]
 name = "reactive_graph"
 version = "0.2.13"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 dependencies = [
  "any_spawner",
  "async-lock",
@@ -2301,7 +2301,7 @@ dependencies = [
 [[package]]
 name = "reactive_stores"
 version = "0.4.2"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 dependencies = [
  "guardian",
  "indexmap 2.13.1",
@@ -2317,7 +2317,7 @@ dependencies = [
 [[package]]
 name = "reactive_stores_macro"
 version = "0.4.1"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 dependencies = [
  "convert_case 0.11.0",
  "proc-macro-error2",
@@ -2478,9 +2478,9 @@ dependencies = [
 
 [[package]]
 name = "semver"
-version = "1.0.27"
+version = "1.0.28"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d767eb0aabc880b29956c35734170f26ed551a859dbd361d140cdbeca61ab1e2"
+checksum = "8a7852d02fc848982e0c167ef163aaff9cd91dc640ba85e263cb1ce46fae51cd"
 
 [[package]]
 name = "send_wrapper"
@@ -2626,7 +2626,7 @@ dependencies = [
 [[package]]
 name = "server_fn"
 version = "0.8.11"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 dependencies = [
  "axum",
  "base64 0.22.1",
@@ -2665,7 +2665,7 @@ dependencies = [
 [[package]]
 name = "server_fn_macro"
 version = "0.8.10"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 dependencies = [
  "const_format",
  "convert_case 0.11.0",
@@ -2679,7 +2679,7 @@ dependencies = [
 [[package]]
 name = "server_fn_macro_default"
 version = "0.8.5"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 dependencies = [
  "server_fn_macro",
  "syn",
@@ -2832,7 +2832,7 @@ dependencies = [
 [[package]]
 name = "tachys"
 version = "0.2.14"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 dependencies = [
  "any_spawner",
  "async-trait",
@@ -2903,7 +2903,7 @@ dependencies = [
 [[package]]
 name = "throw_error"
 version = "0.3.1"
-source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#406b9d2f1712b1e7c74a75aa062763f7a7307332"
+source = "git+https://github.com/hanyuone/leptos?branch=ssg-site-base#ab74b02058b792639f46b6a96514d61967e2e50a"
 dependencies = [
  "pin-project-lite",
 ]
@@ -2952,9 +2952,9 @@ dependencies = [
 
 [[package]]
 name = "tokio"
-version = "1.50.0"
+version = "1.51.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "27ad5e34374e03cfffefc301becb44e9dc3c17584f414349ebe29ed26661822d"
+checksum = "2bd1c4c0fc4a7ab90fc15ef6daaa3ec3b893f004f915f2392557ed23237820cd"
 dependencies = [
  "bytes",
  "libc",
@@ -2967,9 +2967,9 @@ dependencies = [
 
 [[package]]
 name = "tokio-macros"
-version = "2.6.1"
+version = "2.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5c55a2eff8b69ce66c84f85e1da1c233edc36ceb85a2058d11b0d6a3c7e7569c"
+checksum = "385a6cb71ab9ab790c5fe8d67f1645e6c450a7ce006a33de03daa956cf70a496"
 dependencies = [
  "proc-macro2",
  "quote",
