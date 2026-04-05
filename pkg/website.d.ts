@@ -40,7 +40,7 @@ export class IntoUnderlyingSource {
     pull(controller: ReadableStreamDefaultController): Promise<any>;
 }
 
-export function MobileHeader_14484353534515111953(el: HTMLElement): void;
+export function MobileHeader_4700568660252565466(el: HTMLElement): void;
 
 export function hydrate(): void;
 
@@ -48,9 +48,9 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
     readonly memory: WebAssembly.Memory;
-    readonly Background_7011291641563722467: (a: any) => void;
-    readonly MobileHeader_14484353534515111953: (a: any) => void;
     readonly HomeAnimation_14651908795469971363: (a: any) => void;
+    readonly Background_7011291641563722467: (a: any) => void;
+    readonly MobileHeader_4700568660252565466: (a: any) => void;
     readonly hydrate: () => void;
     readonly __wbg_intounderlyingsource_free: (a: number, b: number) => void;
     readonly intounderlyingsource_cancel: (a: number) => void;
@@ -65,9 +65,9 @@ export interface InitOutput {
     readonly intounderlyingbytesource_pull: (a: number, b: any) => any;
     readonly intounderlyingbytesource_start: (a: number, b: any) => void;
     readonly intounderlyingbytesource_type: (a: number) => number;
+    readonly wasm_bindgen__closure__destroy__he2fcbb4cd5a130f8: (a: number, b: number) => void;
     readonly wasm_bindgen__closure__destroy__h147f6485a17efb39: (a: number, b: number) => void;
     readonly wasm_bindgen__closure__destroy__h8216cadf55ebc7b9: (a: number, b: number) => void;
-    readonly wasm_bindgen__closure__destroy__he2fcbb4cd5a130f8: (a: number, b: number) => void;
     readonly wasm_bindgen__convert__closures_____invoke__h8d63a1e6aa0eef59: (a: number, b: number, c: any, d: any) => void;
     readonly wasm_bindgen__convert__closures_____invoke__h453eb45db7fcf7ce: (a: number, b: number, c: any, d: any) => void;
     readonly wasm_bindgen__convert__closures_____invoke__hdcb0ca9e91738b6a: (a: number, b: number, c: any) => void;
