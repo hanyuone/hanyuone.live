@@ -26,9 +26,7 @@ pub fn BlogPostPage() -> impl IntoView {
         .unwrap_or_default();
 
     let context = use_context::<BlogContext>().unwrap();
-    let slug_id = BlogId::from_str(&slug)
-        .map_err(ServerFnError::new)
-        .unwrap();
+    let slug_id = BlogId::from_str(&slug).map_err(ServerFnError::new).unwrap();
 
     let BlogMetadata {
         front_matter,

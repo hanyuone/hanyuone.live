@@ -69,7 +69,7 @@ jobs:
         shell: bash
         run: |
           shopt -s extglob
-          rm -rf !(target|CNAME)
+          rm -rf !(target|CNAME|robots.txt)
       # Move into `gh-pages` branch
       - name: Checkout gh-pages
         uses: actions/checkout@v6
