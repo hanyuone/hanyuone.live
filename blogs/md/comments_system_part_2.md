@@ -1,7 +1,7 @@
 ---
 title: Comments system devlog, Part 2
 description: Encountering our first roadblock - moving to a new library.
-image: /blog_media/comments_system/leptos.png
+image: blog_media/comments_system/leptos.png
 publish_date: 2026-02-15 23:13
 tags:
 - meta
@@ -44,12 +44,12 @@ That is, until I tried to implement a client for the comments system.
 
 ### Yew, `Suspense` and OAuth
 
-From [Part 1](/blog/comments_system_part_1) of the devlog, the comments system uses the OAuth 2 flow to allow
+From [Part 1](blog/comments_system_part_1) of the devlog, the comments system uses the OAuth 2 flow to allow
 users to log in through larger tech platforms like GitHub or Google (and therefore, offload most of our
 security concerns to these large platforms). Accessing information using a GitHub account and OAuth 2 looks
 something like this:
 
-![A diagram of the OAuth 2 flow.](/blog_media/comments_system/oauth2.png)
+![A diagram of the OAuth 2 flow.](blog_media/comments_system/oauth2.png)
 
 The comments system currently has a few endpoints related to authentication[^1]:
 - `/auth/login`, which redirects the user to `github.com` to verify their account, and returns a GH access token

@@ -11,7 +11,7 @@ permissions:
   id-token: write
 
 env:
-  ROOT: "/staging/${{ github.event.pull_request.number }}"
+  LEPTOS_SITE_BASE: "https://hanyuone.live/staging/${{ github.event.pull_request.number }}/"
   LEPTOS_WASM_BINDGEN_VERSION: 0.2.108
   LEPTOS_TAILWIND_VERSION: v4.1.18
 
@@ -30,6 +30,8 @@ jobs:
         uses: baptiste0928/cargo-install@v3
         with:
           crate: cargo-leptos
+          git: https://github.com/hanyuone/cargo-leptos
+          branch: ssg-site-base
       # Install Node and PNPM
       - uses: actions/setup-node@v4
         with:
@@ -68,9 +70,6 @@ jobs:
         run: |
           shopt -s extglob
           rm -rf !(target|CNAME|robots.txt)
-          mv target/site/staging/${{ github.event.pull_request.number }}/* target/site
-          mv target/site/staging/${{ github.event.pull_request.number }}.html target/site/index.html
-          rmdir target/site/staging/${{ github.event.pull_request.number }}
       # Move into `gh-pages` branch
       - name: Checkout gh-pages
         uses: actions/checkout@v6

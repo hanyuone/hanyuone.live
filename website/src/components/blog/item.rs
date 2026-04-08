@@ -1,31 +1,27 @@
 use std::str::FromStr;
 
 use leptos::prelude::*;
+use leptos_router::components::A;
 use markdown::structs::{
     blog::BlogId,
     metadata::BlogMetadata,
     tag::{TagId, TagMetadata},
 };
 
-use crate::{
-    components::blog::{tag::Tag, to_read_time},
-    ROOT,
-};
+use crate::components::blog::{tag::Tag, to_read_time};
 
 #[component]
 pub fn BlogItem(id: BlogId, metadata: BlogMetadata) -> impl IntoView {
-    let root = ROOT.unwrap_or("");
-
     let BlogMetadata {
         front_matter,
         post_translate,
-    } = &metadata;
+    } = metadata;
 
     view! {
         <div class="flex-col p-4 border-t-[1px] border-white hover:bg-gray">
-            <a href={format!("{root}/blog/{}", id)}>
+            <A href=id.to_string()>
                 <h3 class="font-bold text-xl hover:underline">{front_matter.title.clone()}</h3>
-            </a>
+            </A>
             <div class="inline">
                 <span class="text-gray-500">{front_matter.publish_date.format("%d %b %Y").to_string()}</span>
                 <span class="px-1 text-white">{"·"}</span>
