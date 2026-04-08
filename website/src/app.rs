@@ -15,7 +15,6 @@ use crate::{
     components::{footer::Footer, header::Header},
     context::BlogContext,
     pages::{blog::BlogPage, blog_post::BlogPostPage, home::HomePage, tag::TagPage},
-    ROOT,
 };
 
 pub fn shell(options: LeptosOptions) -> impl IntoView {
@@ -76,7 +75,6 @@ pub fn App() -> impl IntoView {
     let metadata_map = use_context::<BlogContext>().unwrap();
 
     let formatter = |text| format!("{text} - Hanyuan's site");
-    let base = ROOT.unwrap_or_default();
 
     let slugs = metadata_map
         .content
@@ -98,7 +96,7 @@ pub fn App() -> impl IntoView {
         <Title formatter />
 
         // content for this welcome page
-        <Router base>
+        <Router>
             <div class="bg-black text-white flex flex-col min-h-screen justify-between">
                 <Header />
                 <main class="grow px-10 py-20 lg:px-20">
