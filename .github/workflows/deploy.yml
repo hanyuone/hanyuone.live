@@ -69,7 +69,7 @@ jobs:
         shell: bash
         run: |
           shopt -s extglob
-          rm -rf !(target|CNAME)
+          rm -rf !(target|CNAME|robots.txt)
           mv target/site/* .
           rm -rf target
       - name: Upload to gh-pages branch
