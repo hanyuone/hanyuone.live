@@ -12,8 +12,6 @@ permissions:
 
 env:
   LEPTOS_SITE_BASE: "https://hanyuone.live/staging/${{ github.event.pull_request.number }}/"
-  # TODO: remove once path-relative URLs implemented
-  ROOT: "/staging/${{ github.event.pull_request.number }}"
   LEPTOS_WASM_BINDGEN_VERSION: 0.2.108
   LEPTOS_TAILWIND_VERSION: v4.1.18
 
@@ -72,9 +70,6 @@ jobs:
         run: |
           shopt -s extglob
           rm -rf !(target|CNAME)
-          mv target/site/staging/${{ github.event.pull_request.number }}/* target/site
-          mv target/site/staging/${{ github.event.pull_request.number }}.html target/site/index.html
-          rmdir target/site/staging/${{ github.event.pull_request.number }}
       # Move into `gh-pages` branch
       - name: Checkout gh-pages
         uses: actions/checkout@v6
