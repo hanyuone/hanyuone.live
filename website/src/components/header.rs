@@ -50,11 +50,6 @@ pub fn MobileHeader() -> impl IntoView {
                         class="pr-4 py-2 text-neutral-200 hover:text-blue transition-colors">
                         <Icon icon={i::BsLinkedin} height="1.1em" />
                     </a>
-                    <a
-                        href="mailto:work@hanyuone.live"
-                        class="py-2 text-neutral-200 hover:text-yellow transition-colors">
-                        <Icon icon={i::LuMail} height="1.1em" />
-                    </a>
                 </div>
             </div>
         </div>
@@ -98,11 +93,6 @@ pub fn Header() -> impl IntoView {
                         href="https://linkedin.com/in/hanyuan-li"
                         class="px-2 text-neutral-200 hover:text-blue transition-colors">
                         <Icon icon={i::BsLinkedin} height="1.1em" />
-                    </a>
-                    <a
-                        href="mailto:work@hanyuone.live"
-                        class="px-2 text-neutral-200 hover:text-yellow transition-colors">
-                        <Icon icon={i::LuMail} height="1.1em" />
                     </a>
                 </div>
             </div>
