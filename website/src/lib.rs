@@ -6,7 +6,7 @@ pub mod renderer;
 
 const ROOT: Option<&'static str> = option_env!("ROOT");
 
-const COMMENTS_URL: &'static str = env!("COMMENTS_URL");
+const COMMENTS_URL: &str = env!("COMMENTS_URL");
 
 #[cfg(feature = "hydrate")]
 #[wasm_bindgen::prelude::wasm_bindgen]
