@@ -50,8 +50,32 @@ fn Comment(#[prop(into)] data: CommentData) -> impl IntoView {
     view! {}
 }
 
-async fn get_comments(slug: Option<BlogSlug>) -> Vec<CommentData> {
-    vec![]
+async fn get_comments(slug: Option<BlogSlug>) -> Result<Vec<CommentData>, Error> {
+    if let None = slug {
+        return Ok(vec![]);
+    }
+
+    // Guaranteed to be non-empty
+    let slug = slug.unwrap();
+
+    #[cfg(target_arch = "wasm32")]
+    {
+        use reqwest::Client;
+
+        let url = format!("{COMMENTS_URL}/post/{slug}");
+
+        let client = Client::new();
+        let user = client
+            .get(url)
+            .fetch_credentials_include()
+            .send()
+            .await?;
+
+        Ok(user)
+    }
+
+    #[cfg(not(target_arch = "wasm32"))]
+    Err("Only supported on WASM mode".into())
 }
 
 #[island]
