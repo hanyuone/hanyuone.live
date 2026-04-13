@@ -47,7 +47,9 @@ struct CommentData {
 
 #[component]
 fn Comment(#[prop(into)] data: CommentData) -> impl IntoView {
-    view! {}
+    view! {
+        <p>{data.contents}</p>
+    }
 }
 
 async fn get_comments(slug: Option<BlogSlug>) -> Vec<CommentData> {
