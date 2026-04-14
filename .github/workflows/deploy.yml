@@ -11,6 +11,7 @@ permissions:
 env:
   LEPTOS_WASM_BINDGEN_VERSION: 0.2.108
   LEPTOS_TAILWIND_VERSION: v4.1.18
+  COMMENTS_URL: https://comments.hanyuone.live
 
 jobs:
   release:
