@@ -1,3 +1,4 @@
+// Needed for Leptos, as of Rust 1.94.0
 #![recursion_limit = "256"]
 
 #[cfg(feature = "ssr")]
