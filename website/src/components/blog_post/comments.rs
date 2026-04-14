@@ -52,41 +52,24 @@ fn Comment(#[prop(into)] data: CommentData) -> impl IntoView {
     }
 }
 
-async fn get_comments(slug: Option<BlogSlug>) -> Vec<CommentData> {
-    vec![]
-}
-
-#[island]
-fn CommentList() -> impl IntoView {
-    let slug = use_context::<BlogSlug>();
-    let comments = LocalResource::new(move || get_comments(slug.clone()));
-
-    view! {
-        <div>
-            <Suspense fallback=move || view! { <p>"Loading comments..."</p> }>
-                {move || Suspend::new(async move {
-                    let comments = comments.await;
-
-                    if comments.is_empty() {
-                        view! { <p>"No comments"</p> }.into_any()
-                    } else {
-                        view! {
-                            <For
-                                each=move || comments.clone()
-                                key=|comment| comment.id.clone()
-                                let(data)>
-                                <Comment data />
-                            </For>
-                        }.into_any()
-                    }
-                })}
-            </Suspense>
-        </div>
-    }
-}
-
 #[component]
-fn CommentWidget(#[prop(into)] user: User) -> impl IntoView {
+fn CommentPostAndDisplay(
+    #[prop(into)] user: User,
+    #[prop(into)] comments: Vec<CommentData>,
+) -> impl IntoView {
+    let comments_list = move || if comments.is_empty() {
+        view! { <p>"No comments"</p> }.into_any()
+    } else {
+        view! {
+            <For
+                each=move || comments.clone()
+                key=|comment| comment.id.clone()
+                let(data)>
+                <Comment data />
+            </For>
+        }.into_any()
+    };
+    
     view! {
         <div class="flex flex-col">
             // Posting comments
@@ -114,7 +97,7 @@ fn CommentWidget(#[prop(into)] user: User) -> impl IntoView {
                 </div>
             </form>
             // List of existing comments
-            <CommentList />
+            {comments_list()}
         </div>
     }
 }
@@ -142,9 +125,16 @@ async fn get_profile() -> Result<User, Error> {
     Err("Only supported on WASM mode".into())
 }
 
+async fn get_comments(slug: Option<BlogSlug>) -> Vec<CommentData> {
+    vec![]
+}
+
 #[island]
 pub fn CommentToggle() -> impl IntoView {
+    let slug = use_context::<BlogSlug>();
+
     let auth_state = LocalResource::new(get_profile);
+    let comments = LocalResource::new(move || get_comments(slug.clone()));
 
     view! {
         <Suspense fallback=move || view! { <p>"Loading..."</p> }>
@@ -152,9 +142,12 @@ pub fn CommentToggle() -> impl IntoView {
                 let auth_state = auth_state.await;
 
                 match auth_state {
-                    Ok(ref user) => view! {
-                        <CommentWidget user={user.clone()} />
-                    }.into_any(),
+                    Ok(ref user) => {
+                        let comments = comments.await;
+                        view! {
+                            <CommentPostAndDisplay user={user.clone()} comments />
+                        }.into_any()
+                    },
                     Err(_) => view! { <OAuth /> }.into_any(),
                 }
             })}
