@@ -7,7 +7,7 @@ use leptos::{
     web_sys::{CanvasRenderingContext2d, HtmlCanvasElement},
 };
 use leptos_use::{use_interval, use_resize_observer, UseIntervalReturn};
-use rand::Rng;
+use rand::RngExt;
 
 const POINTS: usize = 20;
 const LINES: usize = 30;
