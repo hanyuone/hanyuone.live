@@ -3,55 +3,6 @@ name = "website"
 version = "0.7.1"
 edition = "2021"
 
-[lib]
-crate-type = ["cdylib", "rlib"]
-
-[dependencies]
-leptos = { version = "0.8.0", features = ["islands"] }
-leptos_router = { version = "0.8.0" }
-axum = { version = "0.8.0", optional = true }
-console_error_panic_hook = { version = "0.1", optional = true }
-leptos_axum = { version = "0.8.0", optional = true }
-leptos_meta = { version = "0.8.0" }
-tokio = { version = "1", features = ["rt-multi-thread"], optional = true }
-wasm-bindgen = { version = "=0.2.108", optional = true }
-notify = "8.2.0"
-futures = "0.3.31"
-ron = "0.12.0"
-markdown = { path = "../markdown" }
-leptos_icons = "0.7.1"
-icondata = "0.6.0"
-icondata_core = "0.1.0"
-chrono = "0.4.43"
-rand = "0.9.2"
-leptos-use = "0.18.0"
-serde = "1.0.228"
-getrandom = { version = "0.3.4", features = ["wasm_js"] }
-
-[dependencies.web-sys]
-version = "0.3.69"
-features = ["CanvasRenderingContext2d", "HtmlCanvasElement"]
-
-[features]
-hydrate = ["leptos/hydrate", "dep:console_error_panic_hook", "dep:wasm-bindgen"]
-ssr = [
-    "dep:axum",
-    "dep:tokio",
-    "dep:leptos_axum",
-    "leptos/ssr",
-    "leptos_meta/ssr",
-    "leptos_router/ssr",
-    "leptos-use/ssr",
-]
-
-# Defines a size-optimized profile for the WASM bundle in release mode
-[profile.release]
-inherits = "release"
-opt-level = 'z'
-lto = true
-codegen-units = 1
-panic = "abort"
-
 [package.metadata.leptos]
 # The name used by wasm-bindgen/cargo-leptos for the JS/WASM bundle. Defaults to the crate name
 output-name = "website"
@@ -112,3 +63,52 @@ tailwind-input-file = "style/tailwind.css"
 # Optional, defaults to "tailwind.config.js" which if is not present
 # is generated for you
 tailwind-config-file = "tailwind.config.js"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+hydrate = ["leptos/hydrate", "dep:console_error_panic_hook", "dep:wasm-bindgen"]
+ssr = [
+    "dep:axum",
+    "dep:tokio",
+    "dep:leptos_axum",
+    "leptos/ssr",
+    "leptos_meta/ssr",
+    "leptos_router/ssr",
+    "leptos-use/ssr",
+]
+
+[dependencies]
+axum = { version = "0.8.0", optional = true }
+chrono = "0.4.43"
+console_error_panic_hook = { version = "0.1", optional = true }
+futures = "0.3.31"
+getrandom = { version = "0.3.4", features = ["wasm_js"] }
+icondata = "0.6.0"
+icondata_core = "0.1.0"
+leptos = { version = "0.8.0", features = ["islands"] }
+leptos-use = "0.18.0"
+leptos_axum = { version = "0.8.0", optional = true }
+leptos_icons = "0.7.1"
+leptos_meta = { version = "0.8.0" }
+leptos_router = { version = "0.8.0" }
+markdown = { path = "../markdown" }
+notify = "8.2.0"
+rand = "0.9.2"
+ron = "0.12.0"
+serde = "1.0.228"
+tokio = { version = "1", features = ["rt-multi-thread"], optional = true }
+wasm-bindgen = { version = "=0.2.108", optional = true }
+
+[dependencies.web-sys]
+version = "0.3.69"
+features = ["CanvasRenderingContext2d", "HtmlCanvasElement"]
+
+# Defines a size-optimized profile for the WASM bundle in release mode
+[profile.release]
+inherits = "release"
+opt-level = 'z'
+lto = true
+codegen-units = 1
+panic = "abort"

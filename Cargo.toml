@@ -1,7 +1,3 @@
 [workspace]
-members = [
-    "macros",
-    "markdown",
-    "website",
-]
+members = ["macros", "markdown", "website"]
 resolver = "2"
