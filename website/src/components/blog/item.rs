@@ -13,13 +13,13 @@ use crate::{
 };
 
 #[component]
-pub fn BlogItem(id: BlogId, metadata: BlogMetadata) -> impl IntoView {
+pub fn BlogItem<'a>(id: BlogId, metadata: &'a BlogMetadata) -> impl IntoView {
     let root = ROOT.unwrap_or("");
 
     let BlogMetadata {
         front_matter,
         post_translate,
-    } = &metadata;
+    } = metadata;
 
     view! {
         <div class="flex-col p-4 border-t-[1px] border-white hover:bg-gray">

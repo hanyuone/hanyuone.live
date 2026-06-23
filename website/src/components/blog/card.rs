@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+pub(crate) use leptos::prelude::*;
 use markdown::structs::{
     blog::BlogId,
     metadata::BlogMetadata,
@@ -11,7 +11,7 @@ use crate::{
 };
 
 #[component]
-pub fn blog_card(id: BlogId, metadata: BlogMetadata) -> impl IntoView {
+pub fn BlogCard<'a>(id: BlogId, metadata: &'a BlogMetadata) -> impl IntoView {
     let root = ROOT.unwrap_or("");
 
     let BlogMetadata {
