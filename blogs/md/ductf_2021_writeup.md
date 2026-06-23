@@ -1,7 +1,7 @@
 ---
 title: DUCTF 2021 Writeup
 description: Writeup for a maths-based crypto cipher in the Down Under CTF 2021.
-image: /blog_media/hello_world/title.png
+image: blog_media/hello_world/title.png
 publish_date: 2021-09-21 20:30
 tags:
 - programming

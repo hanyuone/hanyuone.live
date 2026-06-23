@@ -15,20 +15,18 @@ use crate::{
     components::{footer::Footer, header::Header},
     context::BlogContext,
     pages::{blog::BlogPage, blog_post::BlogPostPage, home::HomePage, tag::TagPage},
-    ROOT,
 };
 
 pub fn shell(options: LeptosOptions) -> impl IntoView {
-    let root = ROOT.unwrap_or("");
-
     view! {
         <!DOCTYPE html>
         <html lang="en">
             <head>
                 <meta charset="utf-8"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <leptos_meta::Base options=options.clone() />
                 <AutoReload options=options.clone() />
-                <HydrationScripts options root islands=true />
+                <HydrationScripts options islands=true />
                 <MetaTags />
             </head>
             <body>
@@ -78,11 +76,6 @@ pub fn App() -> impl IntoView {
 
     let formatter = |text| format!("{text} - Hanyuan's site");
 
-    let (sheets_href, base) = match ROOT {
-        Some(root) => (format!("{root}/pkg/website.css"), root),
-        None => ("/pkg/website.css".to_string(), ""),
-    };
-
     let slugs = metadata_map
         .content
         .keys()
@@ -97,13 +90,13 @@ pub fn App() -> impl IntoView {
     view! {
         // injects a stylesheet into the document <head>
         // id=leptos means cargo-leptos will hot-reload this stylesheet
-        <Stylesheet id="leptos" href=sheets_href />
+        <Stylesheet id="leptos" href="pkg/website.css" />
 
         // sets the document title
         <Title formatter />
 
         // content for this welcome page
-        <Router base>
+        <Router>
             <div class="bg-black text-white flex flex-col min-h-screen justify-between">
                 <Header />
                 <main class="grow px-10 py-20 lg:px-20">
