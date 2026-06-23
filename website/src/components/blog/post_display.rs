@@ -16,7 +16,7 @@ pub fn PostList(posts: Vec<(BlogId, BlogMetadata)>) -> impl IntoView {
         <div>
             {
                 rest
-                    .into_iter()
+                    .iter()
                     .map(|(id, metadata)| view! {
                         <BlogItem
                             id={*id}
