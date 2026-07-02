@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+use leptos::{ev::Targeted, prelude::*};
 use leptos_icons::Icon;
 use markdown::structs::{blog::BlogId, metadata::BlogMetadata};
 
@@ -51,6 +51,21 @@ pub fn PostDisplay(pages: Vec<Vec<(BlogId, BlogMetadata)>>) -> impl IntoView {
         })
     };
 
+    let page_input_change = move |ev: Targeted<web_sys::Event, web_sys::HtmlInputElement>| {
+        let value = ev.target().value();
+        let parsed_page = value.parse::<usize>().unwrap_or(1);
+
+        set_page_index.update(|page_index| {
+            *page_index = if parsed_page == 0 {
+                0
+            } else if parsed_page > n_pages {
+                n_pages - 1
+            } else {
+                parsed_page - 1
+            }
+        })
+    };
+
     view! {
         <div class="flex flex-col">
             {
@@ -71,7 +86,15 @@ pub fn PostDisplay(pages: Vec<Vec<(BlogId, BlogMetadata)>>) -> impl IntoView {
                 <button class="px-2 border-[1px] border-solid rounded-md hover:bg-gray transition-colors" on:click=decrement>
                     <Icon icon={icondata::BsArrowLeft} />
                 </button>
-                <p class="p-2">{move || format!("Page {} / {n_pages}", page_index.get() + 1)}</p>
+                <p class="p-2">"Page "</p>
+                <input
+                    class="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    type="number"
+                    inputmode="numeric"
+                    size={n_pages.checked_ilog10().unwrap() + 1}
+                    on:change:target=page_input_change
+                    prop:value={move || page_index.get() + 1} />
+                <p class="p-2">{format!(" / {n_pages}")}</p>
                 <button class="px-2 border-[1px] border-solid rounded-md hover:bg-gray transition-colors" on:click=increment>
                     <Icon icon={icondata::BsArrowRight} />
                 </button>
