@@ -118,10 +118,10 @@ pub fn App() -> impl IntoView {
                             path=path!("/blog")
                             view=BlogPage
                             ssr=SsrMode::Static(
-                                StaticRoute::new().regenerate(|_| watch_path(Path::new("./blogs/blog_map.ron"))),
+                                StaticRoute::new().regenerate(|_| watch_path(Path::new("./blogs/blog_map.ron")))
                             ) />
                         <Route
-                            path=path!("/blog/:slug")
+                            path=path!("/post/:slug")
                             view=BlogPostPage
                             ssr=SsrMode::Static(
                                 StaticRoute::new()

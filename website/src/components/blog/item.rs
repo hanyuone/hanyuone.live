@@ -13,17 +13,17 @@ use crate::{
 };
 
 #[component]
-pub fn BlogItem(id: BlogId, metadata: BlogMetadata) -> impl IntoView {
+pub fn BlogItem<'a>(id: BlogId, metadata: &'a BlogMetadata) -> impl IntoView {
     let root = ROOT.unwrap_or("");
 
     let BlogMetadata {
         front_matter,
         post_translate,
-    } = &metadata;
+    } = metadata;
 
     view! {
         <div class="flex-col p-4 border-t-[1px] border-white hover:bg-gray">
-            <a href={format!("{root}/blog/{}", id)}>
+            <a href={format!("{root}/post/{}", id)}>
                 <h3 class="font-bold text-xl hover:underline">{front_matter.title.clone()}</h3>
             </a>
             <div class="inline">
