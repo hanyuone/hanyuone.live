@@ -1,8 +1,12 @@
 # Changelog
 
+## v0.7.2 (2026-07-06)
+
+Added **pages** to the blog display, which now shows 10 blogs at a time.
+
 ## v0.7.1 (2026-02-14)
 
-Moved from Yew to Leptos, which has better support for SSR. Fixed some bugs in relation to mobile
+Moved from Yew to **Leptos**, which has better support for SSR. Fixed some bugs in relation to mobile
 views of the website.
 
 ## v0.7.0 (2025-11-28)
