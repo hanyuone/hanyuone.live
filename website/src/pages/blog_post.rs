@@ -47,7 +47,7 @@ pub fn BlogPostPage() -> impl IntoView {
         </div>
         <Suspense fallback=move || view! { <p>"Loading post..."</p> }>
             {move || Suspend::new(async move {
-                let renderer = crate::renderer::Renderer::new();
+                let renderer = crate::renderer::Renderer::default();
 
                 let post_contents = post_contents.await;
                 let post_ron = ron::from_str::<Vec<RenderNode>>(&post_contents.unwrap())

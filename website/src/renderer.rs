@@ -68,19 +68,13 @@ fn to_icon_data(icon: RenderIcon) -> &'static IconData {
     }
 }
 
+#[derive(Default)]
 pub struct Renderer {
     prose: Vec<AnyView>,
     output: Vec<AnyView>,
 }
 
 impl Renderer {
-    pub fn new() -> Self {
-        Self {
-            prose: vec![],
-            output: vec![],
-        }
-    }
-
     fn move_prose(&mut self) {
         if self.prose.is_empty() {
             return;
@@ -128,7 +122,7 @@ impl Renderer {
                     icon,
                     title,
                 } = kind.into();
-                let children = Renderer::new().run(children);
+                let children = Renderer::default().run(children);
 
                 view! {
                     <Callout colour icon title>
