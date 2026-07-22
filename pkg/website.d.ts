@@ -50,11 +50,11 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
     readonly memory: WebAssembly.Memory;
+    readonly PostDisplay_9641767229574460062: (a: any) => void;
     readonly hydrate: () => void;
     readonly Background_7011291641563722467: (a: any) => void;
     readonly HomeAnimation_14651908795469971363: (a: any) => void;
     readonly MobileHeader_4700568660252565466: (a: any) => void;
-    readonly PostDisplay_9641767229574460062: (a: any) => void;
     readonly __wbg_intounderlyingbytesource_free: (a: number, b: number) => void;
     readonly intounderlyingbytesource_autoAllocateChunkSize: (a: number) => number;
     readonly intounderlyingbytesource_cancel: (a: number) => void;
@@ -68,14 +68,14 @@ export interface InitOutput {
     readonly intounderlyingsink_abort: (a: number, b: any) => any;
     readonly intounderlyingsink_close: (a: number) => any;
     readonly intounderlyingsink_write: (a: number, b: any) => any;
-    readonly wasm_bindgen__closure__destroy__hb6f77309a7ae5a6d: (a: number, b: number) => void;
-    readonly wasm_bindgen__closure__destroy__h1867e00f979bbb1f: (a: number, b: number) => void;
-    readonly wasm_bindgen__closure__destroy__h790afbe4e0ba04b7: (a: number, b: number) => void;
-    readonly wasm_bindgen__convert__closures_____invoke__h17d463fc2d3c010a: (a: number, b: number, c: any, d: any) => void;
-    readonly wasm_bindgen__convert__closures_____invoke__hc5e337c50eb795f2: (a: number, b: number, c: any, d: any) => void;
-    readonly wasm_bindgen__convert__closures_____invoke__he84dffd3303c01e3: (a: number, b: number, c: any) => void;
-    readonly wasm_bindgen__convert__closures_____invoke__heda7b5ab860fd071: (a: number, b: number, c: any) => void;
-    readonly wasm_bindgen__convert__closures_____invoke__h76149b12f4dc2909: (a: number, b: number) => void;
+    readonly wasm_bindgen_680487435948353e___closure__destroy___dyn_core_9b3796e30d99ddb7___ops__function__FnMut__js_sys_2945079e191ee12d___Array__web_sys_f59ed36d19b9cde9___features__gen_ResizeObserver__ResizeObserver___Output_______: (a: number, b: number) => void;
+    readonly wasm_bindgen_680487435948353e___closure__destroy___dyn_core_9b3796e30d99ddb7___ops__function__FnMut__web_sys_f59ed36d19b9cde9___features__gen_Event__Event____Output_______: (a: number, b: number) => void;
+    readonly wasm_bindgen_680487435948353e___closure__destroy___dyn_core_9b3796e30d99ddb7___ops__function__FnMut__wasm_bindgen_680487435948353e___JsValue____Output_______: (a: number, b: number) => void;
+    readonly wasm_bindgen_680487435948353e___convert__closures_____invoke___js_sys_2945079e191ee12d___Array__web_sys_f59ed36d19b9cde9___features__gen_ResizeObserver__ResizeObserver_____: (a: number, b: number, c: any, d: any) => void;
+    readonly wasm_bindgen_680487435948353e___convert__closures_____invoke___wasm_bindgen_680487435948353e___JsValue__wasm_bindgen_680487435948353e___JsValue_____: (a: number, b: number, c: any, d: any) => void;
+    readonly wasm_bindgen_680487435948353e___convert__closures_____invoke___web_sys_f59ed36d19b9cde9___features__gen_Event__Event_____: (a: number, b: number, c: any) => void;
+    readonly wasm_bindgen_680487435948353e___convert__closures_____invoke___wasm_bindgen_680487435948353e___JsValue_____: (a: number, b: number, c: any) => void;
+    readonly wasm_bindgen_680487435948353e___convert__closures_____invoke______: (a: number, b: number) => void;
     readonly __wbindgen_malloc: (a: number, b: number) => number;
     readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
     readonly __wbindgen_exn_store: (a: number) => void;
