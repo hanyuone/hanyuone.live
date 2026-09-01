@@ -6,7 +6,7 @@
  * *This API requires the following crate features to be activated: `ReadableStreamType`*
  */
 
-type ReadableStreamType = "bytes";
+export type ReadableStreamType = "bytes";
 
 export function Background_7011291641563722467(el: HTMLElement): void;
 
@@ -50,38 +50,38 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
     readonly memory: WebAssembly.Memory;
-    readonly hydrate: () => void;
-    readonly MobileHeader_4700568660252565466: (a: any) => void;
-    readonly PostDisplay_9641767229574460062: (a: any) => void;
     readonly Background_7011291641563722467: (a: any) => void;
     readonly HomeAnimation_14651908795469971363: (a: any) => void;
-    readonly __wbg_intounderlyingsink_free: (a: number, b: number) => void;
+    readonly MobileHeader_4700568660252565466: (a: any) => void;
+    readonly PostDisplay_9641767229574460062: (a: any) => void;
+    readonly hydrate: () => void;
     readonly __wbg_intounderlyingsource_free: (a: number, b: number) => void;
-    readonly intounderlyingsink_abort: (a: number, b: any) => any;
-    readonly intounderlyingsink_close: (a: number) => any;
-    readonly intounderlyingsink_write: (a: number, b: any) => any;
     readonly intounderlyingsource_cancel: (a: number) => void;
     readonly intounderlyingsource_pull: (a: number, b: any) => any;
     readonly __wbg_intounderlyingbytesource_free: (a: number, b: number) => void;
+    readonly __wbg_intounderlyingsink_free: (a: number, b: number) => void;
     readonly intounderlyingbytesource_autoAllocateChunkSize: (a: number) => number;
     readonly intounderlyingbytesource_cancel: (a: number) => void;
     readonly intounderlyingbytesource_pull: (a: number, b: any) => any;
     readonly intounderlyingbytesource_start: (a: number, b: any) => void;
     readonly intounderlyingbytesource_type: (a: number) => number;
-    readonly wasm_bindgen_653c87f48400b705___closure__destroy___dyn_core_f0fd674eaa06beef___ops__function__FnMut__js_sys_1e378c1bdf4d2b2b___Array__web_sys_6b1501eb58018654___features__gen_ResizeObserver__ResizeObserver___Output_______: (a: number, b: number) => void;
-    readonly wasm_bindgen_653c87f48400b705___closure__destroy___dyn_core_f0fd674eaa06beef___ops__function__FnMut__web_sys_6b1501eb58018654___features__gen_Event__Event____Output_______: (a: number, b: number) => void;
-    readonly wasm_bindgen_653c87f48400b705___closure__destroy___dyn_core_f0fd674eaa06beef___ops__function__FnMut__wasm_bindgen_653c87f48400b705___JsValue____Output_______: (a: number, b: number) => void;
-    readonly wasm_bindgen_653c87f48400b705___convert__closures_____invoke___js_sys_1e378c1bdf4d2b2b___Array__web_sys_6b1501eb58018654___features__gen_ResizeObserver__ResizeObserver_____: (a: number, b: number, c: any, d: any) => void;
-    readonly wasm_bindgen_653c87f48400b705___convert__closures_____invoke___wasm_bindgen_653c87f48400b705___JsValue__wasm_bindgen_653c87f48400b705___JsValue_____: (a: number, b: number, c: any, d: any) => void;
-    readonly wasm_bindgen_653c87f48400b705___convert__closures_____invoke___web_sys_6b1501eb58018654___features__gen_Event__Event_____: (a: number, b: number, c: any) => void;
-    readonly wasm_bindgen_653c87f48400b705___convert__closures_____invoke___wasm_bindgen_653c87f48400b705___JsValue_____: (a: number, b: number, c: any) => void;
-    readonly wasm_bindgen_653c87f48400b705___convert__closures_____invoke______: (a: number, b: number) => void;
+    readonly intounderlyingsink_abort: (a: number, b: any) => any;
+    readonly intounderlyingsink_close: (a: number) => any;
+    readonly intounderlyingsink_write: (a: number, b: any) => any;
+    readonly wasm_bindgen_5a64860dddf9f74___convert__closures_____invoke___wasm_bindgen_5a64860dddf9f74___JsValue__core_f0fd674eaa06beef___result__Result_____wasm_bindgen_5a64860dddf9f74___JsError___true_: (a: number, b: number, c: any) => [number, number];
+    readonly wasm_bindgen_5a64860dddf9f74___convert__closures_____invoke___js_sys_d0cefdcfedb2a55c___Array__web_sys_1d7306c2fb8f0074___features__gen_ResizeObserver__ResizeObserver______true_: (a: number, b: number, c: any, d: any) => void;
+    readonly wasm_bindgen_5a64860dddf9f74___convert__closures_____invoke___js_sys_d0cefdcfedb2a55c___Function_fn_wasm_bindgen_5a64860dddf9f74___JsValue_____wasm_bindgen_5a64860dddf9f74___sys__Undefined___js_sys_d0cefdcfedb2a55c___Function_fn_wasm_bindgen_5a64860dddf9f74___JsValue_____wasm_bindgen_5a64860dddf9f74___sys__Undefined_______true_: (a: number, b: number, c: any, d: any) => void;
+    readonly wasm_bindgen_5a64860dddf9f74___convert__closures_____invoke___wasm_bindgen_5a64860dddf9f74___JsValue______true_: (a: number, b: number, c: any) => void;
+    readonly wasm_bindgen_5a64860dddf9f74___convert__closures_____invoke___wasm_bindgen_5a64860dddf9f74___JsValue______true__3: (a: number, b: number, c: any) => void;
+    readonly wasm_bindgen_5a64860dddf9f74___convert__closures_____invoke_______true_: (a: number, b: number) => void;
     readonly __wbindgen_malloc: (a: number, b: number) => number;
     readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
     readonly __wbindgen_exn_store: (a: number) => void;
     readonly __externref_table_alloc: () => number;
     readonly __wbindgen_externrefs: WebAssembly.Table;
     readonly __wbindgen_free: (a: number, b: number, c: number) => void;
+    readonly __wbindgen_destroy_closure: (a: number, b: number) => void;
+    readonly __externref_table_dealloc: (a: number) => void;
     readonly __wbindgen_start: () => void;
 }
 
