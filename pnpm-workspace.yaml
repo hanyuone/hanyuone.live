@@ -1,2 +1,4 @@
 packages:
   - 'website'
+allowBuilds:
+  '@parcel/watcher': true
