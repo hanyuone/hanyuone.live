@@ -12,8 +12,8 @@ permissions:
 
 env:
   ROOT: "/staging/${{ github.event.pull_request.number }}"
-  LEPTOS_WASM_BINDGEN_VERSION: 0.2.108
-  LEPTOS_TAILWIND_VERSION: v4.1.18
+  LEPTOS_WASM_BINDGEN_VERSION: 0.2.127
+  LEPTOS_TAILWIND_VERSION: v4.3.3
   COMMENTS_URL: https://comments.hanyuone.live
 
 jobs:
@@ -32,13 +32,13 @@ jobs:
         with:
           crate: cargo-leptos
       # Install Node and PNPM
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: '20'
-      - uses: pnpm/action-setup@v4
+          node-version: '24'
+      - uses: pnpm/action-setup@v6
         name: Install pnpm
         with:
-          version: 9
+          version: 11
           run_install: false
       # Checkout repo
       - uses: actions/checkout@v6
@@ -51,7 +51,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
       - name: Setup pnpm cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}

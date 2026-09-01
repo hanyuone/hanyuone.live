@@ -59,7 +59,7 @@ pub fn BlogPostPage() -> impl IntoView {
             <div class="flex flex-col py-4 items-center">
                 <Suspense fallback=move || view! { <p>"Loading post..."</p> }>
                     {move || Suspend::new(async move {
-                        let renderer = crate::renderer::Renderer::new();
+                        let renderer = crate::renderer::Renderer::default();
 
                         let post_contents = post_contents.await;
                         let rendered_views = match post_contents {
