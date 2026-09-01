@@ -3,10 +3,7 @@ use leptos_meta::Title;
 use leptos_router::{hooks::use_params, params::Params};
 use markdown::structs::tag::{TagId, TagMetadata};
 
-use crate::{
-    components::blog::{card::BlogCard, item::BlogItem},
-    context::BlogContext,
-};
+use crate::{components::blog::post_display::PostDisplay, context::BlogContext};
 
 #[derive(Params, PartialEq)]
 pub struct TagParams {
@@ -26,11 +23,7 @@ pub fn TagPage() -> impl IntoView {
     let tag_metadata: TagMetadata = tag_id.clone().into();
 
     let blog_context = use_context::<BlogContext>().unwrap();
-    let sorted_blogs = blog_context.get_sorted();
-    let mut tag_blogs = sorted_blogs
-        .into_iter()
-        .filter(|(_, metadata)| metadata.front_matter.tags.contains(&tag_id.to_string()));
-    let first_blog = tag_blogs.next();
+    let pages = blog_context.get_with_tag(tag_id.clone());
 
     view! {
         <Title text={tag_id.to_string()} />
@@ -44,29 +37,6 @@ pub fn TagPage() -> impl IntoView {
             </a>
             <div>{tag_metadata.description}</div>
         </div>
-        {
-            if let Some((first_id, first_metadata)) = first_blog {
-                view! {
-                    <BlogCard
-                        id={*first_id}
-                        metadata={first_metadata.clone()} />
-                    <div>
-                        {
-                            tag_blogs
-                                .map(|(id, metadata)| {
-                                    view! {
-                                        <BlogItem
-                                            id={*id}
-                                            metadata={metadata.clone()} />
-                                    }
-                                })
-                                .collect::<Vec<_>>()
-                        }
-                    </div>
-                }.into_any()
-            } else {
-                view! { <p>{"No blogs found!"}</p> }.into_any()
-            }
-        }
+        <PostDisplay pages />
     }
 }

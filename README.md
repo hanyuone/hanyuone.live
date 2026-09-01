@@ -20,7 +20,7 @@ Make sure you have the following installed:
 - Rust (currently using `v1.94.1`)
 - [`cargo-leptos`](https://github.com/leptos-rs/cargo-leptos)
 - Node.js (currently using `v22.18.0`)
-- [`pnpm`] (currently using `v9.6.0`)
+- [`pnpm`](https://pnpm.io) (currently using `v9.6.0`)
 
 To test the website locally, run `pnpm dev`. This calls `cargo leptos watch` in the background,
 which listens for file changes and builds static files on change. A minimal Axum server is then

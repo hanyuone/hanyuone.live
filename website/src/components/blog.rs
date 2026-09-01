@@ -2,6 +2,7 @@ use chrono::TimeDelta;
 
 pub mod card;
 pub mod item;
+pub mod post_display;
 pub mod tag;
 
 pub fn to_read_time(words: usize) -> String {
