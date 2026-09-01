@@ -9,9 +9,8 @@ permissions:
   id-token: write
 
 env:
-  LEPTOS_SITE_BASE: "https://hanyuone.live/"
-  LEPTOS_WASM_BINDGEN_VERSION: 0.2.108
-  LEPTOS_TAILWIND_VERSION: v4.1.18
+  LEPTOS_WASM_BINDGEN_VERSION: 0.2.127
+  LEPTOS_TAILWIND_VERSION: v4.3.3
 
 jobs:
   release:

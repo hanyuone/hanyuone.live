@@ -10,8 +10,8 @@
     "author": "hanyuone",
     "license": "ISC",
     "devDependencies": {
-        "@tailwindcss/cli": "^4.1.17",
+        "@tailwindcss/cli": "^4.3.3",
         "@tailwindcss/typography": "^0.5.13",
-        "tailwindcss": "^4.1.17"
+        "tailwindcss": "^4.3.3"
     }
 }
