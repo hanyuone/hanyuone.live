@@ -1,7 +1,7 @@
 ---
 title: Australian government explainer, Part 1
 description: A guide into the Australian political system, starting with our power structures.
-image: /blog_media/ausgov/parliament_house.jpg
+image: blog_media/ausgov/parliament_house.jpg
 publish_date: 2026-05-31 17:04
 tags:
 - explainer
@@ -26,7 +26,7 @@ As of 2026, there are six **states** and two **territories** which are represent
 
 Because the states never gave up their own governments and only came together because they all decided they wanted to (in the territories’ cases, they gained governments), power and decision-making is divided between the Australian government and the **state/territory governments**, as well as **local governments** within each state/territory, run by **councils**.
 
-![The three levels of government in Australia.](/blog_media/ausgov/levels_of_government.png)
+![The three levels of government in Australia.](blog_media/ausgov/levels_of_government.png)
 
 The federal government is generally responsible for:
 - Immigration
@@ -57,7 +57,7 @@ Because the colonies that now form Australia used to be a part of the British Em
 
 The monarch is therefore a figurehead, and doesn’t exercise their theoretical power due to centuries of laws and **convention** - informal, agreed-upon rules that are not legally defined, but would cause mass controversy if broken. For example, one of their powers is the ability to decide whether new laws have power or not - all **bills** (proposed laws) in the UK Parliament have to go through the monarch in what is known as **royal assent**, where the monarch "allows" it to become an act (enforceable law). However, by convention, the monarch essentially acts as a "rubber stamp" and approves everything that has already been decided on by the Parliament, since if they didn’t automatically pass a law, then it means that the Parliament is powerless against the monarch, resulting in institutional and societal breakdowns.
 
-![How the British monarch performs royal assent.](/blog_media/ausgov/royal_assent.png)
+![How the British monarch performs royal assent.](blog_media/ausgov/royal_assent.png)
 
 In many **Commonwealth** countries (countries that were formerly part of the British Empire), the British monarch does not directly perform **ceremonial duties** like royal assent. Instead, they assign someone to do those duties on their behalf for each country - in Australia, this person would be the **governor-general**. They are appointed by the Prime Minister, and are usually Australians who have significantly contributed to the nation (Sam Mostyn, the current governor-general as of April 2026, was a Commissioner and later President of the AFL, and an advocate for climate change and gender equality). Under this model, the governor-general is the **head of state**, someone who is the "public persona" of the country, while the prime minister is the **head of government**, and does the day-to-day running of the country itself.
 
@@ -65,7 +65,7 @@ The governor-general has the duty of approving bills before they become law, as 
 
 It is similarly under convention that the governor-general doesn’t exercise these "**reserve powers**" by themselves, to ensure that the politicians elected by the people have the final say. Parliament is dissolved, for example, only "**on the advice of the prime minister**", i.e. when the prime minister tells the governor-general to do so.
 
-![What exactly is the governor-general?](/blog_media/ausgov/governor_general.png)
+![What exactly is the governor-general?](blog_media/ausgov/governor_general.png)
 
 This convention has only been broken once since Federation - in 1975, the Senate, controlled by the Liberal Party under Malcolm Fraser, refused to pass the budget proposed by the Labor Party under Gough Whitlam. As the deadlock would result in the government not able to give money to various departments that actually run the country, Whitlam went to the governor-general, John Kerr, asking for parliament to be dissolved. Instead, Kerr dismissed Whitlam as Prime Minister and installed Fraser in his place, on the condition that elections were held within six months. The whole saga is known as the **1975 constitutional crisis**, and while technically within Kerr’s rights, scholars still debate on whether such powers should have ever been used.
 
@@ -79,7 +79,7 @@ In a **direct democracy**, ordinary citizens vote on each law. However, not ever
 
 There are still situations where the people directly vote on laws. If a decision by the government affects the Constitution, then a **referendum** must be held - a nation-wide vote on a specific subject, rather than on who represents our interests. Referendums are legally binding - if one is passed, then the constitution is altered. As of 2026, the most recent referendum is the **2023 Australian Indigenous Voice referendum**, that aimed to enshrine an Aboriginal and Torres Strait Islander advisory body into the Constitution.
 
-![The two main types of democracy, and how Australia does a little bit of both.](/blog_media/ausgov/types_of_democracy.png)
+![The two main types of democracy, and how Australia does a little bit of both.](blog_media/ausgov/types_of_democracy.png)
 
 A **plebiscite**, a national vote that is not legally binding, is another way that the government can see how Australian people feel about a certain subject. The most recent plebiscite is the **Australian Marriage Law Postal Survey** in 2017 - a majority of people voted "Yes", and as a result the ruling Liberal government put forward a bill to legalise same-sex marriage.
 
@@ -87,7 +87,7 @@ A **plebiscite**, a national vote that is not legally binding, is another way th
 
 In order to ensure that power is not concentrated in one particular organisation (and therefore, one particular person, if they happen to be in charge of said organisation), nations often divide decision-making abilities into distinct institutions, which are independent from one another. This is known as the **separation of powers** - in Australia, power is separated into the **legislature** (Parliament, the people that make laws), **executive** (the **Cabinet**, made up of **ministers**, senior politicians that enact laws), and the **judiciary** (the courts, the people that judge laws).
 
-![The three branches of government, and how they keep tabs on each other.](/blog_media/ausgov/separation_of_powers.png)
+![The three branches of government, and how they keep tabs on each other.](blog_media/ausgov/separation_of_powers.png)
 
 Having distinct "branches" run the country, each with clearly-defined responsibilities, allows each branch to be specialised - judges and lawyers can focus on making judgements on existing laws, and politicians, sometimes with expertise in their field (economists, lawyers, social workers), can focus on directing their respective departments to follow laws. The branches can also prevent each other from acting "out of line", through a system known as **checks and balances** - for example, courts can rule certain laws made by Parliament **unconstitutional**, and anything the Cabinet does must first go through Parliament.
 

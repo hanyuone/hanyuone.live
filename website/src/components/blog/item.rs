@@ -7,15 +7,10 @@ use markdown::structs::{
     tag::{TagId, TagMetadata},
 };
 
-use crate::{
-    components::blog::{tag::Tag, to_read_time},
-    ROOT,
-};
+use crate::components::blog::{tag::Tag, to_read_time};
 
 #[component]
 pub fn BlogItem<'a>(id: BlogId, metadata: &'a BlogMetadata) -> impl IntoView {
-    let root = ROOT.unwrap_or("");
-
     let BlogMetadata {
         front_matter,
         post_translate,
@@ -23,7 +18,7 @@ pub fn BlogItem<'a>(id: BlogId, metadata: &'a BlogMetadata) -> impl IntoView {
 
     view! {
         <div class="flex-col p-4 border-t-[1px] border-white hover:bg-gray">
-            <a href={format!("{root}/post/{}", id)}>
+            <a href={format!("post/{}", id)}>
                 <h3 class="font-bold text-xl hover:underline">{front_matter.title.clone()}</h3>
             </a>
             <div class="inline">
