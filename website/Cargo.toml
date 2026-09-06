@@ -81,11 +81,11 @@ ssr = [
 
 [dependencies]
 axum = { version = "0.8.0", optional = true }
-chrono = "0.4.43"
+chrono = { workspace = true }
 console_error_panic_hook = { version = "0.1", optional = true }
 futures = "0.3.31"
-getrandom = { version = "0.3.4", features = ["wasm_js"] }
-icondata = "0.6.0"
+getrandom = { version = "0.4", features = ["wasm_js"] }
+icondata = "0.7.0"
 icondata_core = "0.1.0"
 leptos = { version = "0.8.0", features = ["islands"] }
 leptos-use = "0.18.0"
@@ -94,10 +94,10 @@ leptos_icons = "0.7.1"
 leptos_meta = { version = "0.8.0" }
 leptos_router = { version = "0.8.0" }
 markdown = { path = "../markdown" }
-notify = "8.2.0"
-rand = "0.9.2"
-ron = "0.12.0"
-serde = "1.0.228"
+notify = "9.0.0-rc.5"
+rand = "0.10"
+ron = { workspace = true }
+serde = { workspace = true }
 tokio = { version = "1", features = ["rt-multi-thread"], optional = true }
 wasm-bindgen = { version = "=0.2.127", optional = true }
 
